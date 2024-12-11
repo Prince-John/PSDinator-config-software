@@ -55,3 +55,18 @@ def sanitize_resistance_string(resistance_str: str) -> int:
         return int(cleaned_str)
     except ValueError:
         raise ValueError(f"Invalid input: {resistance_str}")
+
+
+
+def apply_number(configuration, number, start_bit, length):
+    """Set `length` bits starting from `start_bit` to represent `number`."""
+    mask = (1 << length) - 1  # Create a mask of `length` bits
+    number &= mask  # Ensure `number` fits in the specified length
+    configuration &= ~(mask << start_bit)  # Clear the target bits
+    configuration |= (number << start_bit)  # Set the target bits to `number`
+    return configuration
+
+
+def toggle_bit(configuration, bit_position):
+    """Toggle the bit at the specified position in the configuration byte."""
+    return configuration ^ (1 << bit_position)

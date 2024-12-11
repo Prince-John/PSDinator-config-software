@@ -1,8 +1,15 @@
-def generate_dac_word(channel: int, voltage: float) -> int:
+"""
+Module to generate bitstrings required con configure the LTC1660 dac
+
+"""
+from __future__ import annotations
+
+
+def generate_dac_word(channel: int, value: float | int) -> int:
     """
 Generates the 16 bit word required to configure the LTC1660 DAC.
     :param channel: DAC channel to configure range: 1-8
-    :param voltage: Voltage setting, 0.0V - 5.0V
+    :param value: Voltage setting, if type float 0.0V - 5.0V, if int expects unsigned bits for configuration.
 
 
     :return: (uint16) 2 byte DAC configuration bitstring
@@ -12,15 +19,15 @@ Generates the 16 bit word required to configure the LTC1660 DAC.
     max_voltage = 5.0
     min_voltage = 0.0
 
-    if voltage < min_voltage or voltage > max_voltage:
-        raise ValueError("DAC voltage must be between 0.0V-5.0")
-        return
+    if isinstance(value, int):
+        k = value
+    else:
+        if not isinstance(value, float) or value < min_voltage or value > max_voltage:
+            raise ValueError("DAC voltage must be between 0.0V-5.0")
+        k = int((value / 5.0) * 1024)
 
     if channel < 1 or channel > 8:
         raise ValueError("DAC channel must be between 1 - 8")
-        return
-
-    k = int((voltage / 5.0) * 1024)
 
     data_word = (channel << 12) | (k << 2) | 0x1  # making the don't care bits 0b01.
 

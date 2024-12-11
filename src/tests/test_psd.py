@@ -49,7 +49,13 @@ class TestBitSequenceOutputs(TestCase):
         self.assertEqual(actual_word, word)
 
 
-class Test(TestCase):
+class TestGeneratePsdDacWords(TestCase):
+    def test_generate_psd_dac_words(self):
+        test_out = psd.generate_psd_dac_words(12, 3, "a")
+        good_out = (0b01100, 0b0001100)
+
+        self.assertEqual(test_out, good_out, msg=f"Failed for {test_out} != {good_out}")
+
     def test_get_dac_value(self):
         test_out = psd.get_dac_value(-1)
         good_output = 0b10001
@@ -60,12 +66,36 @@ class Test(TestCase):
             self.assertEqual(test_out, good_output, msg=f"Failed for {i:05b} != {good_output:05b}")
 
 
-class Test(TestCase):
-    def test_generate_psd_dac_words(self):
+class TestPsdTriggerWord(TestCase):
+    def test_generate_psd_trigger_word(self):
 
-        test_out = psd.generate_psd_dac_words(12, 3, "a")
-        good_out = (0b01100, 0b0001100)
+        for test_case, good_out in [(1, 0x3), (2, 0x1), (3, 0x0), ("1", 0x3), ("2", 0x1), ("3", 0x0)]:
+            self.assertEqual(psd.generate_psd_trigger_word(test_case), good_out)
 
-        self.assertEqual(test_out, good_out, msg=f"Failed for {test_out} != {good_out}")
+    def test_invalid_type(self):
+        # Test invalid types to raise TypeError
+        with self.assertRaises(TypeError) as context:
+            psd.generate_psd_trigger_word(1.0)  # Float type, invalid
+        self.assertEqual(str(context.exception), "Not a valid trigger mode type, str | int expected")
 
+        with self.assertRaises(TypeError) as context:
+            psd.generate_psd_trigger_word([1])  # List type, invalid
+        self.assertEqual(str(context.exception), "Not a valid trigger mode type, str | int expected")
 
+        with self.assertRaises(TypeError) as context:
+            psd.generate_psd_trigger_word({"mode": 1})  # Dict type, invalid
+        self.assertEqual(str(context.exception), "Not a valid trigger mode type, str | int expected")
+
+    def test_invalid_value(self):
+        # Test invalid values to raise ValueError
+        with self.assertRaises(ValueError) as context:
+            psd.generate_psd_trigger_word(4)  # Integer outside of valid range
+        self.assertEqual(str(context.exception), "Not a valid trigger mode value")
+
+        with self.assertRaises(ValueError) as context:
+            psd.generate_psd_trigger_word("4")  # String outside of valid range
+        self.assertEqual(str(context.exception), "Not a valid trigger mode value")
+
+        with self.assertRaises(ValueError) as context:
+            psd.generate_psd_trigger_word("mode")  # Completely invalid string
+        self.assertEqual(str(context.exception), "Not a valid trigger mode value")

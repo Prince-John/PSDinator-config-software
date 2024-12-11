@@ -1,9 +1,17 @@
-from curses.ascii import ACK
+import sys
+import time
 
 import serial
 from serial.tools.list_ports import comports
-from utils import *
-from ascii_constants import *
+
+from src.command_generator import generate_command_string
+from src.gui.configuration_helper import read_config
+from src.uart_link.utils import *
+from src.uart_link.ascii_constants import *
+
+
+# from ..gui.configuration_helper import read_config
+# from ..command_generator import generate_command_string
 
 
 class UartMiddleware:
@@ -41,26 +49,43 @@ class UartMiddleware:
 
     def connect_to_device(self, device: str):
 
-        if device in self.get_available_devices():
+        if device in self.get_available_devices(print_output=False):
             self.serial_handler.port = device
             self.serial_handler.open()
             print(f"Connected to {device} at {self.serial_handler.baudrate} baud!")
         else:
             raise IOError("Device is not available")
 
-    def wait_ack(self):
-        print("Waiting for a ACK or NAK...", flush=True)
+    def send_stx(self):
+        print("")
+        print("Sending STX to enter configuration mode.", flush=True)
+        buff = [STX, NUL]
+        byte_array = bytearray(buff)
+        self.serial_handler.write(byte_array)
+        self.wait_ack()
+
+    def wait_ack(self, timeout=5):
+        print("Waiting for an ACK or NAK...", flush=True)
+        start_time = time.time()
+
         while True:
+            # Check for timeout
+            elapsed_time = time.time() - start_time
+            if elapsed_time > timeout:
+                print("Timeout: No response received.")
+                return False
+
+            # Check if there's data in the buffer
             if self.serial_handler.in_waiting:
                 byte = self.serial_handler.read(1)
                 if byte == ACK:
                     print("Received ACK ...")
-                    break
+                    return True
                 if byte == NAK:
                     print("Received NAK ...")
-                    break
+                    return False
 
-    def send_ETX(self):
+    def send_etx(self):
         print("")
         print("Sending ETX to exit configuration mode.", flush=True)
         buff = [ETX, NUL]
@@ -78,7 +103,7 @@ class UartMiddleware:
 
         byte_array = command_string.encode(encoding="ascii")
         self.serial_handler.write(byte_array)
-        self.wait_ack()
+        return self.wait_ack()
 
     def cleanup(self) -> None:
         """
@@ -92,6 +117,45 @@ class UartMiddleware:
 if __name__ == '__main__':
     uart_link = UartMiddleware()
     print("Uart Link is up, no device connected!")
-    uart_link.get_available_devices()
-    uart_link.connect_to_device('/dev/ttyUSB0')
+    devices = uart_link.get_available_devices()
+
+    config = read_config(r'../configurations/single_board_config.json')
+
+    commands = generate_command_string.generate_commands(config)
+
+    print_with_bars("Generated Commands Listed below")
+    for command in commands:
+        print(command)
+
+    try:
+        device_index = int(input("Enter the index of the device to connect to: "))
+        if 0 <= device_index < len(devices):
+            uart_link.connect_to_device(devices[device_index])
+        else:
+            print("Invalid device index selected.")
+            exit(1)
+    except ValueError:
+        print("Invalid input. Please enter a number.")
+        exit(1)
+
+    uart_link.send_stx()
+    try:
+        while input("Enter debug commands (Y)?") == "Y":
+
+            command_string = [input("Enter command string\n")]
+
+            for command in command_string:
+                uart_link.send_CMD(f"Sending:- {command}", f"{command}\0")
+    except KeyboardInterrupt:
+        print("Interrupted by user, exiting...")
+        uart_link.send_etx()
+        uart_link.cleanup()
+        sys.exit(0)
+
+        print(commands)
+    for command in commands:
+        # input(f"Send next command:  {command}? ")
+        uart_link.send_CMD(command_string=command, message=f"Sending:- {command}")
+
+    uart_link.send_etx()
     uart_link.cleanup()

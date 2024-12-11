@@ -44,14 +44,14 @@ def generate_psd_serial_word(channel_enable_low_mask: int,
     range_word = get_range_word(subchannel_delay_ranges, subchannel_width_ranges)
 
     # assembling the serial word
-    serial_word = bit_append_left(check_bitstring(channel_enable_low_mask)
-                                  , [0x00,
-                                     gain_word,
-                                     range_word,
-                                     get_vtc_range(vtc_range),
-                                     get_mode_bit(bias_mode),
-                                     get_mode_bit(test_mode),
-                                     check_bitstring(chip_id)],
+    serial_word = bit_append_left(check_bitstring(channel_enable_low_mask),
+                                  [0x00,
+                                   gain_word,
+                                   range_word,
+                                   get_vtc_range(vtc_range),
+                                   get_mode_bit(bias_mode),
+                                   get_mode_bit(test_mode),
+                                   check_bitstring(chip_id)],
                                   initial_word_length=[8, 8, 9, 12, 1, 1, 1, 8],
                                   final_bit_width=48)
 
@@ -92,6 +92,33 @@ unused.
     address = channel << 2 | sub_channel_map[sub_channel]
 
     return dac_value, address
+
+
+def generate_psd_trigger_word(trigger_mode: int | Literal["1", "2", "3"]) -> int:
+    """
+This function generates the 2 bit trigger mode data word, with MSB = Bypass signal and LSB = Acq_ALL signal
+
+#TODO: Acq_ALL is a fast signal this needs to be changed to not configure Acq_all using GUI.
+
+    From Proctor Thesis mode look up table
+Signal Names:   Acq_All                 Bypass
+Mode 1          1 (prior to readout)    1
+Mode 2          0                       1
+Mode 3          0                       0
+
+    :param trigger_mode: desired trigger mode 1, 2, or 3
+    :return: 2 bit mode data word [Ack_All, Bypass(LSB)], type int
+    """
+
+    trigger_mode_map = {1: 0x3, 2: 0x1, 3: 0x0, "1": 0x3, "2": 0x1, "3": 0x0}
+
+    if not isinstance(trigger_mode, (int, str)):
+        raise TypeError("Not a valid trigger mode type, str | int expected")
+
+    if trigger_mode not in trigger_mode_map:
+        raise ValueError("Not a valid trigger mode value")
+
+    return trigger_mode_map[trigger_mode]
 
 
 def get_dac_value(dac_value: int) -> int:
@@ -145,6 +172,8 @@ def get_subchannel_gain_bits(resistance: str | int) -> int:
 
     if not isinstance(resistance, int):
         try:
+
+
             resistance = sanitize_resistance_string(resistance)
         except (TypeError, ValueError):
             raise TypeError("Not a valid resistance setting type, should be string or int in ohms ")

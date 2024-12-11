@@ -1,3 +1,8 @@
+"""
+MUX data word generator module for ADG1206 analog multiplexer
+"""
+
+
 def generate_mux_word(channel: int, enable: bool) -> int:
     """
     Assembles the 8 bit word that is sent to configure the mux channel

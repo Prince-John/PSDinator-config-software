@@ -6,11 +6,12 @@ Our syntax follows this simple structure, very loosely inspired by the SCPI stan
 
 **GENERAL STRUCTURE**
 
-COMMAND_TYPE : TARGET_CHIP : CONFIG_INST : VALUE
+TARGET_CHIP:TARGET_CHIP_SUBCOMMAND:VALUE
 
+- `TARGET_CHIP`: Abstracted board component level chip not always actual IC's.
+- `TARGET_CHIP_SUBCOMMAND` : This is optional and not present on for all chips
+- `VALUE`: is the raw config value that will be interpreted as binary data and loaded into the chip, it is encoded in hex but sent as ASCII representation.  
 
 ### Top level - Command Type
 
 
-
-S3cJxFUBr@z@sq@2wV$

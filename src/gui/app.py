@@ -10,7 +10,7 @@ from PySide6 import QtWidgets
 from PySide6.QtGui import QAction, QIcon
 from PySide6.QtCore import Qt, QRegularExpression, SIGNAL
 
-from src.gui import utilities
+from ..gui import utilities
 from ui_files.MainConfigWindow import Ui_MainWindow
 from ui_files.GlobalSettingsWindow import Ui_Dialog
 
@@ -31,7 +31,7 @@ def change_item_selection(comboBox, text):
     if index >= 0:
         comboBox.setCurrentIndex(index)
     else:
-        raise ValueError("Text passed does not match any comboBox options")
+        raise ValueError("Text passed does not match any comboBox config")
 
 
 class GlobalSettingsWindow(QtWidgets.QDialog, Ui_Dialog):
