@@ -1,0 +1,31 @@
+{
+  "auto_veto_time": "2",
+  "delay": {
+    "a": {
+      "range": "0",
+      "dac_value": "0"
+    },
+    "b": {
+      "range": "0",
+      "dac_value": "0"
+    },
+    "c": {
+      "range": "0",
+      "dac_value": "0"
+    }
+  },
+  "width": {
+    "a": {
+      "range": "0",
+      "dac_value": "0"
+    },
+    "b": {
+      "range": "0",
+      "dac_value": "0"
+    },
+    "c": {
+      "range": "0",
+      "dac_value": "0"
+    }
+  }
+}
