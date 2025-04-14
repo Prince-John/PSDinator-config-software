@@ -12,7 +12,7 @@ import numpy as np
 # AFG:TRIGger:COUnt 1
 # AFG:TRIGger:INTerval 1.5e-3
 # AFG:OUTPut:STATE 1
-
+# interrupt
 
 import sys
 

@@ -13,7 +13,7 @@ if __name__ == "__main__":
 
     with DeviceManager(verbose=True) as dm:
         dm.visa_library = PYVISA_PY_BACKEND
-        scope: MDO3K = dm.add_scope("10.229.115.11")
+        scope: MDO3K = dm.add_scope("10.229.115.112")
         scope.timeout = 100000
         scope.write("AFG:OUTPut:STATE 0")
         scope.write("AFG:TRIGger:SOUrce EXTernal")
@@ -22,7 +22,7 @@ if __name__ == "__main__":
                 input("Any key to reset scope and AFG")
                 scope.write("AFG:OUTPut:STATE 1")
                 scope.write("ACQuire:STATE OFF")
-                scope.write("TRIGger: A:MODe SINGLE")
+                scope.write("AFG:TRIGGER:INTERVAL 10")
                 scope.write("ACQuire:STOPAfter SEQ")
                 scope.write("ACQuire:STATE ON")
                 sleep(3)

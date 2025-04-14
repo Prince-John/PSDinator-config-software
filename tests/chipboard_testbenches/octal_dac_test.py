@@ -5,9 +5,9 @@ from tm_devices.drivers import MDO3K
 import time
 import numpy as np
 
-from src.chipboard_configuration_software.command_generator.board_components import dac
-from src.chipboard_configuration_software.uart_link import middleware
-from src.chipboard_configuration_software.uart_link.utils import print_with_bars
+from chipboard_configuration_software.command_generator.board_components import dac
+from chipboard_configuration_software.uart_link import middleware
+from chipboard_configuration_software.uart_link.utils import print_with_bars
 
 data_dir = r'./data/octal_dac_tests'
 

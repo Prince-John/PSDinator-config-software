@@ -53,8 +53,8 @@ def get_cfd_individual_channel_commands(cfd_config: dict) -> List[str]:
                                                                   True if channel_dict["enable"] == "True" else False),
                                                               leading_edge_DAC_input=channel_dict[
                                                                   "leading_edge_DAC_value"],
-                                                              leading_edge_DAC_neg_polarity=(True if channel_dict[
-                                                                                                         "sign_bit"] == "True" else False))
+                                                              leading_edge_DAC_neg_polarity=(
+                                                                  True if channel_dict["sign_bit"] == "True" else False))
 
         commands.append(f"{add_mode:02X}{data:02X}\0")
 

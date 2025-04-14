@@ -5,9 +5,10 @@ import serial
 from serial.tools.list_ports import comports
 
 from chipboard_configuration_software.command_generator import generate_command_string
-from chipboard_configuration_software.gui.configuration_helper import read_config
-from .utils import print_with_bars
-from .ascii_constants import *
+from chipboard_configuration_software.gui.configuration_helper import read_config, write_config
+from utils import print_with_bars
+from ascii_constants import *
+
 
 # from ..gui.configuration_helper import read_config
 # from ..command_generator import generate_command_string
@@ -112,52 +113,3 @@ class UartMiddleware:
         """
         self.serial_handler.close()
 
-
-if __name__ == '__main__':
-    uart_link = UartMiddleware()
-    print("Uart Link is up, no device connected!")
-    devices = uart_link.get_available_devices()
-
-    config = read_config(r'../configurations/single_board_config.json')
-
-    commands = generate_command_string.generate_commands(config)
-
-    print_with_bars("Generated Commands Listed below")
-    for command in commands:
-        print(command)
-
-    try:
-        device_index = int(input("Enter the index of the device to connect to: "))
-        if 0 <= device_index < len(devices):
-            uart_link.connect_to_device(devices[device_index])
-        else:
-            print("Invalid device index selected.")
-            exit(1)
-    except ValueError:
-        print("Invalid input. Please enter a number.")
-        exit(1)
-
-    config_mode_status = uart_link.send_stx()
-    if config_mode_status is False:
-        print("Unable to get into chipboard configuration mode! Exiting..")
-        exit(1)
-
-    try:
-        while input("Enter debug commands (Y)?") == "Y":
-
-            command_string = [input("Enter command string\n")]
-
-            for command in command_string:
-                uart_link.send_CMD(f"Sending:- {command}", f"{command}\0")
-    except KeyboardInterrupt:
-        print("Interrupted by user, exiting...")
-        uart_link.send_etx()
-        uart_link.cleanup()
-        sys.exit(0)
-
-    for command in commands:
-        # input(f"Send next command:  {command}? ")
-        uart_link.send_CMD(command_string=command, message=f"Sending:- {command}")
-
-    uart_link.send_etx()
-    uart_link.cleanup()

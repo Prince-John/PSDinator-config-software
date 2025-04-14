@@ -2,10 +2,10 @@
             "chipboard_number": 0,
             "cfd": {
                 "nowlin_mode": "short",
-                "nowlin_delay": "6 ns",
-                "lockout_DAC": "20",
+                "nowlin_delay": "8 ns",
+                "lockout_DAC": "31",
                 "lockout_mode": "long",
-                "cfd_pulse_width": "50",
+                "cfd_pulse_width": "100",
                 "agnd_trim": "1.43 V",
                 "agnd_trim_options": {"1.36 V": 0, "1.43 V": 1, "1.49 V": 2, "1.56 V": 3,
                                       "1.63 V": 4, "1.69 V": 5, "1.77 V": 6, "1.84 V": 7},
@@ -24,8 +24,8 @@
                 "channels": {
                     "0": {
                         "enable": "True",
-                        "leading_edge_DAC_value": 2,
-                        "sign_bit": "False"
+                        "leading_edge_DAC_value": 25,
+                        "sign_bit": "True"
                     },
                     "1": {
                          "enable": "False",
@@ -106,174 +106,157 @@
                 }
             },
             "psd": {
-                "polarity": "pos",
-                "bias": "high",
-                "gain": {
-                    "a": "500",
-                    "b": "10000",
-                    "c": "10000"
-                },
-                "delay": {
-                    "a": {
-                        "range": "0",
-                        "dac_value": "0"
-                    },
-                    "b": {
-                        "range": "0",
-                        "dac_value": "0"
-                    },
-                    "c": {
-                        "range": "0",
-                        "dac_value": "0"
-                    }
-                },
-                "width": {
-                    "a": {
-                        "range": "0",
-                        "dac_value": "0"
-                    },
-                    "b": {
-                        "range": "0",
-                        "dac_value": "0"
-                    },
-                    "c": {
-                        "range": "0",
-                        "dac_value": "0"
-                    }
-                },
-                "vtc_range": "2 us",
-                "auto_veto_time": "2",
-                "multiplicity_offset": "0",
-                "trigger_mode": "3",
+                "global_enable": "True",
                 "test_mode": "off",
-                "channels": {
+                "serial_register_settings": {
+                    "polarity": "positive",
+                    "bias": "high",
+                    "gain": {
+                        "a": "500",
+                        "b": "10000",
+                        "c": "10000"
+                    },
+
+                    "vtc_range": "2 us",
+                    "delay_ranges": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                     },
+                    "width_ranges": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                     },
+                    "channel_enables": {
+                        "0": "False",
+                        "1": "False",
+                        "2": "False",
+                        "3": "False",
+                        "4": "False",
+                        "5": "False",
+                        "6": "False",
+                        "7": "False",
+                        "8": "False",
+                        "9": "False",
+                        "10": "False",
+                        "11": "False",
+                        "12": "False",
+                        "13": "False",
+                        "14": "False",
+                        "15": "False"
+                    }
+                },
+                "octal_dac_settings": {
+                    "delay_voltages": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                     },
+                    "width_voltages": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                     },
+                    "auto_veto_time": "2",
+                    "multiplicity_offset": "0"
+                },
+                "trigger_mode": "3",
+                "channel_offset_dacs": {
                     "0": {
-                        "enable": "True",
-                        "offset_dac": {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        },
+                    "1":  {
+                            "a": "0",
+                            "b": "0",
+                            "c": "0"
+                        
                     },
-                    "1": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "2":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "2": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "3":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "3": {
-                        "enable": "True",
-                        "offset_dac": {
+                    "4":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "4": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "5":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "5": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "6":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "6": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "7":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "7": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "8":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "8": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "9":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "9": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "10":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "10": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "11":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "11": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "12":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "12": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "13":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "13": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "14":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
+                        
                     },
-                    "14": {
-                        "enable": "False",
-                        "offset_dac": {
+                    "15":  {
                             "a": "0",
                             "b": "0",
                             "c": "0"
-                        }
-                    },
-                    "15": {
-                        "enable": "False",
-                        "offset_dac": {
-                            "a": "0",
-                            "b": "0",
-                            "c": "0"
-                        }
+                        
                     }
                 }
             },
@@ -295,11 +278,11 @@
                     "address": "0"
                 },
                 "4": {
-                    "value": "62",
+                    "value": "0",
                     "address": "0"
                 },
                 "5": {
-                    "value": "62",
+                    "value": "0",
                     "address": "0"
                 },
                 "6": {
@@ -307,7 +290,7 @@
                     "address": "0"
                 },
                 "7": {
-                    "value": "62",
+                    "value": "0",
                     "address": "0"
                 },
                 "8": {
@@ -315,7 +298,7 @@
                     "address": "0"
                 },
                 "9": {
-                    "value": "20",
+                    "value": "0",
                     "address": "0"
                 },
                 "10": {
@@ -352,6 +335,6 @@
                 }
 
             },
-            "mux": {"enable": "True",
+            "mux": {"enable": "False",
                     "channel": 7}
         }

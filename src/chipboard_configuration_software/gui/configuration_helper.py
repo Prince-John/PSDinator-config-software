@@ -31,6 +31,32 @@ def read_config(path: str) -> dict:
         return config
 
 
+class ConfigurationDiffer:
+    def __init__(self, old_config_path, temp_path=""):
+        self.old_config = read_config(old_config_path)
+        self.temp_path = temp_path
+        write_config(self.temp_path, self.old_config)
+        self.current_config = self.old_config
+
+    def get_changes(self):
+        return self._recursive_diff(self.old_config, read_config(self.temp_path))
+
+    def _recursive_diff(self, old, new):
+        if not isinstance(old, dict) or not isinstance(new, dict):
+            return new if old != new else None
+
+        diff = {}
+        for key in new:
+            old_val = old.get(key)
+            new_val = new[key]
+
+            child_diff = self._recursive_diff(old_val, new_val)
+            if child_diff is not None:
+                diff[key] = child_diff
+
+        return diff if diff else None
+
+
 class ConfigurationManager:
 
     def __init__(self):

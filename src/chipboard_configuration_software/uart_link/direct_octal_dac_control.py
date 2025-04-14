@@ -1,8 +1,9 @@
 import sys
 
-from src.chipboard_configuration_software.command_generator.commands.global_commands import generate_single_dac_command
-from src.chipboard_configuration_software.gui.configuration_helper import read_config, write_config
-from src.chipboard_configuration_software.uart_link.middleware import UartMiddleware
+from chipboard_configuration_software.uart_link.utils import connect_to_chipboard_prompt
+from chipboard_configuration_software.command_generator.commands.global_commands import generate_single_dac_command
+from chipboard_configuration_software.gui.configuration_helper import read_config, write_config
+from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 # Define the mapping of DAC channels to config keys
 channel_map = {

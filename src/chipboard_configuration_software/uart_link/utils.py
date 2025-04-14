@@ -1,7 +1,7 @@
 from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
-    from src.chipboard_configuration_software.uart_link.middleware import UartMiddleware
+    from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 
 def print_with_bars(text: str, symbol: str = '*', border_length: int = 40) -> None:

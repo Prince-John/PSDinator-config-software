@@ -10,7 +10,7 @@ from typing import List, Union, Literal
 from .utils import bit_append_left, sanitize_resistance_string
 
 BIAS_MODES = Literal["high", "low"]
-TEST_MODES = Literal["off", "on"]
+POLARITY_MODES = Literal["positive", "negative"]
 VTC_RANGES = Literal["250 ns", "2 us"]
 SUBCHANNEL_RANGES = Literal[0, 1, 2, 3, "0", "1", "2", "3"]
 
@@ -21,9 +21,64 @@ def generate_psd_serial_word(channel_enable_low_mask: int,
                              subchannel_width_ranges: tuple,
                              vtc_range: VTC_RANGES,
                              bias_mode: BIAS_MODES,
-                             test_mode: TEST_MODES,
+                             polarity_mode: POLARITY_MODES,
                              chip_id: int
                              ) -> int:
+    """
+
+    Serial word definition:
+        [Chip ID]-[Polarity]-[Bias Mode]-[VTC Range]-[Range Word]-[Gain Word]-[Unused]-[Channel Enable]
+         <47:40> -  <39>    -   <38>    -   <37>    -   <36:25>  -  <24:16>  - <15:8> -    <7:0>
+
+    Range Word Definition:
+        --[Width Range C]-[Delay Range C]-[Width Range B]-[Delay Range B]-[Width Range A]-[Delay Range A]--
+        --   <36:35>     -   <34:33>     -   <32:31>     -   <30:29>     -   <28:27>     -   <26:25>     --
+
+    Gain Word Definition:
+        --[Gain Range C]-[Gain Range C]-[Gain Range B]--
+        --   <24:22>     -   <21:19>     -   <18:16>  --
+
+    :param channel_enable_low_mask:
+    :param gain_settings:
+    :param subchannel_delay_ranges:
+    :param subchannel_width_ranges:
+    :param vtc_range:
+    :param bias_mode:
+    :param polarity_mode:
+    :param chip_id: should be zero for both
+
+    :rtype: int
+    :return: 48 bit PSD configuration shift register word
+    """
+
+    gain_word = get_gain_word(gain_settings)
+    range_word = get_range_word(subchannel_delay_ranges, subchannel_width_ranges)
+    vtc_range_bit = get_vtc_range(vtc_range)
+    bias_mode_bit = get_mode_bit(bias_mode)
+    polarity_mode_bit = get_mode_bit(polarity_mode)
+    channel_enable_mask_upper_byte = 0xFF
+    channel_enable_mask_lower_byte = check_bitstring(channel_enable_low_mask)
+    # chip_id should always be 0 for PSDv4
+    chip_id = 0
+
+    # assembling the serial word
+    serial_word = chip_id << 40 | polarity_mode_bit << 39 | bias_mode_bit << 38 | vtc_range_bit << 37 | \
+                  range_word << 25 | gain_word << 16 | channel_enable_mask_upper_byte << 8 | \
+                  channel_enable_mask_lower_byte
+
+    return serial_word
+
+
+def generate_psd_serial_word_backup(channel_enable_low_mask: int,
+                                    gain_settings: tuple,
+                                    subchannel_delay_ranges: tuple[
+                                        SUBCHANNEL_RANGES, SUBCHANNEL_RANGES, SUBCHANNEL_RANGES],
+                                    subchannel_width_ranges: tuple,
+                                    vtc_range: VTC_RANGES,
+                                    bias_mode: BIAS_MODES,
+                                    test_mode: POLARITY_MODES,
+                                    chip_id: int
+                                    ) -> int:
     """
 
 
@@ -136,8 +191,8 @@ Converts pythons 2's complement into the 5 bit sign/mag notation expected by PSD
     return (abs(dac_value) & 0x0F) | sign
 
 
-def get_mode_bit(mode: BIAS_MODES | TEST_MODES | int) -> int:
-    test_mode_map = {"off": 0, "on": 1}
+def get_mode_bit(mode: BIAS_MODES | POLARITY_MODES | int) -> int:
+    test_mode_map = {"positive": 1, "negative": 0}
     bias_mode_map = {"high": 0, "low": 1}
 
     if isinstance(mode, int):
@@ -172,7 +227,6 @@ def get_subchannel_gain_bits(resistance: str | int) -> int:
 
     if not isinstance(resistance, int):
         try:
-
             resistance = sanitize_resistance_string(resistance)
         except (TypeError, ValueError):
             raise TypeError("Not a valid resistance setting type, should be string or int in ohms ")
@@ -184,39 +238,62 @@ def get_subchannel_gain_bits(resistance: str | int) -> int:
 
 
 def get_gain_word(gain_settings: tuple) -> int:
-    gain_word = 0x00
-    for index, gain in enumerate(gain_settings):
-        gain_word = bit_append_left(gain_word, get_subchannel_gain_bits(gain), initial_word_length=3 * index)
+    """
+    Gain Word Definition:
+        --[Gain Range C]-[Gain Range B]-[Gain Range A]--
+        --   <24:22>     -   <21:19>     -   <18:16>  --
+
+    :param gain_settings: (Gain A, Gain B, Gain C)
+    :return:
+    """
+
+    gain_word = get_subchannel_gain_bits(gain_settings[2]) << 6 | \
+                get_subchannel_gain_bits(gain_settings[1]) << 3 | \
+                get_subchannel_gain_bits(gain_settings[0])
+
     return gain_word
 
 
 def get_range_word(subchannel_delay_ranges: tuple, subchannel_width_ranges) -> int:
-    range_word = 0x00
-    for index, (delay_range, width_range) in enumerate(zip(subchannel_delay_ranges, subchannel_width_ranges)):
-        range_word = bit_append_left(range_word, get_subchannel_range_bits(delay_range),
-                                     initial_word_length=(4 * index))
-        range_word = bit_append_left(range_word, get_subchannel_range_bits(width_range),
-                                     initial_word_length=(4 * index + 2))
+    """
+
+     Range Word Definition:
+            --[Width Range C]-[Delay Range C]-[Width Range B]-[Delay Range B]-[Width Range A]-[Delay Range A]--
+            --   <36:35>     -   <34:33>     -   <32:31>     -   <30:29>     -   <28:27>     -   <26:25>     --
+
+    :param subchannel_delay_ranges:
+    :param subchannel_width_ranges:
+    :return:
+    """
+    range_c = get_subchannel_range_bits(subchannel_width_ranges[2]) << 2 | \
+              get_subchannel_range_bits(subchannel_delay_ranges[2])
+
+    range_b = get_subchannel_range_bits(subchannel_width_ranges[1]) << 2 | \
+              get_subchannel_range_bits(subchannel_delay_ranges[1])
+
+    range_a = get_subchannel_range_bits(subchannel_width_ranges[0]) << 2 | \
+              get_subchannel_range_bits(subchannel_delay_ranges[0])
+
+    range_word = range_c << 8 | range_b << 4 | range_a
+
     return range_word
 
 
 def get_subchannel_range_bits(delay_range: SUBCHANNEL_RANGES) -> int:
     """
-    TODO: Endian error, change this.
-
-    Returns the 2 delay and width setting bits. Default setting for PSD is 0
+   Returns the 2 delay and width setting bits. Default setting for PSD is 0
 
     Expects input to be a valid range setting 0-3.
 
     :return: 2 bit range bitstring. The return is of type int, only 2 LSB are valid.
     """
 
-    valid_range_settings = {0: 0, 1: 2, 2: 1, 3: 3}
+    valid_range_settings = {0: 0, 1: 1, 2: 2, 3: 3}
 
     delay_range = int(delay_range)
 
-   # if delay_range not in valid_range_settings.keys:
-      #  raise ValueError("Not a valid range setting")
+    if delay_range not in valid_range_settings:
+        raise ValueError("Not a valid range setting")
 
     return valid_range_settings[delay_range]
 
@@ -243,7 +320,29 @@ CFD pulse, just as in PSD3.'
 
 
 def check_bitstring(channel_mask: int) -> int:
-    if not isinstance(channel_mask, int) or channel_mask.bit_length() > 8:
+    if not isinstance(channel_mask, int):
         raise TypeError("Bitmask needs to be of type int with bit width = 8")
+    if channel_mask.bit_length() != 8:
+        raise ValueError("Bit width needs to be 8")
 
     return channel_mask
+
+
+def generate_global_enable_word(global_enable: bool):
+    """
+    Returns the status of the PSD global enable line. 1 bit value.
+
+    This function is not strictly needed but is included for consistency with the way this program generates data words
+    for configuration commands. It is a wrapper for typecasting bool to 1 bit int
+
+    :param global_enable: global enable state of the CFD asic
+    :return: Returns int with 1 valid bit for global enable bool input
+    """
+
+    if not isinstance(global_enable, bool):
+        raise TypeError("Global Enable needs to be Type bool")
+
+    if global_enable:
+        return 1
+    else:
+        return 0

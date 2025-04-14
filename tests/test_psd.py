@@ -33,20 +33,21 @@ class TestBitSequenceOutputs(TestCase):
         gains = (500, 10000, 500)
         delays = (0, 1, 2)
         widths = ("3", 1, "2")
-        chip_id = 0b11100011
-        word = psd.generate_psd_serial_word(ch_bit_mask, gains, delays, widths, "2 us", "high", "on", chip_id)
+        chip_id = 0b00000000
+        word = psd.generate_psd_serial_word(ch_bit_mask, gains, delays, widths, "2 us", "high", "positive", chip_id)
 
         test_mode = 1
         bias_mode = 0
         vtc = 0
 
         actual_word = chip_id << 40 | test_mode << 39 | bias_mode << 38 | vtc << 37 | 2 << 35 | 2 << 33 | 1 << 31 | \
-                      1 << 29 | 3 << 27 | 0 << 25 | 0 << 22 | 4 << 19 | 0 << 16 | ch_bit_mask
+                      1 << 29 | 3 << 27 | 0 << 25 | 0 << 22 | 4 << 19 | 0 << 16 | 0xFF << 8 | ch_bit_mask
 
         print(format_binary_with_spaces(word, 48))
         print(format_binary_with_spaces(actual_word, 48))
         print(format_binary_with_spaces(actual_word ^ word, 48))
         self.assertEqual(actual_word, word)
+
 
 
 class TestGeneratePsdDacWords(TestCase):
@@ -68,7 +69,6 @@ class TestGeneratePsdDacWords(TestCase):
 
 class TestPsdTriggerWord(TestCase):
     def test_generate_psd_trigger_word(self):
-
         for test_case, good_out in [(1, 0x3), (2, 0x1), (3, 0x0), ("1", 0x3), ("2", 0x1), ("3", 0x0)]:
             self.assertEqual(psd.generate_psd_trigger_word(test_case), good_out)
 
@@ -99,3 +99,17 @@ class TestPsdTriggerWord(TestCase):
         with self.assertRaises(ValueError) as context:
             psd.generate_psd_trigger_word("mode")  # Completely invalid string
         self.assertEqual(str(context.exception), "Not a valid trigger mode value")
+
+
+class TestGainWord(TestCase):
+    def test_get_gain_word(self):
+        gain_word = psd.get_gain_word((20000, 500, 100000))
+        print(f"{gain_word:09b}")
+        self.fail()
+
+
+class TestRangeWord(TestCase):
+    def test_get_range_word(self):
+        range_word = psd.get_range_word(subchannel_delay_ranges=(1, 0, 3), subchannel_width_ranges=(3, 0, 1))
+        print(f"{range_word:012b}")
+        self.fail()
