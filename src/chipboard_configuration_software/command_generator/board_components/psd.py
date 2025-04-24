@@ -180,7 +180,7 @@ def get_dac_value(dac_value: int) -> int:
     """
 Converts pythons 2's complement into the 5 bit sign/mag notation expected by PSD.
     :rtype: 5 bit sign/mag notation int
-    :return: 5 bit dac value in sign/mag notation
+    :return: 5 bit dac value in sign/mag notation (1 bit sign)+(4 bits mag)
     :type dac_value: int
     """
     if dac_value < 0:

@@ -100,8 +100,14 @@ def get_mode_0_words(nowlin_mode: NOWLIN_MODES,
 
     address_word = ((test_point_channel & 0xF) << 4) | 0x0
 
+    try:
+        nowlin_delay = capacitor_bus_map[nowlin_mode][capacitor_bus]
+    except KeyError as e:
+
+        raise ValueError(f"Invalid nowlin delay setting {capacitor_bus} for nowlin mode {nowlin_mode}")
+
     data_word = nowlin_mode_map[nowlin_mode] << 7 | test_point_select_map[test_point_select] << 4 | \
-                capacitor_bus_map[nowlin_mode][capacitor_bus]
+                nowlin_delay
 
     return address_word, data_word
 
@@ -204,4 +210,3 @@ def generate_global_enable_word(global_enable: bool):
         return 1
     else:
         return 0
-

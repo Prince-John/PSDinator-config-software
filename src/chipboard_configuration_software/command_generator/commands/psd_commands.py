@@ -44,7 +44,7 @@ def generate_psd_commands(psd_config: PSDConfigurationDict) -> List[str]:
                 psd_commands.extend(generate_psd_dac_subcommands(component_dict))
 
             case "serial_register_settings":
-                psd_commands.extend(generate_psd_serial_subcommands(component_dict))
+                psd_commands.append(generate_psd_serial_subcommands(component_dict))
 
     return psd_commands
 

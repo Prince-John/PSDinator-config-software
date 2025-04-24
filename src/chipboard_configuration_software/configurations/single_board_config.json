@@ -1,27 +1,28 @@
 {
             "chipboard_number": 0,
             "cfd": {
-                "nowlin_mode": "short",
-                "nowlin_delay": "8 ns",
-                "lockout_DAC": "31",
-                "lockout_mode": "long",
-                "cfd_pulse_width": "100",
-                "agnd_trim": "1.43 V",
-                "agnd_trim_options": {"1.36 V": 0, "1.43 V": 1, "1.49 V": 2, "1.56 V": 3,
-                                      "1.63 V": 4, "1.69 V": 5, "1.77 V": 6, "1.84 V": 7},
-                "global_enable": "True",
-                "global_Mode": "False",
-                "le_out_enable": "False",
-                "test_point": "AVSS",
-                "test_point_options":  {"AVSS": 0,
-                             "lockout pulse": 1,
-                             "leading edge detector pulse": 2,
-                             "oneshot input": 3,
-                             "oneshot pulse": 5,
-                             "zero cross detector pulse": 6},
-                "test_point_channel": "0",
-                "negative_polarity": "False",
-                "channels": {
+                "common_settings": {
+                    "nowlin_mode": "short",
+                    "nowlin_delay": "8 ns",
+                    "lockout_DAC": "31",
+                    "lockout_mode": "long",
+                    "cfd_pulse_width": "100",
+                    "agnd_trim": "1.43 V",
+                    "agnd_trim_options": {"1.36 V": 0, "1.43 V": 1, "1.49 V": 2, "1.56 V": 3,
+                                          "1.63 V": 4, "1.69 V": 5, "1.77 V": 6, "1.84 V": 7},
+                    "global_Mode": "False",
+                    "le_out_enable": "False",
+                    "test_point": "AVSS",
+                    "test_point_options":  {"AVSS": 0,
+                                 "lockout pulse": 1,
+                                 "leading edge detector pulse": 2,
+                                 "oneshot input": 3,
+                                 "oneshot pulse": 5,
+                                 "zero cross detector pulse": 6},
+                    "test_point_channel": "0",
+                    "negative_polarity": "False"
+                },
+                "individual_channel_settings": {
                     "0": {
                         "enable": "True",
                         "leading_edge_DAC_value": 25,
@@ -102,8 +103,8 @@
                         "leading_edge_DAC_value": 0,
                         "sign_bit": "False"
                     }
-
-                }
+                },
+                "global_enable": "True"
             },
             "psd": {
                 "global_enable": "True",

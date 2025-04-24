@@ -1,4 +1,5 @@
 from typing import TypedDict, Literal, Dict
+from .literal_types import *
 
 # Predefined allowed literals
 BIAS_MODES = Literal["high", "low"]
@@ -6,13 +7,7 @@ POLARITY_MODES = Literal["positive", "negative"]
 VTC_RANGES = Literal["250 ns", "2 us"]
 SUBCHANNEL_RANGES = Literal[0, 1, 2, 3, "0", "1", "2", "3"]
 BOOL_TYPES = Literal["True", "False"]
-ChannelKey = Literal[
-    "0", "1", "2", "3",
-    "4", "5", "6", "7",
-    "8", "9", "10", "11",
-    "12", "13", "14", "15"
-]
-SubchannelKey = Literal["a", "b", "c"]
+
 # Define types for each subfield
 ChannelEnableDict = Dict[ChannelKey, BOOL_TYPES]
 
@@ -49,10 +44,16 @@ class SubchannelOffsetDacDict(TypedDict, total=False):
 ChannelOffsetDacDict = Dict[ChannelKey, SubchannelOffsetDacDict]
 
 
+class TestModeDict(TypedDict):
+    status: Literal["on", "off"]
+    channel: ChannelKey
+    subchannel: SubchannelKey
+
+
 # Top-level configuration
 class PSDConfigurationDict(TypedDict, total=False):
     global_enable: Literal["True", "False"]
-    test_mode: Literal["on", "off"]
+    test_mode: TestModeDict
     serial_register_settings: SerialRegisterSettingsDict
     octal_dac_settings: OctalDacSettingsDict
     trigger_mode: Literal["1", "2", "3"]

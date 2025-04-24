@@ -241,7 +241,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def on_negativePolarity_clicked(self, state):
         print("negativePolarity State Changed.")
 
-        self.configuration_manager.current_chip_config["negative_polarity"] = str(state == Qt.CheckState.Checked.value)
+        self.configuration_manager.current_chipboard_config["negative_polarity"] = str(state == Qt.CheckState.Checked.value)
 
         pass
 
@@ -259,26 +259,26 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def on_chipNumber_clicked(self, text):
         print("chipNumber selection changed to {0}".format(text))
-        self.configuration_manager.set_current_chip(int(text))
+        self.configuration_manager._set_current_chipboard(int(text))
         self.chipNumber_display.display(text)
         self.update_current_gui()
 
     def on_testPoint_clicked(self, text):
         print("testPoint selection changed to {0}".format(text))
 
-        self.configuration_manager.current_chip_config["test_point"] = text
+        self.configuration_manager.current_chipboard_config["test_point"] = text
 
     def on_testPointChannel_clicked(self, text):
         print("testPointChannel selection changed to {0}".format(text))
 
-        self.configuration_manager.current_chip_config["test_point_channel"] = text
+        self.configuration_manager.current_chipboard_config["test_point_channel"] = text
 
     def update_current_gui(self):
 
         current_enable_values = self.configuration_manager.get_DAC_values("enable")
         current_sign_values = self.configuration_manager.get_DAC_values("sign_bit")
         current_DAC_values = self.configuration_manager.get_DAC_values("leading_edge_DAC_value")
-        print(json.dumps(self.configuration_manager.current_chip_config, indent=4))
+        print(json.dumps(self.configuration_manager.current_chipboard_config, indent=4))
         # update checkboxes
         for index, checkbox in enumerate(self.signBit_checkboxes):
             checkbox.setChecked(current_sign_values[index])
@@ -294,11 +294,11 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                 DAC_value.setText(current_DAC_values[index])
 
         # update test point
-        self.negativePolarity.setChecked(self.configuration_manager.current_chip_config["negative_polarity"] == 'True')
+        self.negativePolarity.setChecked(self.configuration_manager.current_chipboard_config["negative_polarity"] == 'True')
 
-        change_item_selection(self.testPoint, self.configuration_manager.current_chip_config["test_point"])
+        change_item_selection(self.testPoint, self.configuration_manager.current_chipboard_config["test_point"])
         change_item_selection(self.testPointChannel,
-                              self.configuration_manager.current_chip_config["test_point_channel"])
+                              self.configuration_manager.current_chipboard_config["test_point_channel"])
 
     def closeEvent(self, event):
         """ overloads the default PyQt function to save file config on exit"""

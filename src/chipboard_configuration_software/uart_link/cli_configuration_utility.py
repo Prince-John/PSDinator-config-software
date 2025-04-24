@@ -1,29 +1,28 @@
 import json
+import sys
 
 from chipboard_configuration_software.command_generator import generate_command_string
-from chipboard_configuration_software.gui.configuration_helper import read_config, write_config, ConfigurationDiffer
+from chipboard_configuration_software.gui.configuration_helper import ConfigurationDiffer, ConfigurationManager
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 from chipboard_configuration_software.uart_link.utils import print_with_bars
-
 
 if __name__ == '__main__':
     uart_link = UartMiddleware()
     print("Uart Link is up, no device connected!")
 
+    configuration_manager = ConfigurationManager()
+
     chipboard_config = ConfigurationDiffer(old_config_path=r'../configurations/single_board_config.json',
                                            temp_path=r'../configurations/single_board_config_temp.json')
 
-    original_config = read_config(r'../configurations/single_board_config.json')
-    write_config(r'../configurations/single_board_config_temp.json', original_config)
-    config = original_config
+    config = configuration_manager.current_chipboard_config
 
     try:
-        while input("Read config changes (Y)?") == "Y":
-            config = read_config(r'../configurations/single_board_config_temp.json')
-            input("Read Changes? Enter to continue")
-            changed_config = chipboard_config.get_changes()
+        while input("Modify configuration (Y/n)?") == "Y":
+            input("Read Changes? Enter to continue ...")
+            changed_config = configuration_manager.get_changes()
             print_with_bars(f"Command changes: {json.dumps(changed_config, indent=4)}")
-
+            config = changed_config
     except KeyboardInterrupt:
         print("Interrupted by user, exiting config edit loops")
 

@@ -1,5 +1,13 @@
 import json
 import os
+import logging
+from datetime import datetime
+from typing import List
+
+from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
+    ChipboardConfigurationDict
+
+logger = logging.getLogger(__name__)
 
 tempfile_path = r"autosave_config.json"
 
@@ -31,26 +39,140 @@ def read_config(path: str) -> dict:
         return config
 
 
+def read_single_chipboard_config(path: str, chipboard_number: int) -> dict:
+    """Accepts a path and reads the json file into memory as the `configuration`
+    This does not validate the dictionary, ensure that the dictionary is validated as a valid chipboard configuration.
+
+    Args:
+        path: path of the config file.
+        chipboard_number: Index of chipboard configuration to load.
+    """
+    with open(path, 'r') as autosave_file:
+        config = json.load(autosave_file)
+        chipboard_config = config["configuration"][str(chipboard_number)]
+        logger.info(f"Chipboard {chipboard_number} from configuration file {path} loaded.")
+
+        return chipboard_config
+
+
+def generate_default_configuration() -> dict:
+    default_config = {"configuration_name": "default_config.json",
+                      "date_modified": datetime.today().strftime('%Y-%m-%d %H:%M:%S'),
+                      "configuration": {
+                          "0":
+                              dict(chipboard_number=0,
+                                   cfd=dict(common_settings=
+                                            dict(nowlin_mode="short",
+                                                 nowlin_delay="1 ns",
+                                                 lockout_DAC="3",
+                                                 lockout_mode="long",
+                                                 cfd_pulse_width="100",
+                                                 agnd_trim="1.43 V",
+                                                 global_enable="True",
+                                                 global_Mode="False",
+                                                 le_out_enable="False",
+                                                 test_point="AVSS",
+                                                 test_point_channel="0",
+                                                 negative_polarity="False"
+                                                 ),
+                                            individual_channel_settings={
+                                                str(channel): {"enable": False,
+                                                               "leading_edge_DAC_value": 0,
+                                                               "sign_bit": True}
+                                                for channel in range(0, 16)
+                                            },
+                                            global_enable=True
+                                            ),
+
+                                   psd=dict(global_enable="False",
+                                            test_mode={"status": "off", "channel": "0", "subchannel": "a"},
+                                            serial_register_settings={
+                                                "polarity": "positive",
+                                                "bias": "high",
+                                                "gain": {subchannel: "500"
+                                                         for subchannel in ['a', 'b', 'c']},
+                                                "vtc_range": "2 us",
+                                                "delay_ranges": {subchannel: "0"
+                                                                 for subchannel in ['a', 'b', 'c']},
+                                                "width_ranges": {subchannel: "0"
+                                                                 for subchannel in ['a', 'b', 'c']},
+                                                "channel_enables": {
+                                                    str(channel): "False" for channel in range(0, 16)
+                                                }
+                                            },
+                                            octal_dac_settings={
+                                                "delay_voltages": {subchannel: "0"
+                                                                   for subchannel in ['a', 'b', 'c']},
+                                                "width_voltages": {subchannel: "0"
+                                                                   for subchannel in ['a', 'b', 'c']},
+                                                "auto_veto_time": "2",
+                                                "multiplicity_offset": "0"
+                                            },
+                                            trigger_mode="3",
+                                            channel_offset_dacs={
+                                                str(index): {subchannel: "0" for subchannel in ['a', 'b', 'c']}
+                                                for index in range(16)}
+                                            ),
+
+                                   delay={index: {"value": "0"} for index in range(16)},
+
+                                   mux={"enable": False, "channel": 0}
+
+                                   )
+
+                      }
+                      }
+    return default_config
+
+
 class ConfigurationDiffer:
     def __init__(self, old_config_path, temp_path=""):
         self.old_config = read_config(old_config_path)
         self.temp_path = temp_path
+        self.stop_recurse_paths = {
+            "psd.serial_register_settings",
+            "cfd.individual_channel_settings.0",
+            "cfd.individual_channel_settings.1",
+            "cfd.individual_channel_settings.2",
+            "cfd.individual_channel_settings.3",
+            "cfd.individual_channel_settings.4",
+            "cfd.individual_channel_settings.5",
+            "cfd.individual_channel_settings.6",
+            "cfd.individual_channel_settings.7",
+            "cfd.individual_channel_settings.8",
+            "cfd.individual_channel_settings.9",
+            "cfd.individual_channel_settings.10",
+            "cfd.individual_channel_settings.11",
+            "cfd.individual_channel_settings.12",
+            "cfd.individual_channel_settings.13",
+            "cfd.individual_channel_settings.14",
+            "cfd.individual_channel_settings.15",
+            "cfd.common_settings",
+            "delay",
+            "mux"
+
+        }
+
         write_config(self.temp_path, self.old_config)
-        self.current_config = self.old_config
 
-    def get_changes(self):
-        return self._recursive_diff(self.old_config, read_config(self.temp_path))
+    def get_changes(self, stop_recurse_paths: set[str] = None):
+        if stop_recurse_paths is None:
+            stop_recurse_paths = self.stop_recurse_paths
+        new_config = read_config(self.temp_path)
+        return self._recursive_diff(self.old_config, new_config, path="", stop_paths=stop_recurse_paths)
 
-    def _recursive_diff(self, old, new):
-        if not isinstance(old, dict) or not isinstance(new, dict):
+    def _recursive_diff(self, old, new, path: str, stop_paths: set[str]):
+        # Stop at paths marked to include whole block
+        if path in stop_paths or not isinstance(old, dict) or not isinstance(new, dict):
             return new if old != new else None
 
         diff = {}
         for key in new:
+            new_path = f"{path}.{key}" if path else key
             old_val = old.get(key)
             new_val = new[key]
 
-            child_diff = self._recursive_diff(old_val, new_val)
+            child_diff = self._recursive_diff(old_val, new_val, new_path, stop_paths)
             if child_diff is not None:
                 diff[key] = child_diff
 
@@ -59,98 +181,110 @@ class ConfigurationDiffer:
 
 class ConfigurationManager:
 
-    def __init__(self):
-        self.current_chip_config = None
+    def __init__(self, auto_save_file_path=tempfile_path):
+        self.current_chipboard_config: ChipboardConfigurationDict = {}
+        self.currently_loaded_chipboard_config: ChipboardConfigurationDict | None = None
 
-        if os.path.isfile(tempfile_path):
-            print("Found Autosave file.")
-            self.configuration = read_config(tempfile_path)
+        self.__stop_recurse_paths = {
+            "psd.serial_register_settings",
+            "cfd.individual_channel_settings.0",
+            "cfd.individual_channel_settings.1",
+            "cfd.individual_channel_settings.2",
+            "cfd.individual_channel_settings.3",
+            "cfd.individual_channel_settings.4",
+            "cfd.individual_channel_settings.5",
+            "cfd.individual_channel_settings.6",
+            "cfd.individual_channel_settings.7",
+            "cfd.individual_channel_settings.8",
+            "cfd.individual_channel_settings.9",
+            "cfd.individual_channel_settings.10",
+            "cfd.individual_channel_settings.11",
+            "cfd.individual_channel_settings.12",
+            "cfd.individual_channel_settings.13",
+            "cfd.individual_channel_settings.14",
+            "cfd.individual_channel_settings.15",
+            "cfd.common_settings",
+            "delay",
+            "mux"
+
+        }
+        if os.path.isfile(auto_save_file_path):
+            logger.info("Found Autosave file!")
+            self.configuration = read_config(auto_save_file_path)
 
         else:
-            self.configuration = {"configuration_name": "default_config.json",
-                                  "date_modified": "07-28-23",
-                                  "configuration": [
-                                      dict(chipboard_number=chipboard_index,
-                                           cfd=dict(nowlin_mode="short",
-                                                    nowlin_delay="1",
-                                                    lockout_DAC="",
-                                                    lockout_mode="disabled",
-                                                    cfd_pulse_width="50",
-                                                    agnd_trim="1.77",
-                                                    global_enable="True",
-                                                    global_Mode="False",
-                                                    le_out_enable="False",
-                                                    external_agnd_enable="False",
-                                                    test_point="AVSS",
-                                                    test_point_channel="0",
-                                                    negative_polarity="False",
-                                                    leading_edge_DACs=[
-                                                        dict(channel=index,
-                                                             enable="True",
-                                                             leading_edge_DAC_value=None,
-                                                             sign_bit="False")
-                                                        for index in range(16)]
-                                                    ),
-                                           psd=dict(polarity="pos",
-                                                    bias="low",
-                                                    gain={subchannel: "0"
-                                                          for subchannel in ['a', 'b', 'c']},
-                                                    delay={subchannel: dict(range="0", dac_value="0")
-                                                           for subchannel in ['a', 'b', 'c', 't']},
-                                                    width={subchannel: dict(range="0", dac_value="0")
-                                                           for subchannel in ['a', 'b', 'c', 't']},
-                                                    auto_veto_time="0",
-                                                    channels={index: {"enable": "True",
-                                                                      "offset_dac": {subchannel: "0" for subchannel in
-                                                                                     ['a', 'b', 'c']}
-                                                                      }
-                                                              for index in range(16)}
-                                                    ),
-                                           delay=dict(channels={index: {"value": "0",
-                                                                        "multiplier": "0"}
-                                                                for index in range(16)})
+            self.configuration = generate_default_configuration()
+            write_config(auto_save_file_path, self.configuration)
+            logger.info("No autosave file found, using default configuration.")
 
-                                           )
-                                      for chipboard_index in range(16)
-                                  ]
-                                  }
+        self.current_chipboard_number = 0
+        self._set_current_chipboard(self.current_chipboard_number)
 
-            write_config(tempfile_path, self.configuration)
-
-        self.set_current_chip(0)
-
-    def set_current_chip(self, chip_number: int) -> None:
+    def _set_current_chipboard(self, chipboard_number: int) -> None:
         """
-        Sets the `current_chip_config` variable to the one corresponding to the chip_number index input.
-        This is a utility function that allows for easier reference of the current chip configurations.
+        Sets the `current_chipboard_config` variable to the one corresponding to the chipboard_number index input.
+        This is a utility function that allows for easier reference of the current chipboard configuration.
         """
-        self.current_chip_config = self.configuration["configuration"][chip_number]
+        logger.debug(f'Updating current single chipboard config')
+        self.current_chipboard_config = self.configuration["configuration"][str(chipboard_number)]
+        self.current_chipboard_number = chipboard_number
 
-    def modify_DAC_value(self, channel: int, key: str, value):
-        leading_edge_DACs = self.current_chip_config["channels"]
-
-        leading_edge_DACs[channel][key] = str(value)
-
-        pass
-
-    def get_DAC_values(self, key: str) -> list:
+    def __recursive_diff(self, old: dict, new: dict, path: str, stop_paths: set[str]) -> dict | None:
         """
-        This function returns a list of the current DAC values corresponding to the current key
-
-        Args: key: key of the list of current values to be retrieved. Options are `enable`, `sign_bit`,
-        and `leading_edge_DAC_value`
-
-        Returns: A list of DAC values in corresponding data type
-
-        raises: TypeError: if a key is not valid(sign_bit or leading_edge_DAC_value)
-
+        Internal helper function that recursively traverses through 2 chipboard configs and returns a configuration
+        dict with only changes. The recursive traversal stops once it comes across a stop path and returns the entire
+        dict below that point.
         """
+        if path in stop_paths or not isinstance(old, dict) or not isinstance(new, dict):
+            return new if old != new else None
 
-        leading_edge_DACs = self.current_chip_config["cfd"]["channels"]
+        diff = {}
+        for key in new:
+            new_path = f"{path}.{key}" if path else key
+            old_val = old.get(key)
+            new_val = new[key]
 
-        if key == 'enable' or key == 'sign_bit':
-            return [(DAC[key] == "True") for DAC in leading_edge_DACs]
-        elif key == 'leading_edge_DAC_value':
-            return [DAC[key] for DAC in leading_edge_DACs]
+            child_diff = self.__recursive_diff(old_val, new_val, new_path, stop_paths)
+            if child_diff is not None:
+                diff[key] = child_diff
+
+        return diff if diff else None
+
+    def get_changes(self, stop_recurse_paths: set[str] = None) -> ChipboardConfigurationDict:
+        """
+        Calculates the differences between the currently loaded configuration on the chipboard and current state of the
+        configuration on the utility. The last loaded configuration is also the same as the autosave file.
+        It returns a dict with all the related information needed to generate a command string.
+
+        :param stop_recurse_paths: Optional, set[str] of '.' seperated paths of keys which should be the last
+        traversed configuration subdict. This should almost never be used.
+        :return: dict of changed commands.
+        """
+        if stop_recurse_paths is None:
+            stop_recurse_paths = self.__stop_recurse_paths
+
+        new_config = self.current_chipboard_config
+
+        if self.currently_loaded_chipboard_config is None:
+            return self.current_chipboard_config
         else:
-            raise TypeError('{0} is not a valid DAC key.'.format(key))
+            old_config = self.currently_loaded_chipboard_config
+
+        return self.__recursive_diff(old_config, new_config, path="", stop_paths=stop_recurse_paths)
+
+    def get_currently_loaded_chipboard_config(self) -> ChipboardConfigurationDict:
+        """
+        This returns  the last valid loaded configuration onto the current chipboard. If the current chipboard has
+        not been loaded with any configuration then this returns the last auto saved configuration from disk.
+
+        Always use this method instead of directly accessing the class attribute. Edge cases can exist during
+        application start up where the `current_chipboard_config` might contain changes from GUI that have not yet
+        been loaded onto the chipboard and `currently_loaded_chipboard_config` is None.
+
+        :return:  currently_loaded_chipboard_config Type[ChipboardConfigurationDict]
+
+        """
+        if self.currently_loaded_chipboard_config is None:
+            return read_single_chipboard_config(tempfile_path, self.current_chipboard_number)
+
+        return self.currently_loaded_chipboard_config

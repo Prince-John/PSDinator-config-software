@@ -23,7 +23,7 @@ Generates the 16 bit word required to configure the LTC1660 DAC.
         k = value
     else:
         if not isinstance(value, float) or value < min_voltage or value > max_voltage:
-            raise ValueError("DAC voltage must be between 0.0V-5.0")
+            raise ValueError("DAC voltage must be between 0.0 V-5.0 V")
 
         k = int((value / 5.0) * 1023)  # scales up to 1023 because of 10 bit limit.
 
