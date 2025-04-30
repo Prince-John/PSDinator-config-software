@@ -9,7 +9,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>1091</width>
+    <width>1089</width>
     <height>993</height>
    </rect>
   </property>
@@ -315,7 +315,7 @@
          <enum>QTabWidget::Rounded</enum>
         </property>
         <property name="currentIndex">
-         <number>1</number>
+         <number>2</number>
         </property>
         <property name="elideMode">
          <enum>Qt::ElideLeft</enum>
@@ -1596,13 +1596,6 @@
           </item>
           <item row="1" column="1" rowspan="2" colspan="2">
            <layout class="QHBoxLayout" name="horizontalLayout_29">
-            <item>
-             <widget class="Line" name="line_3">
-              <property name="orientation">
-               <enum>Qt::Vertical</enum>
-              </property>
-             </widget>
-            </item>
             <item>
              <widget class="QLabel" name="label_2">
               <property name="text">
@@ -7453,8 +7446,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>1091</width>
-     <height>24</height>
+     <width>1089</width>
+     <height>37</height>
     </rect>
    </property>
    <widget class="QMenu" name="menutest">

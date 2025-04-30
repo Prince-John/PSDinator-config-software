@@ -19,6 +19,9 @@ def generate_commands(config) -> List[str]:
 
     commands = []
 
+    if config is None:
+        return []
+
     for component, component_config in config.items():
 
         match component:

@@ -1,0 +1,299 @@
+{
+    "configuration_name": "default_config.json",
+    "date_modified": "2025-04-21 22:42:10",
+    "configuration": {
+        "0": {
+            "chipboard_number": 0,
+            "cfd": {
+                "common_settings": {
+                    "nowlin_mode": "short",
+                    "nowlin_delay": "8 ns",
+                    "lockout_DAC": "3",
+                    "lockout_mode": "short",
+                    "cfd_pulse_width": "50",
+                    "agnd_trim": "1.43 V",
+                    "global_enable": "True",
+                    "global_Mode": "False",
+                    "le_out_enable": "False",
+                    "test_point": "AVSS",
+                    "test_point_channel": "0",
+                    "negative_polarity": "False"
+                },
+                "individual_channel_settings": {
+                    "0": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "1": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "2": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "3": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "4": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "5": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "6": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "7": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "8": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "9": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "10": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "11": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "12": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "13": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "14": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    },
+                    "15": {
+                        "enable": false,
+                        "leading_edge_DAC_value": 0,
+                        "sign_bit": true
+                    }
+                },
+                "global_enable": true
+            },
+            "psd": {
+                "global_enable": true,
+                "serial_register_settings": {
+                    "polarity": "positive",
+                    "bias": "high",
+                    "gain ": {
+                        "a": "500",
+                        "b": "500",
+                        "c": "500"
+                    },
+                    "delay_ranges": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "width_ranges": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "channel_enables": {
+                        "0": "False",
+                        "1": "False",
+                        "2": "False",
+                        "3": "False",
+                        "4": "False",
+                        "5": "False",
+                        "6": "False",
+                        "7": "False",
+                        "8": "False",
+                        "9": "False",
+                        "10": "False",
+                        "11": "False",
+                        "12": "False",
+                        "13": "False",
+                        "14": "False",
+                        "15": "False"
+                    }
+                },
+                "octal_dac_settings": {
+                    "delay_voltages": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "width_voltages": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "auto_veto_time": "2",
+                    "multiplicity_offset": "0"
+                },
+                "trigger_mode": "3",
+                "channel_offset_dacs": {
+                    "0": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "1": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "2": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "3": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "4": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "5": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "6": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "7": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "8": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "9": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "10": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "11": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "12": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "13": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "14": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    },
+                    "15": {
+                        "a": "0",
+                        "b": "0",
+                        "c": "0"
+                    }
+                }
+            },
+            "delay": {
+                "0": {
+                    "value": "0"
+                },
+                "1": {
+                    "value": "0"
+                },
+                "2": {
+                    "value": "0"
+                },
+                "3": {
+                    "value": "0"
+                },
+                "4": {
+                    "value": "0"
+                },
+                "5": {
+                    "value": "0"
+                },
+                "6": {
+                    "value": "0"
+                },
+                "7": {
+                    "value": "0"
+                },
+                "8": {
+                    "value": "0"
+                },
+                "9": {
+                    "value": "0"
+                },
+                "10": {
+                    "value": "0"
+                },
+                "11": {
+                    "value": "0"
+                },
+                "12": {
+                    "value": "0"
+                },
+                "13": {
+                    "value": "0"
+                },
+                "14": {
+                    "value": "0"
+                },
+                "15": {
+                    "value": "0"
+                }
+            },
+            "mux": {
+                "enable": false,
+                "channel": 0
+            }
+        }
+    }
+}

@@ -129,6 +129,7 @@ def generate_psd_serial_subcommands(psd_config: SerialRegisterSettingsDict) -> s
     :return: Returns the command string with 96bit serial word in ascii hex
     """
     bitmask_lower, bitmask_upper = _get_channel_enable(psd_config["channel_enables"])
+    print(bitmask_upper, bitmask_lower)
 
     gains = _get_ordered_ranges(psd_config["gain"])
     delay_ranges = _get_ordered_ranges(psd_config["delay_ranges"])
@@ -174,6 +175,7 @@ def _get_ordered_ranges(range_dict: RangeDict) -> tuple[int, int, int]:
 
 def _get_channel_enable(channels: ChannelEnableDict) -> (int, int):
     bitmask = 0x0
+    print(channels)
     for channel, channel_value in channels.items():
         if channel_value == 'True':
             bitmask |= (1 << (15 - int(channel)))

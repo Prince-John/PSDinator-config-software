@@ -71,11 +71,7 @@ def get_cfd_individual_channel_commands(cfd_config: CfdIndividualChannelSettings
         add_mode, data = cfd.generate_individual_channel_word(channel=int(channel),
                                                               channel_enable=(
                                                                   True if channel_dict["enable"] == "True" else False),
-                                                              leading_edge_DAC_input=channel_dict[
-                                                                  "leading_edge_DAC_value"],
-                                                              leading_edge_DAC_neg_polarity=(
-                                                                  True if channel_dict[
-                                                                              "sign_bit"] == "True" else False))
+                                                              leading_edge_DAC_value= int(channel_dict["leading_edge_DAC_value"]))
 
         commands.append(f"{cfd_command_prefix}{cfd_write_register_prefix}{add_mode:02X}{data:02X}\0")
 

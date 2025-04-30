@@ -68,7 +68,6 @@ def generate_default_configuration() -> dict:
                                                  lockout_mode="long",
                                                  cfd_pulse_width="100",
                                                  agnd_trim="1.43 V",
-                                                 global_enable="True",
                                                  global_Mode="False",
                                                  le_out_enable="False",
                                                  test_point="AVSS",
@@ -76,12 +75,11 @@ def generate_default_configuration() -> dict:
                                                  negative_polarity="False"
                                                  ),
                                             individual_channel_settings={
-                                                str(channel): {"enable": False,
-                                                               "leading_edge_DAC_value": 0,
-                                                               "sign_bit": True}
+                                                str(channel): {"enable": "False",
+                                                               "leading_edge_DAC_value": "0"}
                                                 for channel in range(0, 16)
                                             },
-                                            global_enable=True
+                                            global_enable="True"
                                             ),
 
                                    psd=dict(global_enable="False",
@@ -180,11 +178,17 @@ class ConfigurationDiffer:
 
 
 class ConfigurationManager:
+    """
+    Auto save file path should be default tempfile until we get a save file path.
+
+    After that the savefile location will be the autosave location.
+    """
 
     def __init__(self, auto_save_file_path=tempfile_path):
         self.current_chipboard_config: ChipboardConfigurationDict = {}
         self.currently_loaded_chipboard_config: ChipboardConfigurationDict | None = None
 
+        self.configuration_file_path = None
         self.__stop_recurse_paths = {
             "psd.serial_register_settings",
             "cfd.individual_channel_settings.0",
@@ -217,8 +221,11 @@ class ConfigurationManager:
             write_config(auto_save_file_path, self.configuration)
             logger.info("No autosave file found, using default configuration.")
 
+        self.auto_save_file_path = auto_save_file_path
+
         self.current_chipboard_number = 0
         self._set_current_chipboard(self.current_chipboard_number)
+        self.current_device = None
 
     def _set_current_chipboard(self, chipboard_number: int) -> None:
         """
@@ -285,6 +292,47 @@ class ConfigurationManager:
 
         """
         if self.currently_loaded_chipboard_config is None:
-            return read_single_chipboard_config(tempfile_path, self.current_chipboard_number)
+            return read_single_chipboard_config(self.auto_save_file_path, self.current_chipboard_number)
 
         return self.currently_loaded_chipboard_config
+
+    def update_currently_loaded_chipboard_config(self) -> None:
+
+        self.currently_loaded_chipboard_config = self.current_chipboard_config
+
+    def save_current_configuration(self, configuration_file_path: str = None) -> None:
+        """
+        Saves the complete current state of the class attribute `configuration` to the current `configuration_file_path`
+        location on disk. Updates the last saved date and `configuration_file_path` if provided.
+
+
+        :param configuration_file_path: Optional Save File Path, assumes input is correct/validated.
+        :type configuration_file_path: str
+        :return: None
+        """
+        if configuration_file_path is not None:
+            self.configuration_file_path = configuration_file_path
+
+        self.configuration["date_modified"] = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
+        write_config(path=self.configuration_file_path, config=self.configuration)
+
+    def load_saved_configuration(self, configuration_file_path: str) -> None:
+        """
+        Loads the configuration file present on disk into the class attribute `configuration`.
+        Updates the current chipboard dict as well;
+        Sets `currently_loaded_chipboard_config` to None
+        Updates class attribute `configuration_file_path` to one passed as function argument
+
+        TODO: Validation of loaded configurations.
+
+        :param configuration_file_path: Save File Path, assumes input is correct/validated.
+        :return: None
+        """
+
+        self.configuration = read_config(configuration_file_path)
+        self.configuration_file_path = configuration_file_path
+        self._set_current_chipboard(self.current_chipboard_number)
+        self.currently_loaded_chipboard_config = None
+
+        # update tempfile TODO: THis is a bad bodge to get psd checkboxes to update correctly. Fix this you lazy bitch.
+        self.auto_save_file_path = self.configuration_file_path

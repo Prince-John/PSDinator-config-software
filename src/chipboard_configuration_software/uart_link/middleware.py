@@ -1,3 +1,4 @@
+import logging
 import sys
 import time
 
@@ -6,12 +7,23 @@ from serial.tools.list_ports import comports
 
 from chipboard_configuration_software.command_generator import generate_command_string
 from chipboard_configuration_software.gui.configuration_helper import read_config, write_config
-from utils import print_with_bars
-from ascii_constants import *
+from chipboard_configuration_software.uart_link.utils import print_with_bars
+
+# from utils import print_with_bars
+from .ascii_constants import *
+
+logger = logging.getLogger(__name__)
 
 
 # from ..gui.configuration_helper import read_config
 # from ..command_generator import generate_command_string
+
+class CommandRejectedError(Exception):
+    def __init__(self, message, command=None):
+        """Raised when a command is NAK'd by the device, meaning it was rejected or unrecognized."""
+
+        super().__init__(message)
+        self.command = command
 
 
 class UartMiddleware:
@@ -47,50 +59,55 @@ class UartMiddleware:
 
         return [port.device for port in self.available_ports]
 
-    def connect_to_device(self, device: str):
+    def connect_to_device(self, device: str) -> str:
 
         if device in self.get_available_devices(print_output=False):
             self.serial_handler.port = device
             self.serial_handler.open()
-            print(f"Connected to {device} at {self.serial_handler.baudrate} baud!")
+            status = f"Connected to {device} at {self.serial_handler.baudrate} baud!"
+            print(status)
+            return status
         else:
             raise IOError("Device is not available")
 
     def send_stx(self):
-        print("")
-        print("Sending STX to enter configuration mode.", flush=True)
+
+        logger.info("Sending STX to enter configuration mode.")
         buff = [STX, NUL]
         byte_array = bytearray(buff)
         self.serial_handler.write(byte_array)
-        return self.wait_ack()
+        try:
+            self.wait_ack()
+        except (TimeoutError, CommandRejectedError) as e:
+            raise ConnectionRefusedError(e)
 
-    def wait_ack(self, timeout=5):
-        print("Waiting for an ACK or NAK...", flush=True)
+    def wait_ack(self, timeout=0.5):
+        logger.info("Waiting for an ACK or NAK...")
         start_time = time.time()
 
         while True:
             # Check for timeout
             elapsed_time = time.time() - start_time
             if elapsed_time > timeout:
-                print("Timeout: No response received.")
-                return False
+                logger.error("Timeout: No response received.")
+                raise TimeoutError("Timeout: No response received.")
 
             # Check if there's data in the buffer
             if self.serial_handler.in_waiting:
                 byte = self.serial_handler.read(1)
                 if byte == ACK:
-                    print("Received ACK ...")
+                    logger.info("Received ACK ...")
                     return True
                 if byte == NAK:
-                    print("Received NAK ...")
-                    return False
+                    logger.info("Received NAK ...")
+                    raise CommandRejectedError("Received NAK ...")
 
     def send_etx(self):
-        print("")
-        print("Sending ETX to exit configuration mode.", flush=True)
+        logger.info("Sending ETX to exit configuration mode.")
         buff = [ETX, NUL]
         byte_array = bytearray(buff)
         self.serial_handler.write(byte_array)
+
         self.wait_ack()
 
     def send_CMD(self, message, command_string, dry_run=False):
@@ -103,7 +120,12 @@ class UartMiddleware:
 
         byte_array = command_string.encode(encoding="ascii")
         self.serial_handler.write(byte_array)
-        return self.wait_ack()
+
+        try:
+            self.wait_ack()
+        except (CommandRejectedError, TimeoutError) as e:
+            logger.warning(f"Error with sending {command_string}: {e}")
+            raise CommandRejectedError(f"Error with sending {command_string[:-1]}: {e}")
 
     def cleanup(self) -> None:
         """
@@ -112,4 +134,3 @@ class UartMiddleware:
         :return: None
         """
         self.serial_handler.close()
-

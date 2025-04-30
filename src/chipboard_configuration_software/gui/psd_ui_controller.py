@@ -1,27 +1,38 @@
 import json
 from functools import partial
+from time import sleep
 from typing import get_args, cast, List
 
-from PySide6.QtCore import Slot, Qt
-from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit
+from PySide6.QtCore import Slot, Qt, Signal
+from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit, QWidget, QApplication
+from serial import PortNotOpenError
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import ChannelKey, \
     BoolStr, SubchannelKey
 from chipboard_configuration_software.command_generator.commands.configuration_types.psd_config_types import \
     PSDConfigurationDict
+from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
-from chipboard_configuration_software.gui.ui_files.psd_settings import Ui_DockWidget_psd
+from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
+from chipboard_configuration_software.gui.ui_files.psd_ui_widget import Ui_Widget_Psd
 import logging
+
+from chipboard_configuration_software.gui.utilities import set_checkbox_silently
+from chipboard_configuration_software.uart_link.middleware import UartMiddleware, CommandRejectedError
 
 logger = logging.getLogger(__name__)
 
 
-class PsdController:
-    def __init__(self, ui: Ui_DockWidget_psd, config_handler: ConfigurationManager):
+class PsdController(QWidget):
+    status_message = Signal(str)
+
+    def __init__(self, ui: Ui_Widget_Psd, config_handler: ConfigurationManager, uart_link: UartMiddleware, /):
         """
              ui is an instance of Ui_DockWidget_psd (after setupUi has been called).
          """
 
+        super().__init__()
+        self.uart_link = uart_link
         self.SUBCHANNELS: tuple[SubchannelKey, SubchannelKey, SubchannelKey] = ("a", "b", "c")
         self.ui = ui
         self.channel_enable_checkboxes: list[QCheckBox] = []
@@ -31,7 +42,6 @@ class PsdController:
         self.serial_register_comboBoxes: list[QComboBox] = []
 
         self.config_handler = config_handler
-        self.psd_config = self.config_handler.current_chipboard_config["psd"]
         self._connect_psd_offset_dac_signals()
         self._connect_psd_serial_register_signals()
         self._connect_octal_dac_signals()
@@ -40,8 +50,12 @@ class PsdController:
 
         logger.info("PSD GUI signals connected!")
 
-        self._update_ui()
+        self.update_ui()
         logger.info("PSD UI Updated!")
+
+    @property
+    def psd_config(self):
+        return self.config_handler.current_chipboard_config["psd"]
 
     def _connect_signals(self):
         pass
@@ -174,12 +188,6 @@ class PsdController:
 
         self._update_ui_psd_offset_dac()
 
-    @staticmethod
-    def __set_checkbox_silently(checkbox: QCheckBox, state: BoolStr):
-        checkbox.blockSignals(True)
-        checkbox.setChecked(state == "True")
-        checkbox.blockSignals(False)
-
     def _update_ui_psd_channel_enable_checkbox(self, psd_config: PSDConfigurationDict = None):
 
         if psd_config is None:
@@ -188,8 +196,9 @@ class PsdController:
         enable_states = psd_config["serial_register_settings"]["channel_enables"]
 
         for channel, state in enable_states.items():
+            logger.debug(f"Enable checkbox {channel } ui updated to current config state {state}.")
             checkbox = self.channel_enable_checkboxes[int(channel)]
-            self.__set_checkbox_silently(checkbox, state)
+            set_checkbox_silently(checkbox, state)
 
         logger.info("Updated enable checkbox ui to current config state.")
 
@@ -310,16 +319,16 @@ class PsdController:
         logger.debug(f"Channel {channel} enable checkbox set to {state}")
 
         assert str(channel) in get_args(ChannelKey)
-        channel_key = cast(ChannelKey, channel)
+        channel_key = cast(ChannelKey, str(channel))
 
-        self.psd_config["serial_register_settings"]["channel_enables"][channel_key] = cast(BoolStr, state)
+        self.psd_config["serial_register_settings"]["channel_enables"][channel_key] = cast(BoolStr, str(state))
 
         if not state:
-            self.__set_checkbox_silently(self.ui.checkBox_psd_channel_enable_all, "False")
+            set_checkbox_silently(self.ui.checkBox_psd_channel_enable_all, "False")
             if channel < 8:
-                self.__set_checkbox_silently(self.ui.checkBox_psd_channel_enable_0_7, "False")
+                set_checkbox_silently(self.ui.checkBox_psd_channel_enable_0_7, "False")
             else:
-                self.__set_checkbox_silently(self.ui.checkBox_psd_channel_enable_8_15, "False")
+                set_checkbox_silently(self.ui.checkBox_psd_channel_enable_8_15, "False")
 
     def _connect_octal_dac_signals(self):
 
@@ -553,7 +562,7 @@ class PsdController:
         self.ui.comboBox_psd_trigger_mode.currentTextChanged.connect(self._on_trigger_mode_changed)
         self.ui.checkBox_psd_global_enable.stateChanged.connect(self._on_psd_global_enable_changed)
         self.ui.pushButton_reset_psd_ui.pressed.connect(self._on_reset_gui_clicked)
-
+        self.ui.pushButton_configure_psd.pressed.connect(self._on_configure_psd_clicked)
         pass
 
     @Slot(bool)
@@ -576,16 +585,16 @@ class PsdController:
         """Slot for reset gui button """
         logger.debug(f"reset gui clicked")
         last_psd_config = self.config_handler.get_currently_loaded_chipboard_config()["psd"]
-        self._update_ui(last_psd_config)
+        self.update_ui(last_psd_config)
 
     def _update_ui_psd_misc(self, psd_config=None):
 
         if psd_config is None:
             psd_config = self.psd_config
-        self.__set_checkbox_silently(self.ui.checkBox_psd_global_enable, psd_config["global_enable"])
+        set_checkbox_silently(self.ui.checkBox_psd_global_enable, psd_config["global_enable"])
         self.ui.comboBox_psd_trigger_mode.setCurrentText(psd_config["trigger_mode"])
 
-    def _update_ui(self, psd_config=None):
+    def update_ui(self, psd_config=None):
 
         if psd_config is None:
             psd_config = self.psd_config
@@ -597,3 +606,68 @@ class PsdController:
         self._update_ui_psd_offset_dac(psd_config)
         self._update_ui_psd_misc(psd_config)
         pass
+
+    @Slot()
+    def _on_configure_psd_clicked(self):
+        """Slot for configure psd """
+        logger.debug(f"configure psd clicked")
+
+        self.configure_psd()
+
+    def show_failure_details(self, failures):
+        dialog = FailureDetailsDialog(failures, parent=self)
+        dialog.exec()
+
+    def configure_psd(self):
+        command_dict = self.config_handler.get_changes()
+
+        commands = generate_commands(command_dict)
+
+        # Track success and failure
+        success_count = 0
+        failures = []
+
+        try:
+            self.uart_link.send_stx()
+            for command in commands:
+                try:
+                    self.uart_link.send_CMD(command_string=command, message=f"Sending: {command}")
+                    success_count += 1
+
+                except Exception as e:
+                    logger.warning(f"Command '{command[:-1]}' failed: {e}")
+                    self.status_message.emit(f"Configuration Warning! {e}")
+                    failures.append((command[:-1], str(e)))
+                    QApplication.processEvents()
+                    continue
+
+            self.config_handler.update_currently_loaded_chipboard_config()
+            logger.info("Configured PSD!")
+
+            total = len(commands)
+            failure_count = len(failures)
+
+            if success_count == total:
+                self.config_handler.update_currently_loaded_chipboard_config()
+                final_msg = f"All {total} commands configured successfully!"
+                logger.info(final_msg)
+                self.status_message.emit(final_msg)
+            else:
+                final_msg = f"{success_count}/{total} commands succeeded, {failure_count} failed."
+                logger.warning(final_msg)
+                self.status_message.emit(final_msg)
+
+                # Show detailed window
+                self.show_failure_details(failures)
+            self.uart_link.send_etx()
+
+        except ConnectionRefusedError as e:
+            logger.error(f"Unable to get into chipboard configuration mode! {e}")
+            self.status_message.emit(f"Unable to get into chipboard configuration mode! {e}")
+        except PortNotOpenError as e:
+            logger.error(e)
+            self.status_message.emit(f"Error: Device is not connected! {e}")
+
+        except Exception as e:
+            logger.error(f"Unexpected Exception: {e}")
+            self.status_message.emit(f"Unexpected Exception: {e}")

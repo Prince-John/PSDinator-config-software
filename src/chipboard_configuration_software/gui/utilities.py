@@ -1,3 +1,12 @@
+import logging
+
+from PySide6.QtWidgets import QCheckBox
+
+from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import BoolStr
+
+logger = logging.getLogger(__name__)
+
+
 def camel_case_split(s):
     """https://stackoverflow.com/a/58996565"""
     idx = list(map(str.isupper, s))
@@ -58,3 +67,9 @@ def get_key(checkbox):
                   "signBit": "sign_bit"}
 
     return key_lookup[str(checkbox.objectName())]
+
+
+def set_checkbox_silently(checkbox: QCheckBox, state: BoolStr):
+    checkbox.blockSignals(True)
+    checkbox.setChecked(state == "True")
+    checkbox.blockSignals(False)

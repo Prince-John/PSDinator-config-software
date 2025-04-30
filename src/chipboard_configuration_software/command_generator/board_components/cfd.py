@@ -26,23 +26,33 @@ AGND_TRIM_VOLTAGES: Type[str] = Literal["1.36 V", "1.43 V", "1.49 V", "1.56 V", 
 ONESHOT_WIDTH_SELECTS: Type[str] = Literal["50", "100", "200", "500"]
 
 LOCKOUT_MODES: Type[str] = Literal["short", "long", "disabled"]
+LOCKOUT_DAC_VALUES: Type[str] = Literal['110 ns', '220 ns', '330 ns', '440 ns', '550 ns', '660 ns', '770 ns', '880 ns', '990 ns', '1.10 us', '1.21 us', '1.32 us', '1.43 us', '1.54 us', '1.65 us', '1.76 us', '1.87 us', '1.98 us', '2.09 us', '2.20 us', '2.31 us', '2.42 us', '2.53 us', '2.64 us', '2.75 us', '2.86 us', '2.97 us', '3.08 us', '3.19 us', '3.30 us', '3.41 us', '535 ns', '1.1 us', '1.6 us', '2.1 us', '2.7 us', '3.2 us', '3.7 us', '4.3 us', '4.8 us', '5.3 us', '5.9 us', '6.4 us', '7.0 us', '7.5 us', '8.0 us', '8.6 us', '9.1 us', '9.6 us', '10.2 us', '10.7 us', '11.2 us', '11.8 us', '12.3 us', '12.8 us', '13.4 us', '13.9 us', '14.4 us', '15.0 us', '15.5 us', '16.1 us', '16.6 us']
 
 
 def generate_individual_channel_word(channel: int, channel_enable: int | bool,
-                                     leading_edge_DAC_neg_polarity: int | bool,
-                                     leading_edge_DAC_input: int) -> tuple[int, int]:
+                                     leading_edge_DAC_value: int) -> tuple[int, int]:
     """
 Generates the data word and address + mode word required to configure individual channel settings on the CFD chip.
 
+ positive/negative polarity for dac, 1 sets it as negative polarity
+
+    :param leading_edge_DAC_value: 5 bit LE DAC sign/magnitude value
+
     :param channel: channel number, type int (4 valid bits considered) from 0 to 15
     :param channel_enable: enable or disable channel, type bool, 1 bit int sets 1 as enable
-    :param leading_edge_DAC_neg_polarity: positive/negative polarity for dac,True/1 sets it as negative polarity
-    :param leading_edge_DAC_input: 4 bit LE DAC magnitude value
+
     :return: tuple (8 bit address|mode word, 8 bit data word)
     """
     address_word = ((channel & 0xF) << 4) | 0x06
 
-    data_word = (channel_enable << 6) | (leading_edge_DAC_neg_polarity << 5) | (leading_edge_DAC_input & 0b00011111)
+    if leading_edge_DAC_value < 0:
+        sign = 0x1
+    else:
+        sign = 0x0
+
+    magnitude = abs(leading_edge_DAC_value) & 0x1F
+
+    data_word = (channel_enable << 6) | (sign << 5) | magnitude
 
     return address_word, data_word
 
@@ -117,7 +127,7 @@ def get_mode_1_words(lockout_mode, agnd_trim_voltage, oneshot_width_select) -> T
 
 
 
-    :param lockout_mode: Lockout time range, (1)short (110 ns steps, max 3.4 us) or (0)long (565ns steps, max 16.6 us)
+    :param lockout_mode: Lockout time range, (1)short (110 ns steps, max 3.4 us) or (0)long (535ns steps, max 16.6 us)
     :param agnd_trim_voltage: Internal AGND voltage setting, also accepts 3-bit int representing the trim bits
     :param oneshot_width_select: This sets the length of the output CFD pulse.
 
@@ -140,7 +150,7 @@ def get_mode_1_words(lockout_mode, agnd_trim_voltage, oneshot_width_select) -> T
     return address_word, data_word
 
 
-def get_mode_5_words(lockout_enable, lockout_dac: int) -> Tuple[int, int]:
+def get_mode_5_words(lockout_enable, lockout_dac: int | LOCKOUT_DAC_VALUES) -> Tuple[int, int]:
     """
 
     :param lockout_enable:
@@ -164,7 +174,7 @@ def generate_common_channel_words(nowlin_mode: int | NOWLIN_MODES,
                                   lockout_mode: int | LOCKOUT_MODES,
                                   agnd_trim_voltage: int | AGND_TRIM_VOLTAGES,
                                   oneshot_width_select: int | ONESHOT_WIDTH_SELECTS,
-                                  lockout_dac_input: int) -> List[Tuple[int, int], ...]:
+                                  lockout_dac_input: int| LOCKOUT_DAC_VALUES) -> List[Tuple[int, int], ...]:
     """
 
 This function generates the (address-mode,data) 8-bit words that are used to configure the common channel for the CFD
