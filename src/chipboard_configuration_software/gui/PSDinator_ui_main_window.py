@@ -6,14 +6,14 @@ from PySide6 import QtWidgets
 from PySide6.QtCore import Qt, QRegularExpression, QSize, Slot
 
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
-from ui_files.top_level_window import Ui_MainWindow
-from ui_files.psd_ui_widget import Ui_Widget_Psd
-from ui_files.cfd_ui_widget import Ui_Widget_Cfd
-from ui_files.chipboard_ui_widget import Ui_Widget_Chipboard
+from .ui_files.top_level_window import Ui_MainWindow
+from .ui_files.psd_ui_widget import Ui_Widget_Psd
+from .ui_files.cfd_ui_widget import Ui_Widget_Cfd
+from .ui_files.chipboard_ui_widget import Ui_Widget_Chipboard
 
-from psd_ui_controller import PsdController
-from cfd_ui_controller import CfdController
-from chipboard_ui_controller import ChipboardController
+from .psd_ui_controller import PsdController
+from .cfd_ui_controller import CfdController
+from .chipboard_ui_controller import ChipboardController
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 
 import logging

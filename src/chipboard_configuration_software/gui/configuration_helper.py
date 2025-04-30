@@ -112,7 +112,7 @@ def generate_default_configuration() -> dict:
                                                 for index in range(16)}
                                             ),
 
-                                   delay={index: {"value": "0"} for index in range(16)},
+                                   delay={str(index): {"value": "0"} for index in range(16)},
 
                                    mux={"enable": False, "channel": 0}
 
