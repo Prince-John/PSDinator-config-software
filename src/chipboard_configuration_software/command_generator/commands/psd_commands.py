@@ -144,7 +144,7 @@ def generate_psd_serial_subcommands(psd_config: SerialRegisterSettingsDict) -> s
                                                      polarity_mode=psd_config["polarity"],
                                                      chip_id=0x0)
 
-    psd_1_serial_word = psd.generate_psd_serial_word(channel_enable_low_mask=bitmask_lower,
+    psd_1_serial_word = psd.generate_psd_serial_word(channel_enable_low_mask=bitmask_upper,
                                                      gain_settings=gains,
                                                      subchannel_delay_ranges=delay_ranges,
                                                      subchannel_width_ranges=width_ranges,

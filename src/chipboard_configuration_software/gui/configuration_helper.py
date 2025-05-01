@@ -1,3 +1,4 @@
+import copy
 import json
 import os
 import logging
@@ -6,6 +7,8 @@ from typing import List
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
     ChipboardConfigurationDict
+from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import \
+    ChipboardConfigurationDictKey
 
 logger = logging.getLogger(__name__)
 
@@ -112,7 +115,7 @@ def generate_default_configuration() -> dict:
                                                 for index in range(16)}
                                             ),
 
-                                   delay={str(index): {"value": "0"} for index in range(16)},
+                                   delay={str(index): {"value": "0"} for index in range(18)},
 
                                    mux={"enable": False, "channel": 0}
 
@@ -296,9 +299,12 @@ class ConfigurationManager:
 
         return self.currently_loaded_chipboard_config
 
-    def update_currently_loaded_chipboard_config(self) -> None:
+    def update_currently_loaded_chipboard_config(self, component: ChipboardConfigurationDictKey = None) -> None:
 
-        self.currently_loaded_chipboard_config = self.current_chipboard_config
+        if component is None or self.currently_loaded_chipboard_config is None:
+            self.currently_loaded_chipboard_config = copy.deepcopy(self.current_chipboard_config)
+        else:
+            self.currently_loaded_chipboard_config[component] = copy.deepcopy(self.current_chipboard_config[component])
 
     def save_current_configuration(self, configuration_file_path: str = None) -> None:
         """

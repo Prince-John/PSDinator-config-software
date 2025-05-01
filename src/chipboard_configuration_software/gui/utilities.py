@@ -1,8 +1,14 @@
 import logging
 
-from PySide6.QtWidgets import QCheckBox
+from PySide6.QtCore import Signal
+from PySide6.QtWidgets import QCheckBox, QApplication
+from serial import PortNotOpenError
 
-from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import BoolStr
+from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
+    ChipboardConfigurationDict
+from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import BoolStr, \
+    ChipboardConfigurationDictKey
+from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
 
 logger = logging.getLogger(__name__)
 
@@ -52,24 +58,73 @@ def get_channel(checkbox):
 #     return split_camelcase_to_underscore(key)
 
 
-def get_key(checkbox):
-    """
-    This returns a key string in python naming convention with underscores and converts from the Qt object name in
-    camel case
-
-    Args: checkbox: QtCheckbox widget
-
-    Returns: key string
-
-    """
-
-    key_lookup = {"enableDAC": "enable",
-                  "signBit": "sign_bit"}
-
-    return key_lookup[str(checkbox.objectName())]
-
-
 def set_checkbox_silently(checkbox: QCheckBox, state: BoolStr):
     checkbox.blockSignals(True)
     checkbox.setChecked(state == "True")
     checkbox.blockSignals(False)
+
+
+def configure_chipboard(config_handler, uart_link, status_message, component: ChipboardConfigurationDictKey = None):
+    command_dict = config_handler.get_changes()
+
+    if component not in command_dict:
+        status_message.emit(f"No changes to configure for {component}")
+        logger.info(f"No changes to configure for {component}")
+        return
+
+    message = "!"
+
+    if component is not None:
+        command_dict = {component: command_dict[component]}
+        message = f" component: {component}!"
+
+    commands = generate_commands(command_dict)
+
+    # Track success and failure
+    success_count = 0
+    failures = []
+
+    try:
+        uart_link.send_stx()
+        for command in commands:
+            try:
+                uart_link.send_CMD(command_string=command, message=f"Sending: {command}")
+                success_count += 1
+
+            except Exception as e:
+                logger.warning(f"Command '{command[:-1]}' failed: {e}")
+                status_message.emit(f"Configuration Warning! {e}")
+                failures.append((command[:-1], str(e)))
+                QApplication.processEvents()
+                continue
+
+        logger.info(f"Configured Chipboard{message}")
+
+        total = len(commands)
+        failure_count = len(failures)
+
+        if success_count == total:
+            config_handler.update_currently_loaded_chipboard_config(component=component)
+            final_msg = f"All {total} commands configured successfully!"
+            logger.info(final_msg)
+            status_message.emit(final_msg)
+        else:
+            final_msg = f"{success_count}/{total} commands succeeded, {failure_count} failed."
+            logger.warning(final_msg)
+            status_message.emit(final_msg)
+
+            # Show detailed window
+            # show_failure_details(failures)
+
+        uart_link.send_etx()
+
+    except ConnectionRefusedError as e:
+        logger.error(f"Unable to get into chipboard configuration mode! {e}")
+        status_message.emit(f"Unable to get into chipboard configuration mode! {e}")
+    except PortNotOpenError as e:
+        logger.error(e)
+        status_message.emit(f"Error: Device is not connected! {e}")
+
+    except Exception as e:
+        logger.error(f"Unexpected Exception: {e}")
+        status_message.emit(f"Unexpected Exception: {e}")

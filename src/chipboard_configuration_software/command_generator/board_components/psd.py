@@ -320,13 +320,13 @@ CFD pulse, just as in PSD3.'
 
 
 def check_bitstring(channel_mask: int) -> int:
+    # must be an int
     if not isinstance(channel_mask, int):
-        raise TypeError("Bitmask needs to be of type int with bit width = 8")
-    if channel_mask.bit_length() != 8: #TODO does not work with all zeros or values less than 4
-        raise ValueError("Bit width needs to be 8")
-
+        raise TypeError("Bitmask must be an integer")
+    # must be in the range 0–255 inclusive
+    if not 0 <= channel_mask <= 0xFF:
+        raise ValueError("Bitmask must fit within 8 bits (0–255)")
     return channel_mask
-
 
 def generate_global_enable_word(global_enable: bool):
     """

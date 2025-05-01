@@ -17,7 +17,7 @@ from chipboard_configuration_software.gui.ui_files.log_window import FailureDeta
 from chipboard_configuration_software.gui.ui_files.psd_ui_widget import Ui_Widget_Psd
 import logging
 
-from chipboard_configuration_software.gui.utilities import set_checkbox_silently
+from chipboard_configuration_software.gui.utilities import set_checkbox_silently, configure_chipboard
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware, CommandRejectedError
 
 logger = logging.getLogger(__name__)
@@ -196,7 +196,7 @@ class PsdController(QWidget):
         enable_states = psd_config["serial_register_settings"]["channel_enables"]
 
         for channel, state in enable_states.items():
-            logger.debug(f"Enable checkbox {channel } ui updated to current config state {state}.")
+            logger.debug(f"Enable checkbox {channel} ui updated to current config state {state}.")
             checkbox = self.channel_enable_checkboxes[int(channel)]
             set_checkbox_silently(checkbox, state)
 
@@ -619,6 +619,13 @@ class PsdController(QWidget):
         dialog.exec()
 
     def configure_psd(self):
+        configure_chipboard(config_handler=self.config_handler,
+                            uart_link=self.uart_link,
+                            status_message=self.status_message,
+                            component="psd")
+
+
+    def __configure_psd(self):
         command_dict = self.config_handler.get_changes()
 
         commands = generate_commands(command_dict)

@@ -3,8 +3,11 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QSizePolicy, QLabel, QFileDialog, QMessageBox
 import PySide6QtAds as QtAds
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt, QRegularExpression, QSize, Slot
+from PySide6.QtCore import Qt, QRegularExpression, QSize, Slot, Signal
+from serial import PortNotOpenError
 
+from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
+from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 from .ui_files.top_level_window import Ui_MainWindow
 from .ui_files.psd_ui_widget import Ui_Widget_Psd
@@ -24,6 +27,7 @@ relative_configuration_dir = r"../configurations/"
 
 class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     """ This is the class inheriting the Qt designer UI and adding functionality """
+    status_message = Signal(str)
 
     def __init__(self, config_handler: ConfigurationManager, uart_link: UartMiddleware):
         super().__init__()
@@ -97,6 +101,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def _connect_signals(self):
         self.psd_controller.status_message.connect(self.statusBar().showMessage)
+        self.status_message.connect(self.statusBar().showMessage)
         self.__connect_bottom_signals()
         self.__connect_menu_signals()
         logger.info("Connected GUI Signals!")
@@ -184,19 +189,62 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cfd_controller.update_ui()
         logger.info("Updated Global UI!")
 
+    def show_failure_details(self, failures):
+        dialog = FailureDetailsDialog(failures, parent=self)
+        dialog.exec()
 
-if __name__ == "__main__":
-    FORMAT = "%(asctime)s [%(process)7d] %(levelname)8s - %(name)-30s - %(message)s"
-    logging.basicConfig(filename='gui.log', level=logging.DEBUG, format=FORMAT)
-    logger.info('Started')
+    def configure_chipboard(self):
 
-    app = QtWidgets.QApplication(sys.argv)
+        command_dict = self.config_handler.get_changes()
 
-    uart_link = UartMiddleware()
-    configuration_manager = ConfigurationManager()
+        commands = generate_commands(command_dict)
 
-    w = MainWindow(configuration_manager, uart_link)
+        # Track success and failure
+        success_count = 0
+        failures = []
 
-    w.show()
+        try:
+            self.uart_link.send_stx()
+            for command in commands:
+                try:
+                    self.uart_link.send_CMD(command_string=command, message=f"Sending: {command}")
+                    success_count += 1
 
-    sys.exit(app.exec())
+                except Exception as e:
+                    logger.warning(f"Command '{command[:-1]}' failed: {e}")
+                    self.status_message.emit(f"Configuration Warning! {e}")
+                    failures.append((command[:-1], str(e)))
+                    QApplication.processEvents()
+                    continue
+
+            self.config_handler.update_currently_loaded_chipboard_config()
+            logger.info("Configured Chipboard!")
+
+            total = len(commands)
+            failure_count = len(failures)
+
+            if success_count == total:
+                self.config_handler.update_currently_loaded_chipboard_config()
+                final_msg = f"All {total} commands configured successfully!"
+                logger.info(final_msg)
+                self.status_message.emit(final_msg)
+            else:
+                final_msg = f"{success_count}/{total} commands succeeded, {failure_count} failed."
+                logger.warning(final_msg)
+                self.status_message.emit(final_msg)
+
+                # Show detailed window
+                self.show_failure_details(failures)
+            self.uart_link.send_etx()
+
+        except ConnectionRefusedError as e:
+            logger.error(f"Unable to get into chipboard configuration mode! {e}")
+            self.status_message.emit(f"Unable to get into chipboard configuration mode! {e}")
+        except PortNotOpenError as e:
+            logger.error(e)
+            self.status_message.emit(f"Error: Device is not connected! {e}")
+
+        except Exception as e:
+            logger.error(f"Unexpected Exception: {e}")
+            self.status_message.emit(f"Unexpected Exception: {e}")
+
