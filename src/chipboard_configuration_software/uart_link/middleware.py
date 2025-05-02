@@ -127,6 +127,23 @@ class UartMiddleware:
             logger.warning(f"Error with sending {command_string}: {e}")
             raise CommandRejectedError(f"Error with sending {command_string[:-1]}: {e}")
 
+    def get_data(self, bytes_expected, timeout = 5):
+
+        start_time = time.time()
+        while True:
+            # Check for timeout
+            elapsed_time = time.time() - start_time
+            if elapsed_time > timeout:
+                logger.error("Error getting data: Timeout: No response received.")
+                raise TimeoutError("Timeout: No response received.")
+
+            if self.serial_handler.in_waiting:
+                return self.serial_handler.read(bytes_expected)
+
+
+
+
+
     def cleanup(self) -> None:
         """
         Closes up any open device connections + #TODO other closeout housekeeping

@@ -1,7 +1,7 @@
 import logging
 
 from PySide6.QtCore import Signal
-from PySide6.QtWidgets import QCheckBox, QApplication
+from PySide6.QtWidgets import QCheckBox, QApplication, QSlider
 from serial import PortNotOpenError
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
@@ -42,20 +42,10 @@ def get_channel(checkbox):
     return channel
 
 
-# def get_key(checkbox):
-#     """
-#     This returns a key string in python naming convention with underscores and converts from the Qt object name in
-#     camel case
-#
-#     Args: checkbox: QtCheckbox widget
-#
-#     Returns: key string
-#
-#     """
-#
-#     key = remove_underscore(str(checkbox.objectName()), 0)
-#
-#     return split_camelcase_to_underscore(key)
+def set_slider_silently(slider: QSlider, pos: int):
+    slider.blockSignals(True)
+    slider.setSliderPosition(pos)
+    slider.blockSignals(False)
 
 
 def set_checkbox_silently(checkbox: QCheckBox, state: BoolStr):
@@ -67,9 +57,10 @@ def set_checkbox_silently(checkbox: QCheckBox, state: BoolStr):
 def configure_chipboard(config_handler, uart_link, status_message, component: ChipboardConfigurationDictKey = None):
     command_dict = config_handler.get_changes()
 
-    if component not in command_dict:
-        status_message.emit(f"No changes to configure for {component}")
-        logger.info(f"No changes to configure for {component}")
+    if not command_dict or (component and component not in command_dict):
+        text = f"No changes to configure for {component}" if component else "No changes to configure"
+        status_message.emit(text)
+        logger.info(text)
         return
 
     message = "!"

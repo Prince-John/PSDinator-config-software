@@ -26,7 +26,7 @@ logger = logging.getLogger(__name__)
 class PsdController(QWidget):
     status_message = Signal(str)
 
-    def __init__(self, ui: Ui_Widget_Psd, config_handler: ConfigurationManager, uart_link: UartMiddleware, /):
+    def __init__(self, ui: Ui_Widget_Psd, config_handler: ConfigurationManager, uart_link: UartMiddleware):
         """
              ui is an instance of Ui_DockWidget_psd (after setupUi has been called).
          """
@@ -563,7 +563,6 @@ class PsdController(QWidget):
         self.ui.checkBox_psd_global_enable.stateChanged.connect(self._on_psd_global_enable_changed)
         self.ui.pushButton_reset_psd_ui.pressed.connect(self._on_reset_gui_clicked)
         self.ui.pushButton_configure_psd.pressed.connect(self._on_configure_psd_clicked)
-        pass
 
     @Slot(bool)
     def _on_psd_global_enable_changed(self, state):
@@ -623,7 +622,6 @@ class PsdController(QWidget):
                             uart_link=self.uart_link,
                             status_message=self.status_message,
                             component="psd")
-
 
     def __configure_psd(self):
         command_dict = self.config_handler.get_changes()

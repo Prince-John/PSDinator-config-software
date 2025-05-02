@@ -2,9 +2,9 @@ import json
 from functools import partial
 from typing import get_args, cast, List
 
-from PySide6.QtCore import Slot, Qt, QObject
+from PySide6.QtCore import Slot, Qt, QObject, Signal
 from PySide6.QtGui import QIntValidator
-from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit
+from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit, QWidget
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import ChannelKey, \
     BoolStr, SubchannelKey
@@ -15,7 +15,8 @@ from chipboard_configuration_software.gui.ui_files.cfd_ui_widget import Ui_Widge
 from chipboard_configuration_software.gui.ui_files.qt_ui_modifications import ClickableLineEdit
 import logging
 
-from chipboard_configuration_software.gui.utilities import set_checkbox_silently
+from chipboard_configuration_software.gui.utilities import set_checkbox_silently, configure_chipboard
+from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -33,10 +34,14 @@ def validate_cfd_le_dac_value(value) -> int:
     return value
 
 
-class CfdController:
-    def __init__(self, ui: Ui_Widget_Cfd, config_handler: ConfigurationManager):
+class CfdController(QWidget):
+    status_message = Signal(str)
+
+    def __init__(self, ui: Ui_Widget_Cfd, config_handler: ConfigurationManager, uart_link: UartMiddleware):
+        super().__init__()
         self.ui = ui
         self.config_handler = config_handler
+        self.uart_link = uart_link
         self.channel_enable_checkboxes: list[QCheckBox] = []
         self.leading_edge_dac_text: list[QLineEdit | ClickableLineEdit] = []
         self.current_leading_edge_dac_slider_channel: ChannelKey = "0"
@@ -44,6 +49,7 @@ class CfdController:
         self._connect_cfd_common_settings_signals()
         self._connect_cfd_test_signals()
         self._connect_cfd_individual_channel_setting_signals()
+        self._connect_cfd_misc_signals()
         self.update_ui()
         logger.info("CFD GUI signals connected!")
         pass
@@ -62,7 +68,6 @@ class CfdController:
         self.ui.checkBox_negative_polarity.stateChanged.connect(self._on_negative_polarity_checkbox_clicked)
         self.ui.checkBox_le_out_enable.setDisabled(True)
         self.ui.checkBox_global_mode.stateChanged.connect(self._on_global_mode_clicked)
-        self.ui.pushButton_cfd_reset_gui.pressed.connect(self._on_cfd_reset_gui_clicked)
 
         logger.debug("Connected CFD common settings signals!")
         pass
@@ -71,9 +76,6 @@ class CfdController:
 
         if cfd_config is None:
             cfd_config = self.cfd_config
-
-
-
 
         set_checkbox_silently(self.ui.checkBox_cfd_global_enable, cfd_config["global_enable"])
 
@@ -396,3 +398,26 @@ class CfdController:
         self._update_ui_cfd_common_settings(cfd_config)
         self._update_ui_cfd_test_settings(cfd_config)
         self._update_ui_individual_channel_settings(cfd_config)
+
+    def _connect_cfd_misc_signals(self):
+        self.ui.pushButton_cfd_configure.pressed.connect(self._on_cfd_configure_clicked)
+        self.ui.pushButton_cfd_reset.pressed.connect(self._on_cfd_reset_clicked)
+        self.ui.pushButton_cfd_reset_gui.pressed.connect(self._on_cfd_reset_gui_clicked)
+
+    def configure_cfd(self):
+        configure_chipboard(config_handler=self.config_handler,
+                            uart_link=self.uart_link,
+                            status_message=self.status_message,
+                            component="cfd")
+
+    @Slot()
+    def _on_cfd_configure_clicked(self):
+        """Slot for cfd configure """
+        logger.debug(f"cfd configure clicked")
+        self.configure_cfd()
+
+    @Slot()
+    def _on_cfd_reset_clicked(self):
+        """Slot for cfd reset """
+        # TODO: Implement this.
+        logger.debug(f"cfd reset clicked. Functionality not yet implemented. #TODO")

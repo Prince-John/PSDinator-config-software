@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'cfd_ui_widget.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -25,7 +25,8 @@ class Ui_Widget_Cfd(object):
     def setupUi(self, Widget_Cfd):
         if not Widget_Cfd.objectName():
             Widget_Cfd.setObjectName(u"Widget_Cfd")
-        Widget_Cfd.resize(623, 778)
+        Widget_Cfd.resize(574, 527)
+        Widget_Cfd.setBaseSize(QSize(571, 531))
         self.gridLayout_4 = QGridLayout(Widget_Cfd)
         self.gridLayout_4.setObjectName(u"gridLayout_4")
         self.groupBox_cfd_global_settings = QGroupBox(Widget_Cfd)
@@ -38,7 +39,7 @@ class Ui_Widget_Cfd(object):
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.label_4 = QLabel(self.groupBox_cfd_global_settings)
         self.label_4.setObjectName(u"label_4")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Preferred)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Preferred)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.label_4.sizePolicy().hasHeightForWidth())
@@ -79,7 +80,7 @@ class Ui_Widget_Cfd(object):
 
         self.comboBox_nowlin_delay = QComboBox(self.groupBox_cfd_global_settings)
         self.comboBox_nowlin_delay.setObjectName(u"comboBox_nowlin_delay")
-        sizePolicy1 = QSizePolicy(QSizePolicy.MinimumExpanding, QSizePolicy.Fixed)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.comboBox_nowlin_delay.sizePolicy().hasHeightForWidth())
@@ -166,7 +167,7 @@ class Ui_Widget_Cfd(object):
         self.verticalGroupBox.setObjectName(u"verticalGroupBox")
         self.verticalGroupBox.setMinimumSize(QSize(240, 0))
         self.verticalGroupBox.setMaximumSize(QSize(300, 16777215))
-        self.verticalGroupBox.setAlignment(Qt.AlignCenter)
+        self.verticalGroupBox.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.verticalGroupBox.setFlat(False)
         self.verticalGroupBox.setCheckable(False)
         self.gridLayout = QGridLayout(self.verticalGroupBox)
@@ -175,9 +176,9 @@ class Ui_Widget_Cfd(object):
         self.lineEdit_cfd_le_dac_2 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_2.setObjectName(u"lineEdit_cfd_le_dac_2")
         self.lineEdit_cfd_le_dac_2.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_2.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_2, 4, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_2, 4, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.label_34 = QLabel(self.verticalGroupBox)
         self.label_34.setObjectName(u"label_34")
@@ -185,7 +186,7 @@ class Ui_Widget_Cfd(object):
         font1.setBold(True)
         self.label_34.setFont(font1)
 
-        self.gridLayout.addWidget(self.label_34, 0, 0, 1, 2, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.label_34, 0, 0, 1, 2, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_8_15 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_8_15.setObjectName(u"checkBox_cfd_channel_enable_8_15")
@@ -201,42 +202,42 @@ class Ui_Widget_Cfd(object):
         self.lineEdit_cfd_le_dac_3 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_3.setObjectName(u"lineEdit_cfd_le_dac_3")
         self.lineEdit_cfd_le_dac_3.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_3.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_3.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_3, 5, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_3, 5, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_all = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_all.setObjectName(u"checkBox_cfd_channel_enable_all")
 
-        self.gridLayout.addWidget(self.checkBox_cfd_channel_enable_all, 1, 1, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.checkBox_cfd_channel_enable_all, 1, 1, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_12 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_12.setObjectName(u"lineEdit_cfd_le_dac_12")
         self.lineEdit_cfd_le_dac_12.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_12.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_12.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_12, 14, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_12, 14, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_15 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_15.setObjectName(u"lineEdit_cfd_le_dac_15")
         self.lineEdit_cfd_le_dac_15.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_15.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_15.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_15, 17, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_15, 17, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_4 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_4.setObjectName(u"lineEdit_cfd_le_dac_4")
         self.lineEdit_cfd_le_dac_4.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_4.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_4.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_4, 6, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_4, 6, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_5 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_5.setObjectName(u"lineEdit_cfd_le_dac_5")
         self.lineEdit_cfd_le_dac_5.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_5.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_5.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_5, 7, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_5, 7, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_4 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_4.setObjectName(u"checkBox_cfd_channel_enable_4")
@@ -247,9 +248,9 @@ class Ui_Widget_Cfd(object):
         self.verticalSlider_cfd_leading_edge_dac_value.setObjectName(u"verticalSlider_cfd_leading_edge_dac_value")
         self.verticalSlider_cfd_leading_edge_dac_value.setMinimum(-31)
         self.verticalSlider_cfd_leading_edge_dac_value.setMaximum(31)
-        self.verticalSlider_cfd_leading_edge_dac_value.setOrientation(Qt.Vertical)
+        self.verticalSlider_cfd_leading_edge_dac_value.setOrientation(Qt.Orientation.Vertical)
         self.verticalSlider_cfd_leading_edge_dac_value.setInvertedControls(False)
-        self.verticalSlider_cfd_leading_edge_dac_value.setTickPosition(QSlider.TicksBelow)
+        self.verticalSlider_cfd_leading_edge_dac_value.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.verticalSlider_cfd_leading_edge_dac_value.setTickInterval(4)
 
         self.gridLayout.addWidget(self.verticalSlider_cfd_leading_edge_dac_value, 3, 3, 14, 1)
@@ -272,16 +273,16 @@ class Ui_Widget_Cfd(object):
         self.lineEdit_cfd_le_dac_11 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_11.setObjectName(u"lineEdit_cfd_le_dac_11")
         self.lineEdit_cfd_le_dac_11.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_11.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_11.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_11, 13, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_11, 13, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_10 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_10.setObjectName(u"lineEdit_cfd_le_dac_10")
         self.lineEdit_cfd_le_dac_10.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_10.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_10.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_10, 12, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_10, 12, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_13 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_13.setObjectName(u"checkBox_cfd_channel_enable_13")
@@ -295,7 +296,7 @@ class Ui_Widget_Cfd(object):
 
         self.label_35 = QLabel(self.verticalGroupBox)
         self.label_35.setObjectName(u"label_35")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Fixed)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Fixed)
         sizePolicy2.setHorizontalStretch(0)
         sizePolicy2.setVerticalStretch(0)
         sizePolicy2.setHeightForWidth(self.label_35.sizePolicy().hasHeightForWidth())
@@ -313,16 +314,16 @@ class Ui_Widget_Cfd(object):
         self.lineEdit_cfd_le_dac_1 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_1.setObjectName(u"lineEdit_cfd_le_dac_1")
         self.lineEdit_cfd_le_dac_1.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_1.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_1.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_1, 3, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_1, 3, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_9 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_9.setObjectName(u"lineEdit_cfd_le_dac_9")
         self.lineEdit_cfd_le_dac_9.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_9.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_9.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_9, 11, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_9, 11, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_9 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_9.setObjectName(u"checkBox_cfd_channel_enable_9")
@@ -332,9 +333,9 @@ class Ui_Widget_Cfd(object):
         self.lineEdit_cfd_le_dac_0 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_0.setObjectName(u"lineEdit_cfd_le_dac_0")
         self.lineEdit_cfd_le_dac_0.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_0.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_0.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_0, 2, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_0, 2, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_11 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_11.setObjectName(u"checkBox_cfd_channel_enable_11")
@@ -349,9 +350,9 @@ class Ui_Widget_Cfd(object):
         self.lineEdit_cfd_le_dac_8 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_8.setObjectName(u"lineEdit_cfd_le_dac_8")
         self.lineEdit_cfd_le_dac_8.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_8.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_8.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_8, 10, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_8, 10, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_12 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_12.setObjectName(u"checkBox_cfd_channel_enable_12")
@@ -370,30 +371,30 @@ class Ui_Widget_Cfd(object):
 
         self.checkBox_cfd_channel_enable_10 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_10.setObjectName(u"checkBox_cfd_channel_enable_10")
-        self.checkBox_cfd_channel_enable_10.setLayoutDirection(Qt.LeftToRight)
+        self.checkBox_cfd_channel_enable_10.setLayoutDirection(Qt.LayoutDirection.LeftToRight)
 
         self.gridLayout.addWidget(self.checkBox_cfd_channel_enable_10, 12, 1, 1, 1)
 
         self.lineEdit_cfd_le_dac_6 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_6.setObjectName(u"lineEdit_cfd_le_dac_6")
         self.lineEdit_cfd_le_dac_6.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_6.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_6.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_6, 8, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_6, 8, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_14 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_14.setObjectName(u"lineEdit_cfd_le_dac_14")
         self.lineEdit_cfd_le_dac_14.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_14.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_14.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_14, 16, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_14, 16, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.lineEdit_cfd_le_dac_7 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_7.setObjectName(u"lineEdit_cfd_le_dac_7")
         self.lineEdit_cfd_le_dac_7.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_7.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_7.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_7, 9, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_7, 9, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_1 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_1.setObjectName(u"checkBox_cfd_channel_enable_1")
@@ -403,9 +404,9 @@ class Ui_Widget_Cfd(object):
         self.lineEdit_cfd_le_dac_13 = ClickableLineEdit(self.verticalGroupBox)
         self.lineEdit_cfd_le_dac_13.setObjectName(u"lineEdit_cfd_le_dac_13")
         self.lineEdit_cfd_le_dac_13.setMaximumSize(QSize(40, 16777215))
-        self.lineEdit_cfd_le_dac_13.setAlignment(Qt.AlignCenter)
+        self.lineEdit_cfd_le_dac_13.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
-        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_13, 15, 2, 1, 1, Qt.AlignHCenter)
+        self.gridLayout.addWidget(self.lineEdit_cfd_le_dac_13, 15, 2, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.checkBox_cfd_channel_enable_5 = QCheckBox(self.verticalGroupBox)
         self.checkBox_cfd_channel_enable_5.setObjectName(u"checkBox_cfd_channel_enable_5")
@@ -469,25 +470,25 @@ class Ui_Widget_Cfd(object):
 
         self.line = QFrame(Widget_Cfd)
         self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.HLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.HLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.gridLayout_4.addWidget(self.line, 2, 0, 1, 3)
 
-        self.pushButton = QPushButton(Widget_Cfd)
-        self.pushButton.setObjectName(u"pushButton")
+        self.pushButton_cfd_configure = QPushButton(Widget_Cfd)
+        self.pushButton_cfd_configure.setObjectName(u"pushButton_cfd_configure")
 
-        self.gridLayout_4.addWidget(self.pushButton, 3, 0, 1, 1)
+        self.gridLayout_4.addWidget(self.pushButton_cfd_configure, 3, 0, 1, 1)
 
         self.pushButton_cfd_reset_gui = QPushButton(Widget_Cfd)
         self.pushButton_cfd_reset_gui.setObjectName(u"pushButton_cfd_reset_gui")
 
         self.gridLayout_4.addWidget(self.pushButton_cfd_reset_gui, 3, 1, 1, 1)
 
-        self.cfd_pushButton = QPushButton(Widget_Cfd)
-        self.cfd_pushButton.setObjectName(u"cfd_pushButton")
+        self.pushButton_cfd_reset = QPushButton(Widget_Cfd)
+        self.pushButton_cfd_reset.setObjectName(u"pushButton_cfd_reset")
 
-        self.gridLayout_4.addWidget(self.cfd_pushButton, 3, 2, 1, 1)
+        self.gridLayout_4.addWidget(self.pushButton_cfd_reset, 3, 2, 1, 1)
 
 
         self.retranslateUi(Widget_Cfd)
@@ -578,8 +579,8 @@ class Ui_Widget_Cfd(object):
         self.comboBox_cfd_test_point_channel.setItemText(15, QCoreApplication.translate("Widget_Cfd", u"15", None))
 
         self.label_2.setText(QCoreApplication.translate("Widget_Cfd", u"Test Point", None))
-        self.pushButton.setText(QCoreApplication.translate("Widget_Cfd", u"Configure CFD", None))
+        self.pushButton_cfd_configure.setText(QCoreApplication.translate("Widget_Cfd", u"Configure CFD", None))
         self.pushButton_cfd_reset_gui.setText(QCoreApplication.translate("Widget_Cfd", u"Reset CFD GUI", None))
-        self.cfd_pushButton.setText(QCoreApplication.translate("Widget_Cfd", u"Reset CFD", None))
+        self.pushButton_cfd_reset.setText(QCoreApplication.translate("Widget_Cfd", u"Reset CFD", None))
     # retranslateUi
 

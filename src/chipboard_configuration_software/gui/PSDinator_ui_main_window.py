@@ -3,12 +3,13 @@ import sys
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QSizePolicy, QLabel, QFileDialog, QMessageBox
 import PySide6QtAds as QtAds
 from PySide6 import QtWidgets
-from PySide6.QtCore import Qt, QRegularExpression, QSize, Slot, Signal
+from PySide6.QtCore import Qt, QRegularExpression, QSize, Slot, Signal, QThread
 from serial import PortNotOpenError
 
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
 from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
+from .chipboard_configurator import threaded_configure_chipboard, ChipboardConfigurator
 from .ui_files.top_level_window import Ui_MainWindow
 from .ui_files.psd_ui_widget import Ui_Widget_Psd
 from .ui_files.cfd_ui_widget import Ui_Widget_Cfd
@@ -21,6 +22,8 @@ from chipboard_configuration_software.gui.configuration_helper import Configurat
 
 import logging
 
+from .utilities import configure_chipboard
+
 logger = logging.getLogger(__name__)
 relative_configuration_dir = r"../configurations/"
 
@@ -31,6 +34,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def __init__(self, config_handler: ConfigurationManager, uart_link: UartMiddleware):
         super().__init__()
+        self.configuration_worker: ChipboardConfigurator | None = None
+        self.configuration_thread: QThread | None = None
         self.config_handler: ConfigurationManager = config_handler
         self.uart_link: UartMiddleware = uart_link
 
@@ -67,7 +72,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cfd_widget = QWidget()
         self.cfd_ui = Ui_Widget_Cfd()
         self.cfd_ui.setupUi(self.cfd_widget)
-        self.cfd_controller = CfdController(self.cfd_ui, self.config_handler)
+        self.cfd_controller = CfdController(self.cfd_ui, self.config_handler, self.uart_link)
 
         self.cfd_dock = QtAds.CDockWidget(self.dock_manager, "CFD Settings")
         self.cfd_dock.setWidget(self.cfd_widget)
@@ -79,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chipboard_widget = QWidget()
         self.chipboard_ui = Ui_Widget_Chipboard()
         self.chipboard_ui.setupUi(self.chipboard_widget)
-        self.chipboard_controller = ChipboardController(self.chipboard_ui, self.config_handler)
+        self.chipboard_controller = ChipboardController(self.chipboard_ui, self.config_handler, self.uart_link)
 
         self.chipboard_dock = QtAds.CDockWidget(self.dock_manager, "Chipboard Settings")
         self.chipboard_dock.setWidget(self.chipboard_widget)
@@ -101,6 +106,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
     def _connect_signals(self):
         self.psd_controller.status_message.connect(self.statusBar().showMessage)
+        self.chipboard_controller.status_message.connect(self.statusBar().showMessage)
+        self.cfd_controller.status_message.connect(self.statusBar().showMessage)
         self.status_message.connect(self.statusBar().showMessage)
         self.__connect_bottom_signals()
         self.__connect_menu_signals()
@@ -112,7 +119,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionSave_Configuration.triggered.connect(self.save_config)
 
     def __connect_bottom_signals(self):
-
+        self.pushButton_configure_chipboard.pressed.connect(self._on_configure_chipboard_clicked)
         self.pushButton_refresh_devices.pressed.connect(self._on_refresh_devices_clicked)
         self.comboBox_devices.currentTextChanged.connect(self._on_device_selection_changed)
         logger.info("Connected bottom bar Signals!")
@@ -130,15 +137,39 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.comboBox_devices.addItems(device_list)
         self.comboBox_devices.blockSignals(False)
 
+    def validate_chipboard_self_id(self):
+        data = None
+        try:
+            self.uart_link.send_stx()
+            logger.error("Sending BID")
+            self.uart_link.send_CMD(message="Get Board ID", command_string="BID:\0")
+            logger.warning("Waiting for BID data")
+            data = int.from_bytes(self.uart_link.get_data(1))
+            self.uart_link.send_etx()
+        except Exception as e:
+            logger.warning(f"Could not self ID: {e}")
+
+        logger.debug(f"Received {data}")
+        return data
+
     @Slot(str)
     def _on_device_selection_changed(self, device):
         """Slot for device selection """
         logger.debug(f"device selection changed with value {device}")
         try:
             status = self.uart_link.connect_to_device(device)
+
         except IOError as e:
             status = f"Error connecting to {device}: {e}"
 
+        board_id = self.validate_chipboard_self_id()
+
+        if self.config_handler.current_chipboard_number != board_id:
+            alert = f"⚠️ Board ID:{board_id} != Current setting: {self.config_handler.current_chipboard_number}"
+        else:
+            alert = f"Board ID ({board_id})"
+
+        status = f"{status} - {alert}"
         self.statusBar().showMessage(status)
 
     def save_config(self):
@@ -193,58 +224,25 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         dialog = FailureDetailsDialog(failures, parent=self)
         dialog.exec()
 
+    @Slot()
+    def _on_configure_chipboard_clicked(self):
+        """Slot for configure chipboard """
+        logger.debug(f"configure chipboard clicked")
+        self.configure_chipboard()
+
+    @Slot(list)
+    def _on_chipboard_config_done(self, failures):
+        logger.debug(f"Configuration thread exit!")
+        self.progressBar.setValue(0)
+        self.show_failure_details(failures)
+
     def configure_chipboard(self):
+        """
+        Top Level Wrapper for call to the generic chipboard configuration function.
+        :return: None
+        """
 
-        command_dict = self.config_handler.get_changes()
-
-        commands = generate_commands(command_dict)
-
-        # Track success and failure
-        success_count = 0
-        failures = []
-
-        try:
-            self.uart_link.send_stx()
-            for command in commands:
-                try:
-                    self.uart_link.send_CMD(command_string=command, message=f"Sending: {command}")
-                    success_count += 1
-
-                except Exception as e:
-                    logger.warning(f"Command '{command[:-1]}' failed: {e}")
-                    self.status_message.emit(f"Configuration Warning! {e}")
-                    failures.append((command[:-1], str(e)))
-                    QApplication.processEvents()
-                    continue
-
-            self.config_handler.update_currently_loaded_chipboard_config()
-            logger.info("Configured Chipboard!")
-
-            total = len(commands)
-            failure_count = len(failures)
-
-            if success_count == total:
-                self.config_handler.update_currently_loaded_chipboard_config()
-                final_msg = f"All {total} commands configured successfully!"
-                logger.info(final_msg)
-                self.status_message.emit(final_msg)
-            else:
-                final_msg = f"{success_count}/{total} commands succeeded, {failure_count} failed."
-                logger.warning(final_msg)
-                self.status_message.emit(final_msg)
-
-                # Show detailed window
-                self.show_failure_details(failures)
-            self.uart_link.send_etx()
-
-        except ConnectionRefusedError as e:
-            logger.error(f"Unable to get into chipboard configuration mode! {e}")
-            self.status_message.emit(f"Unable to get into chipboard configuration mode! {e}")
-        except PortNotOpenError as e:
-            logger.error(e)
-            self.status_message.emit(f"Error: Device is not connected! {e}")
-
-        except Exception as e:
-            logger.error(f"Unexpected Exception: {e}")
-            self.status_message.emit(f"Unexpected Exception: {e}")
-
+        self.configuration_thread, self.configuration_worker = threaded_configure_chipboard(self,
+                                                                                            config_handler=self.config_handler,
+                                                                                            uart_link=self.uart_link)
+        self.configuration_thread.start()

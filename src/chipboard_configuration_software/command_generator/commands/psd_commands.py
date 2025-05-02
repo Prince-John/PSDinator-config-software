@@ -28,7 +28,7 @@ def generate_psd_commands(psd_config: PSDConfigurationDict) -> List[str]:
     psd_commands = []
 
     for component, component_dict in psd_config.items():
-        print(f'{component} : {json.dumps(component_dict, indent=4)}')
+
         match component:
 
             case "global_enable":
@@ -63,7 +63,7 @@ def generate_octal_dac_psd_subcommands(psd_octal_dac_config: OctalDacSettingsDic
             dac_subcommands.append(f'{octal_dac_prefix}{dac_word:04X}\0')
 
     for component, component_dict in psd_octal_dac_config.items():
-        print(f'In Octal DAC {component} : {json.dumps(component_dict, indent=4)}')
+
 
         match component:
 
@@ -129,7 +129,7 @@ def generate_psd_serial_subcommands(psd_config: SerialRegisterSettingsDict) -> s
     :return: Returns the command string with 96bit serial word in ascii hex
     """
     bitmask_lower, bitmask_upper = _get_channel_enable(psd_config["channel_enables"])
-    print(bitmask_upper, bitmask_lower)
+
 
     gains = _get_ordered_ranges(psd_config["gain"])
     delay_ranges = _get_ordered_ranges(psd_config["delay_ranges"])
@@ -175,7 +175,7 @@ def _get_ordered_ranges(range_dict: RangeDict) -> tuple[int, int, int]:
 
 def _get_channel_enable(channels: ChannelEnableDict) -> (int, int):
     bitmask = 0x0
-    print(channels)
+
     for channel, channel_value in channels.items():
         if channel_value == 'True':
             bitmask |= (1 << (15 - int(channel)))
