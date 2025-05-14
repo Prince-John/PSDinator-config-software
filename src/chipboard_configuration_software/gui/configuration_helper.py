@@ -5,10 +5,14 @@ import logging
 from datetime import datetime
 from typing import List
 
+from chipboard_configuration_software.command_generator.commands.configuration_types.cfd_config_types import \
+    CFDConfigurationDict
 from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
-    ChipboardConfigurationDict
+    ChipboardConfigurationDict, MuxConfigurationDict, DelayConfigurationDict
 from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import \
     ChipboardConfigurationDictKey
+from chipboard_configuration_software.command_generator.commands.configuration_types.psd_config_types import \
+    PSDConfigurationDict
 
 logger = logging.getLogger(__name__)
 
@@ -282,10 +286,14 @@ class ConfigurationManager:
 
         return self.__recursive_diff(old_config, new_config, path="", stop_paths=stop_recurse_paths)
 
-    def get_currently_loaded_chipboard_config(self) -> ChipboardConfigurationDict:
+    def get_currently_loaded_chipboard_config(self, component: ChipboardConfigurationDictKey = None) -> \
+            ChipboardConfigurationDict | PSDConfigurationDict | CFDConfigurationDict | DelayConfigurationDict | MuxConfigurationDict:
         """
         This returns  the last valid loaded configuration onto the current chipboard. If the current chipboard has
         not been loaded with any configuration then this returns the last auto saved configuration from disk.
+
+        If component is present it returns the last valid loaded component configuration subdict. If the component has
+        not been loaded yet, it returns the component subdict from last auto saved configuration from disk.
 
         Always use this method instead of directly accessing the class attribute. Edge cases can exist during
         application start up where the `current_chipboard_config` might contain changes from GUI that have not yet
@@ -296,14 +304,22 @@ class ConfigurationManager:
         """
         if self.currently_loaded_chipboard_config is None:
             return read_single_chipboard_config(self.auto_save_file_path, self.current_chipboard_number)
+        if component is None:
+            return self.currently_loaded_chipboard_config
 
-        return self.currently_loaded_chipboard_config
+        try:
+            return self.currently_loaded_chipboard_config[component]
+        except KeyError:
+            return read_single_chipboard_config(self.auto_save_file_path, self.current_chipboard_number)[component]
 
     def update_currently_loaded_chipboard_config(self, component: ChipboardConfigurationDictKey = None) -> None:
 
-        if component is None or self.currently_loaded_chipboard_config is None:
+        if component is None:
             self.currently_loaded_chipboard_config = copy.deepcopy(self.current_chipboard_config)
         else:
+            if self.currently_loaded_chipboard_config is None:
+                self.currently_loaded_chipboard_config = {}
+
             self.currently_loaded_chipboard_config[component] = copy.deepcopy(self.current_chipboard_config[component])
 
     def save_current_configuration(self, configuration_file_path: str = None) -> None:

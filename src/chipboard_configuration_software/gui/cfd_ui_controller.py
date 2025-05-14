@@ -1,21 +1,20 @@
-import json
+import logging
 from functools import partial
-from typing import get_args, cast, List
+from typing import get_args, cast
 
-from PySide6.QtCore import Slot, Qt, QObject, Signal
+from PySide6.QtCore import Slot, Qt, Signal
 from PySide6.QtGui import QIntValidator
-from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit, QWidget
+from PySide6.QtWidgets import QCheckBox, QLineEdit, QWidget
 
-from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import ChannelKey, \
-    BoolStr, SubchannelKey
 from chipboard_configuration_software.command_generator.commands.configuration_types.cfd_config_types import \
     CFDConfigurationDict, NowlinMode, NowlinDelay, LockoutMode
+from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import ChannelKey, \
+    BoolStr
+from chipboard_configuration_software.gui.chipboard_configurator import threaded_configure_chipboard
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.gui.ui_files.cfd_ui_widget import Ui_Widget_Cfd
 from chipboard_configuration_software.gui.ui_files.qt_ui_modifications import ClickableLineEdit
-import logging
-
-from chipboard_configuration_software.gui.utilities import set_checkbox_silently, configure_chipboard
+from chipboard_configuration_software.gui.utilities import set_checkbox_silently
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 logger = logging.getLogger(__name__)
@@ -37,8 +36,10 @@ def validate_cfd_le_dac_value(value) -> int:
 class CfdController(QWidget):
     status_message = Signal(str)
 
-    def __init__(self, ui: Ui_Widget_Cfd, config_handler: ConfigurationManager, uart_link: UartMiddleware):
+    def __init__(self, parent_ui, ui: Ui_Widget_Cfd, config_handler: ConfigurationManager, uart_link: UartMiddleware):
         super().__init__()
+
+        self.parent_ui = parent_ui
         self.ui = ui
         self.config_handler = config_handler
         self.uart_link = uart_link
@@ -52,7 +53,6 @@ class CfdController(QWidget):
         self._connect_cfd_misc_signals()
         self.update_ui()
         logger.info("CFD GUI signals connected!")
-        pass
 
     @property
     def cfd_config(self):
@@ -79,20 +79,20 @@ class CfdController(QWidget):
 
         set_checkbox_silently(self.ui.checkBox_cfd_global_enable, cfd_config["global_enable"])
 
-        nowlin_mode = cfd_config["common_settings"]["nowlin_mode"].capitalize()
+        nowlin_mode = cfd_config["common_settings"]["nowlin_mode"]
         nowlin_delay = cfd_config["common_settings"]["nowlin_delay"]
-        lockout_mode = cfd_config["common_settings"]["lockout_mode"].capitalize()
+        lockout_mode = cfd_config["common_settings"]["lockout_mode"]
         lockout_dac = cfd_config["common_settings"]["lockout_DAC"]
         cfd_pulse_width = cfd_config["common_settings"]["cfd_pulse_width"]
         agnd_trim = cfd_config["common_settings"]["agnd_trim"]
         negative_polarity = cfd_config["common_settings"]["negative_polarity"]
         global_mode = cfd_config["common_settings"]["global_Mode"]
 
-        self.ui.comboBox_nowlin_mode.setCurrentText(nowlin_mode)
+        self.ui.comboBox_nowlin_mode.setCurrentText(nowlin_mode.capitalize())
         self._update_nowlin_delay_comboBox(nowlin_mode)
         self.ui.comboBox_nowlin_delay.setCurrentText(nowlin_delay)
-        self.ui.comboBox_lockout_mode.setCurrentText(lockout_mode)
-        self._update_lockout_dac_comboBox()
+        self.ui.comboBox_lockout_mode.setCurrentText(lockout_mode.capitalize())
+        self._update_lockout_dac_comboBox(lockout_mode)
         self.ui.comboBox_lockout_dac.setCurrentIndex(int(lockout_dac) - 1)
         self.ui.comboBox_cfd_pulse_width.setCurrentText(cfd_pulse_width)
         self.ui.comboBox_agnd_trim.setCurrentText(agnd_trim)
@@ -386,7 +386,7 @@ class CfdController(QWidget):
         """Slot for cfd reset gui """
         logger.debug(f"cfd reset gui clicked")
 
-        last_cfd_config = self.config_handler.get_currently_loaded_chipboard_config()["cfd"]
+        last_cfd_config = self.config_handler.get_currently_loaded_chipboard_config("cfd")
 
         self.update_ui(last_cfd_config)
 
@@ -405,10 +405,13 @@ class CfdController(QWidget):
         self.ui.pushButton_cfd_reset_gui.pressed.connect(self._on_cfd_reset_gui_clicked)
 
     def configure_cfd(self):
-        configure_chipboard(config_handler=self.config_handler,
-                            uart_link=self.uart_link,
-                            status_message=self.status_message,
-                            component="cfd")
+
+        self.parent_ui.configuration_thread, self.parent_ui.configuration_worker = threaded_configure_chipboard(
+            parent_ui=self.parent_ui,
+            config_handler=self.config_handler,
+            uart_link=self.uart_link,
+            component="cfd")
+        self.parent_ui.configuration_thread.start()
 
     @Slot()
     def _on_cfd_configure_clicked(self):

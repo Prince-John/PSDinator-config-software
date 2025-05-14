@@ -10,7 +10,12 @@ from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 logger = logging.getLogger(__name__)
 
 
-if __name__ == "__main__":
+def main():
+    """
+    Entry point for launching the GUI for the configuration software
+    :return: None
+    """
+
     FORMAT = "%(asctime)s [%(process)7d] %(levelname)8s - %(name)-30s - %(message)s"
     logging.basicConfig(filename='gui.log', level=logging.DEBUG, format=FORMAT)
     logger.info('Started')
@@ -25,3 +30,7 @@ if __name__ == "__main__":
     w.show()
 
     sys.exit(app.exec())
+
+
+if __name__ == "__main__":
+    main()

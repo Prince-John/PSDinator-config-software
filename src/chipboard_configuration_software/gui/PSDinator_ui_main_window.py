@@ -72,7 +72,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cfd_widget = QWidget()
         self.cfd_ui = Ui_Widget_Cfd()
         self.cfd_ui.setupUi(self.cfd_widget)
-        self.cfd_controller = CfdController(self.cfd_ui, self.config_handler, self.uart_link)
+        self.cfd_controller = CfdController(self, self.cfd_ui, self.config_handler, self.uart_link)
 
         self.cfd_dock = QtAds.CDockWidget(self.dock_manager, "CFD Settings")
         self.cfd_dock.setWidget(self.cfd_widget)
@@ -84,7 +84,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chipboard_widget = QWidget()
         self.chipboard_ui = Ui_Widget_Chipboard()
         self.chipboard_ui.setupUi(self.chipboard_widget)
-        self.chipboard_controller = ChipboardController(self.chipboard_ui, self.config_handler, self.uart_link)
+        self.chipboard_controller = ChipboardController(self, self.chipboard_ui, self.config_handler, self.uart_link)
 
         self.chipboard_dock = QtAds.CDockWidget(self.dock_manager, "Chipboard Settings")
         self.chipboard_dock.setWidget(self.chipboard_widget)
@@ -96,7 +96,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.psd_widget = QWidget()  # real widget
         self.psd_ui = Ui_Widget_Psd()  # UI builder
         self.psd_ui.setupUi(self.psd_widget)  # setup layout on widget
-        self.psd_controller = PsdController(self.psd_ui, self.config_handler, self.uart_link)
+        self.psd_controller = PsdController(self, self.psd_ui, self.config_handler, self.uart_link)
 
         self.psd_dock = QtAds.CDockWidget(self.dock_manager, "PSD Settings")
         self.psd_dock.setWidget(self.psd_widget)

@@ -7,9 +7,10 @@ from PySide6.QtGui import QIntValidator
 from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit, QWidget
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
-    ChipboardConfigurationDict
+    ChipboardConfigurationDict, DelayConfigurationDict
 from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import ChannelKey, \
     BoolStr, SubchannelKey
+from chipboard_configuration_software.gui.chipboard_configurator import threaded_configure_chipboard
 
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.gui.ui_files.chipboard_ui_widget import Ui_Widget_Chipboard
@@ -24,8 +25,9 @@ logger = logging.getLogger(__name__)
 class ChipboardController(QWidget):
     status_message = Signal(str)
 
-    def __init__(self, ui: Ui_Widget_Chipboard, config_handler: ConfigurationManager, uart_link: UartMiddleware):
+    def __init__(self, parent_ui, ui: Ui_Widget_Chipboard, config_handler: ConfigurationManager, uart_link: UartMiddleware):
         super().__init__()
+        self.parent_ui = parent_ui
         self.ui = ui
         self.chipboard_config: ChipboardConfigurationDict = config_handler.current_chipboard_config
         self.config_handler = config_handler
@@ -45,7 +47,7 @@ class ChipboardController(QWidget):
         if config is None:
             config = self.chipboard_config
 
-        self._update_ui_delays(config)
+        self._update_ui_delays(config["delay"])
         self._update_ui_mux(config)
         pass
 
@@ -79,10 +81,12 @@ class ChipboardController(QWidget):
         self.configure_delays()
 
     def configure_delays(self):
-        configure_chipboard(config_handler=self.config_handler,
-                            uart_link=self.uart_link,
-                            status_message=self.status_message,
-                            component="delay")
+        self.parent_ui.configuration_thread, self.parent_ui.configuration_worker = threaded_configure_chipboard(
+            parent_ui=self.parent_ui,
+            config_handler=self.config_handler,
+            uart_link=self.uart_link,
+            component="delay")
+        self.parent_ui.configuration_thread.start()
 
     @Slot(str)
     def _on_delay_text_edited(self, channel, value):
@@ -130,13 +134,13 @@ class ChipboardController(QWidget):
         for i in range(16):
             self.ui.comboBox_pre_amp_mux.addItem(f"{i}")
 
-    def _update_ui_delays(self, config: ChipboardConfigurationDict = None):
+    def _update_ui_delays(self, delay_config: DelayConfigurationDict = None):
 
-        if config is None:
-            config = self.chipboard_config
+        if delay_config is None:
+            delay_config = self.chipboard_config["delay"]
 
         for channel in range(16):
-            delay_value = config["delay"][cast(ChannelKey, str(channel))]["value"]
+            delay_value = delay_config[cast(ChannelKey, str(channel))]["value"]
 
             self.delay_sliders[channel].setSliderPosition(int(delay_value))
 
@@ -144,7 +148,8 @@ class ChipboardController(QWidget):
     def _on_reset_delays_clicked(self):
         """Slot for reset delays """
         logger.debug(f"reset delays clicked")
-        last_config = self.config_handler.get_currently_loaded_chipboard_config()
+        last_config = self.config_handler.get_currently_loaded_chipboard_config("delay")
+
         self._update_ui_delays(last_config)
 
     def _update_ui_mux(self, config):

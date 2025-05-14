@@ -12,6 +12,7 @@ from chipboard_configuration_software.command_generator.commands.configuration_t
 from chipboard_configuration_software.command_generator.commands.configuration_types.psd_config_types import \
     PSDConfigurationDict
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
+from chipboard_configuration_software.gui.chipboard_configurator import threaded_configure_chipboard
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.gui.ui_files.psd_ui_widget import Ui_Widget_Psd
@@ -26,12 +27,13 @@ logger = logging.getLogger(__name__)
 class PsdController(QWidget):
     status_message = Signal(str)
 
-    def __init__(self, ui: Ui_Widget_Psd, config_handler: ConfigurationManager, uart_link: UartMiddleware):
+    def __init__(self, parent_ui, ui: Ui_Widget_Psd, config_handler: ConfigurationManager, uart_link: UartMiddleware):
         """
              ui is an instance of Ui_DockWidget_psd (after setupUi has been called).
          """
 
         super().__init__()
+        self.parent_ui = parent_ui
         self.uart_link = uart_link
         self.SUBCHANNELS: tuple[SubchannelKey, SubchannelKey, SubchannelKey] = ("a", "b", "c")
         self.ui = ui
@@ -499,7 +501,7 @@ class PsdController(QWidget):
 
     @Slot()
     def _on_psd_integrator_reset_clicked(self, subchannel):
-        last_psd_config = self.config_handler.get_currently_loaded_chipboard_config()["psd"]
+        last_psd_config = self.config_handler.get_currently_loaded_chipboard_config("psd")
         self._update_ui_psd_single_integrator(subchannel, last_psd_config)
 
         pass
@@ -541,7 +543,7 @@ class PsdController(QWidget):
     def _on_test_mode_reset_clicked(self):
         """Slot for test mode reset """
         logger.debug(f"test mode reset clicked")
-        last_psd_config = self.config_handler.get_currently_loaded_chipboard_config()["psd"]
+        last_psd_config = self.config_handler.get_currently_loaded_chipboard_config("psd")
         self._update_ui_psd_test_mode(last_psd_config)
 
     def _update_ui_psd_test_mode(self, psd_config=None):
@@ -583,7 +585,7 @@ class PsdController(QWidget):
     def _on_reset_gui_clicked(self):
         """Slot for reset gui button """
         logger.debug(f"reset gui clicked")
-        last_psd_config = self.config_handler.get_currently_loaded_chipboard_config()["psd"]
+        last_psd_config = self.config_handler.get_currently_loaded_chipboard_config("psd")
         self.update_ui(last_psd_config)
 
     def _update_ui_psd_misc(self, psd_config=None):
@@ -618,61 +620,9 @@ class PsdController(QWidget):
         dialog.exec()
 
     def configure_psd(self):
-        configure_chipboard(config_handler=self.config_handler,
-                            uart_link=self.uart_link,
-                            status_message=self.status_message,
-                            component="psd")
-
-    def __configure_psd(self):
-        command_dict = self.config_handler.get_changes()
-
-        commands = generate_commands(command_dict)
-
-        # Track success and failure
-        success_count = 0
-        failures = []
-
-        try:
-            self.uart_link.send_stx()
-            for command in commands:
-                try:
-                    self.uart_link.send_CMD(command_string=command, message=f"Sending: {command}")
-                    success_count += 1
-
-                except Exception as e:
-                    logger.warning(f"Command '{command[:-1]}' failed: {e}")
-                    self.status_message.emit(f"Configuration Warning! {e}")
-                    failures.append((command[:-1], str(e)))
-                    QApplication.processEvents()
-                    continue
-
-            self.config_handler.update_currently_loaded_chipboard_config()
-            logger.info("Configured PSD!")
-
-            total = len(commands)
-            failure_count = len(failures)
-
-            if success_count == total:
-                self.config_handler.update_currently_loaded_chipboard_config()
-                final_msg = f"All {total} commands configured successfully!"
-                logger.info(final_msg)
-                self.status_message.emit(final_msg)
-            else:
-                final_msg = f"{success_count}/{total} commands succeeded, {failure_count} failed."
-                logger.warning(final_msg)
-                self.status_message.emit(final_msg)
-
-                # Show detailed window
-                self.show_failure_details(failures)
-            self.uart_link.send_etx()
-
-        except ConnectionRefusedError as e:
-            logger.error(f"Unable to get into chipboard configuration mode! {e}")
-            self.status_message.emit(f"Unable to get into chipboard configuration mode! {e}")
-        except PortNotOpenError as e:
-            logger.error(e)
-            self.status_message.emit(f"Error: Device is not connected! {e}")
-
-        except Exception as e:
-            logger.error(f"Unexpected Exception: {e}")
-            self.status_message.emit(f"Unexpected Exception: {e}")
+        self.parent_ui.configuration_thread, self.parent_ui.configuration_worker = threaded_configure_chipboard(
+            parent_ui=self.parent_ui,
+            config_handler=self.config_handler,
+            uart_link=self.uart_link,
+            component="psd")
+        self.parent_ui.configuration_thread.start()

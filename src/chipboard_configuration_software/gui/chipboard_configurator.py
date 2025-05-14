@@ -13,7 +13,7 @@ class ChipboardConfigurator(QObject):
     status_update = Signal(str)
     progress_update = Signal(int)
     config_done = Signal()
-    partial_success = Signal(list)  # fails
+    partial_success = Signal(list)  # List[fails]
 
     def __init__(self, config_handler, uart_link, component=None):
         super().__init__()
