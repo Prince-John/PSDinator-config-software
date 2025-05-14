@@ -1,24 +1,38 @@
-[tool.poetry]
+[project]
 name = "Psdinator-configuration-software"
-version = "0.1.0"
+dynamic = [ "version" ]
 description = "A GUI utitlity for configuring the WashU CFD-PSD ASIC-based chipboards."
-authors = ["Prince John <johnp@wustl.edu>"]
-readme = "README.md"
-packages = [{ include = "chipboard_configuration_software", from = "src" }]
+authors = [
+    {name = "Prince John", email = "johnp@wustl.edu"}
+]
 license = "MIT"
+readme = "README.md"
+requires-python = ">=3.11,<3.12"
+dependencies = [
+"numpy==2.2.5",
+  "pyserial==3.5",
+  "PySide6==6.9.0",
+  "PySide6-QtAds==4.4.0",
+  "PySide6_Addons==6.9.0",
+  "PySide6_Essentials==6.9.0",
+  "shiboken6==6.9.0"
+]
 
-[tool.poetry.dependencies]
-python = ">=3.11,<3.12"
-numpy = "2.2.5"
-pyserial = "3.5"
-PySide6 = "6.9.0"
-PySide6-QtAds = "4.4.0"
-PySide6_Addons = "6.9.0"
-PySide6_Essentials = "6.9.0"
-shiboken6 = "6.9.0"
+[tool.poetry]
+packages = [{ include = "chipboard_configuration_software", from = "src" }]
+version = "0.1.0"
 
-[tool.poetry.scripts]
-psdinator = "chipboard_configuration_software.main:main"
+
+[project.gui-scripts]
+psdinator = 'chipboard_configuration_software.main:main'
+
+[tool.poetry-dynamic-versioning]
+enable = true
+vcs = "git"
+style = "pep440"
+
+[project.scripts]
+psdinator = 'chipboard_configuration_software.main:main'
 
 [build-system]
 requires = ["poetry-core"]

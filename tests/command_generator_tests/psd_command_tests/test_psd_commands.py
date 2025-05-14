@@ -2,6 +2,7 @@ import random
 from unittest import TestCase
 
 from chipboard_configuration_software.command_generator.commands import psd_commands
+# noinspection PyProtectedMember
 from chipboard_configuration_software.command_generator.commands.psd_commands import generate_psd_trigger_subcommands, \
     generate_psd_global_enable_subcommands, _get_channel_enable, generate_psd_dac_subcommands
 
