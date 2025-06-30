@@ -6,15 +6,15 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>610</width>
-    <height>582</height>
+    <width>733</width>
+    <height>645</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
-  <layout class="QGridLayout" name="gridLayout_2">
-   <item row="0" column="0">
+  <layout class="QGridLayout" name="gridLayout">
+   <item row="0" column="0" colspan="4">
     <widget class="QGroupBox" name="groupBox_delays">
      <property name="minimumSize">
       <size>
@@ -32,7 +32,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_label">
         <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
+         <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_15">
@@ -51,7 +51,7 @@
         <item>
          <spacer name="horizontalSpacer_2">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -74,14 +74,14 @@
            <string>Delay Setting</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
          </widget>
         </item>
         <item>
          <spacer name="horizontalSpacer_3">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -96,7 +96,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_0">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_0">
@@ -107,13 +107,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>0</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -123,10 +123,10 @@
         <item>
          <spacer name="horizontalSpacer">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -157,10 +157,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -170,10 +170,10 @@
         <item>
          <spacer name="horizontalSpacer_20">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -210,7 +210,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -229,7 +229,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_1">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_1">
@@ -240,13 +240,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>1</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -256,10 +256,10 @@
         <item>
          <spacer name="horizontalSpacer_4">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -290,10 +290,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -303,10 +303,10 @@
         <item>
          <spacer name="horizontalSpacer_31">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -343,7 +343,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -362,7 +362,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_2">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_2">
@@ -373,13 +373,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>2</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -389,10 +389,10 @@
         <item>
          <spacer name="horizontalSpacer_5">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -423,10 +423,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -436,10 +436,10 @@
         <item>
          <spacer name="horizontalSpacer_30">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -476,7 +476,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -495,7 +495,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_3">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_3">
@@ -506,13 +506,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>3</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -522,10 +522,10 @@
         <item>
          <spacer name="horizontalSpacer_6">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -556,10 +556,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -569,10 +569,10 @@
         <item>
          <spacer name="horizontalSpacer_29">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -609,7 +609,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -628,7 +628,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_4">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_4">
@@ -639,13 +639,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>4</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -655,10 +655,10 @@
         <item>
          <spacer name="horizontalSpacer_7">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -689,10 +689,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -702,10 +702,10 @@
         <item>
          <spacer name="horizontalSpacer_28">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -742,7 +742,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -761,7 +761,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_5">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_5">
@@ -772,13 +772,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>5</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -788,10 +788,10 @@
         <item>
          <spacer name="horizontalSpacer_8">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -822,10 +822,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -835,10 +835,10 @@
         <item>
          <spacer name="horizontalSpacer_27">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -875,7 +875,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -894,7 +894,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_6">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_6">
@@ -905,13 +905,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>6</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -921,10 +921,10 @@
         <item>
          <spacer name="horizontalSpacer_9">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -955,10 +955,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -968,10 +968,10 @@
         <item>
          <spacer name="horizontalSpacer_26">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1008,7 +1008,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1027,7 +1027,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_7">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_7">
@@ -1038,13 +1038,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>7</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1054,10 +1054,10 @@
         <item>
          <spacer name="horizontalSpacer_10">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1088,10 +1088,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -1101,10 +1101,10 @@
         <item>
          <spacer name="horizontalSpacer_25">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1141,7 +1141,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1160,7 +1160,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_8">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_8">
@@ -1171,13 +1171,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>8</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1187,10 +1187,10 @@
         <item>
          <spacer name="horizontalSpacer_11">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1221,10 +1221,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -1234,10 +1234,10 @@
         <item>
          <spacer name="horizontalSpacer_24">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1274,7 +1274,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1293,7 +1293,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_9">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_9">
@@ -1304,13 +1304,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>9</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1320,10 +1320,10 @@
         <item>
          <spacer name="horizontalSpacer_12">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1354,10 +1354,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -1367,10 +1367,10 @@
         <item>
          <spacer name="horizontalSpacer_23">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1407,7 +1407,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1426,7 +1426,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_10">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_10">
@@ -1437,13 +1437,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>10</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1453,10 +1453,10 @@
         <item>
          <spacer name="horizontalSpacer_13">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1487,10 +1487,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -1500,10 +1500,10 @@
         <item>
          <spacer name="horizontalSpacer_34">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1540,7 +1540,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1559,7 +1559,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_11">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_11">
@@ -1570,13 +1570,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>11</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1586,10 +1586,10 @@
         <item>
          <spacer name="horizontalSpacer_14">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1620,10 +1620,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -1633,10 +1633,10 @@
         <item>
          <spacer name="horizontalSpacer_32">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1673,7 +1673,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1692,7 +1692,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_12">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_12">
@@ -1703,13 +1703,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>12</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1719,10 +1719,10 @@
         <item>
          <spacer name="horizontalSpacer_15">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1753,10 +1753,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -1766,10 +1766,10 @@
         <item>
          <spacer name="horizontalSpacer_33">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1806,7 +1806,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1825,7 +1825,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_13">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_13">
@@ -1836,13 +1836,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>13</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1852,10 +1852,10 @@
         <item>
          <spacer name="horizontalSpacer_16">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1886,10 +1886,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -1899,10 +1899,10 @@
         <item>
          <spacer name="horizontalSpacer_35">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -1939,7 +1939,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -1958,7 +1958,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_14">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_14">
@@ -1969,13 +1969,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>14</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -1985,10 +1985,10 @@
         <item>
          <spacer name="horizontalSpacer_17">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -2019,10 +2019,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -2032,10 +2032,10 @@
         <item>
          <spacer name="horizontalSpacer_22">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -2072,7 +2072,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -2091,7 +2091,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontal_layout_delay_ch_15">
         <property name="sizeConstraint">
-         <enum>QLayout::SetDefaultConstraint</enum>
+         <enum>QLayout::SizeConstraint::SetDefaultConstraint</enum>
         </property>
         <item>
          <widget class="QLabel" name="label_delay_ch_15">
@@ -2102,13 +2102,13 @@
            </size>
           </property>
           <property name="frameShape">
-           <enum>QFrame::NoFrame</enum>
+           <enum>QFrame::Shape::NoFrame</enum>
           </property>
           <property name="text">
            <string>15</string>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="margin">
            <number>0</number>
@@ -2118,10 +2118,10 @@
         <item>
          <spacer name="horizontalSpacer_18">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Preferred</enum>
+           <enum>QSizePolicy::Policy::Preferred</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -2152,10 +2152,10 @@
            <number>2</number>
           </property>
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="tickPosition">
-           <enum>QSlider::TicksAbove</enum>
+           <enum>QSlider::TickPosition::TicksAbove</enum>
           </property>
           <property name="tickInterval">
            <number>2</number>
@@ -2165,10 +2165,10 @@
         <item>
          <spacer name="horizontalSpacer_21">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeType">
-           <enum>QSizePolicy::Minimum</enum>
+           <enum>QSizePolicy::Policy::Minimum</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -2205,7 +2205,7 @@
            <bool>true</bool>
           </property>
           <property name="alignment">
-           <set>Qt::AlignCenter</set>
+           <set>Qt::AlignmentFlag::AlignCenter</set>
           </property>
           <property name="placeholderText">
            <string>0</string>
@@ -2224,7 +2224,7 @@
       <item>
        <layout class="QHBoxLayout" name="horizontalLayout">
         <property name="sizeConstraint">
-         <enum>QLayout::SetMinimumSize</enum>
+         <enum>QLayout::SizeConstraint::SetMinimumSize</enum>
         </property>
         <item>
          <widget class="QPushButton" name="qb_delay_configure">
@@ -2251,7 +2251,7 @@
           </property>
          </widget>
         </item>
-        <item alignment="Qt::AlignVCenter">
+        <item alignment="Qt::AlignmentFlag::AlignVCenter">
          <widget class="QPushButton" name="qb_delay_reset">
           <property name="minimumSize">
            <size>
@@ -2279,7 +2279,7 @@
         <item>
          <spacer name="horizontalSpacer_19">
           <property name="orientation">
-           <enum>Qt::Horizontal</enum>
+           <enum>Qt::Orientation::Horizontal</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
@@ -2307,60 +2307,220 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="0">
-    <widget class="QGroupBox" name="groupBox_muxs">
-     <property name="maximumSize">
-      <size>
-       <width>220</width>
-       <height>200</height>
-      </size>
-     </property>
+   <item row="1" column="0" rowspan="3">
+    <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Multiplexers</string>
      </property>
-     <layout class="QGridLayout" name="gridLayout">
-      <property name="verticalSpacing">
-       <number>3</number>
-      </property>
-      <item row="0" column="0" colspan="2">
-       <widget class="QLabel" name="label">
-        <property name="maximumSize">
-         <size>
-          <width>16777215</width>
-          <height>21</height>
-         </size>
-        </property>
-        <property name="font">
-         <font>
-          <bold>true</bold>
-         </font>
-        </property>
+     <layout class="QGridLayout" name="gridLayout_2">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label_3">
         <property name="text">
-         <string>Pre Amp MUX</string>
+         <string>OR Output</string>
         </property>
        </widget>
       </item>
-      <item row="1" column="0" colspan="2">
-       <widget class="QCheckBox" name="checkBox_pre_amp_mux">
+      <item row="0" column="0">
+       <widget class="QLabel" name="label_5">
+        <property name="toolTip">
+         <string>This is the CFD pulse generated by the PSD chips it is routed to backplane connector. </string>
+        </property>
         <property name="text">
-         <string>Enable</string>
+         <string>CFD OUT</string>
         </property>
        </widget>
       </item>
       <item row="2" column="0">
-       <widget class="QLabel" name="label_2">
+       <widget class="QLabel" name="label_4">
         <property name="text">
-         <string>Channel:</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignCenter</set>
+         <string>INTX Output</string>
         </property>
        </widget>
       </item>
-      <item row="2" column="1">
-       <widget class="QComboBox" name="comboBox_pre_amp_mux"/>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Pre Amp MUX Output</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QComboBox" name="comboBox_pre_amp_mux">
+        <item>
+         <property name="text">
+          <string>Disabled</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="3">
+       <widget class="QComboBox" name="comboBox_intx_mux">
+        <item>
+         <property name="text">
+          <string>PSD 0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>PSD 1</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QComboBox" name="comboBox_or_mux">
+        <item>
+         <property name="text">
+          <string>PSD 0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>PSD 1</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>CFD</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>PSD 0 or PSD 1</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="0" column="3">
+       <widget class="QComboBox" name="comboBox_psd_cfd_mux">
+        <item>
+         <property name="text">
+          <string>PSD 0</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>PSD 1</string>
+         </property>
+        </item>
+       </widget>
       </item>
      </layout>
+    </widget>
+   </item>
+   <item row="1" column="1">
+    <widget class="QLabel" name="label_psd_auto_veto_dac_2">
+     <property name="toolTip">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Auto Veto Time: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Configures the time at which the ASIC auto resets if the &lt;span style=&quot; font-weight:700;&quot;&gt;Veto Reset(Take Event)&lt;/span&gt; signal is not asserted.  &lt;/p&gt;&lt;p&gt;Inversely related to DAC voltage, not linear; Higher Voltage -&amp;gt; Quicker reset.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="text">
+      <string>Multiplicity Offset</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="2">
+    <widget class="QSlider" name="horizontalSlider_multiplicity_offset_dac">
+     <property name="toolTip">
+      <string>Voltage Slider for PSD Delay DAC A</string>
+     </property>
+     <property name="maximum">
+      <number>1023</number>
+     </property>
+     <property name="singleStep">
+      <number>10</number>
+     </property>
+     <property name="pageStep">
+      <number>128</number>
+     </property>
+     <property name="orientation">
+      <enum>Qt::Orientation::Horizontal</enum>
+     </property>
+     <property name="invertedControls">
+      <bool>false</bool>
+     </property>
+     <property name="tickPosition">
+      <enum>QSlider::TickPosition::TicksBelow</enum>
+     </property>
+     <property name="tickInterval">
+      <number>128</number>
+     </property>
+    </widget>
+   </item>
+   <item row="1" column="3">
+    <widget class="QLineEdit" name="text_multiplicity_offset_dac">
+     <property name="sizePolicy">
+      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+       <horstretch>0</horstretch>
+       <verstretch>0</verstretch>
+      </sizepolicy>
+     </property>
+     <property name="minimumSize">
+      <size>
+       <width>21</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="maximumSize">
+      <size>
+       <width>50</width>
+       <height>16777215</height>
+      </size>
+     </property>
+     <property name="baseSize">
+      <size>
+       <width>30</width>
+       <height>0</height>
+      </size>
+     </property>
+     <property name="inputMask">
+      <string>0.00 V</string>
+     </property>
+     <property name="text">
+      <string>0.0 V</string>
+     </property>
+     <property name="maxLength">
+      <number>6</number>
+     </property>
+     <property name="cursorPosition">
+      <number>6</number>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignmentFlag::AlignCenter</set>
+     </property>
+     <property name="clearButtonEnabled">
+      <bool>false</bool>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="1">
+    <widget class="QLabel" name="label">
+     <property name="text">
+      <string>Chipboard Mode</string>
+     </property>
+    </widget>
+   </item>
+   <item row="2" column="2">
+    <widget class="QComboBox" name="comboBox_chipboard_mode">
+     <item>
+      <property name="text">
+       <string>Configuration Only Mode</string>
+      </property>
+     </item>
+     <item>
+      <property name="text">
+       <string>Acquisition Mode</string>
+      </property>
+     </item>
+    </widget>
+   </item>
+   <item row="3" column="1" colspan="2">
+    <widget class="QPushButton" name="pushButton">
+     <property name="text">
+      <string>Configure Chipboard Settings</string>
+     </property>
     </widget>
    </item>
   </layout>

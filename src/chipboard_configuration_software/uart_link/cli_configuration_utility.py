@@ -10,27 +10,28 @@ if __name__ == '__main__':
     uart_link = UartMiddleware()
     print("Uart Link is up, no device connected!")
 
-    configuration_manager = ConfigurationManager()
 
-    chipboard_config = ConfigurationDiffer(old_config_path=r'../configurations/single_board_config.json',
-                                           temp_path=r'../configurations/single_board_config_temp.json')
-
-    config = configuration_manager.current_chipboard_config
-
-    try:
-        while input("Modify configuration (Y/n)?") == "Y":
-            input("Read Changes? Enter to continue ...")
-            changed_config = configuration_manager.get_changes()
-            print_with_bars(f"Command changes: {json.dumps(changed_config, indent=4)}")
-            config = changed_config
-    except KeyboardInterrupt:
-        print("Interrupted by user, exiting config edit loops")
-
-    commands = generate_command_string.generate_commands(config)
-
-    print_with_bars("Generated Commands Listed below")
-    for command in commands:
-        print(command)
+    # configuration_manager = ConfigurationManager()
+    #
+    # chipboard_config = ConfigurationDiffer(old_config_path=r'../configurations/single_board_config.json',
+    #                                        temp_path=r'../configurations/single_board_config_temp.json')
+    #
+    # config = configuration_manager.current_chipboard_config
+    #
+    # try:
+    #     while input("Modify configuration (Y/n)?") == "Y":
+    #         input("Read Changes? Enter to continue ...")
+    #         changed_config = configuration_manager.get_changes()
+    #         print_with_bars(f"Command changes: {json.dumps(changed_config, indent=4)}")
+    #         config = changed_config
+    # except KeyboardInterrupt:
+    #     print("Interrupted by user, exiting config edit loops")
+    #
+    # commands = generate_command_string.generate_commands(config)
+    #
+    # print_with_bars("Generated Commands Listed below")
+    # for command in commands:
+    #     print(command)
 
     devices = uart_link.get_available_devices()
 
@@ -63,9 +64,9 @@ if __name__ == '__main__':
         uart_link.cleanup()
         sys.exit(0)
 
-    for command in commands:
+    """for command in commands:
         # input(f"Send next command:  {command}? ")
         uart_link.send_CMD(command_string=command, message=f"Sending:- {command}")
-
+"""
     uart_link.send_etx()
     uart_link.cleanup()

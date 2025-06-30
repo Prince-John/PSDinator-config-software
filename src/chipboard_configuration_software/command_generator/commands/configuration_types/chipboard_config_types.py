@@ -13,13 +13,16 @@ DelayConfigurationDict = Dict[ChannelKey, DelayEntry]
 
 
 class MuxConfigurationDict(TypedDict):
-    enable: BoolStr
-    channel: int
+    preamp_output: PreampOutputKey
+    or_output: OrOutputKey
+    intx_output: IntxOutputKey
+    psd_cfd_output: PsdCfdOutputKey
 
 
 # --- Top-level Configuration ---
 class ChipboardConfigurationDict(TypedDict):
     chipboard_number: int
+    chipboard_mode: str
     cfd: CFDConfigurationDict
     psd: PSDConfigurationDict
     delay: DelayConfigurationDict

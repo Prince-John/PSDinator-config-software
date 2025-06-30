@@ -121,8 +121,10 @@ def generate_default_configuration() -> dict:
 
                                    delay={str(index): {"value": "0"} for index in range(18)},
 
-                                   mux={"enable": False, "channel": 0}
-
+                                   mux={"preamp_output": "disabled",
+                                        "or_output": "cfd",
+                                        "intx_output": "psd_0",
+                                        "psd_cfd_output": "psd_0"}
                                    )
 
                       }
@@ -154,8 +156,10 @@ class ConfigurationDiffer:
             "cfd.individual_channel_settings.15",
             "cfd.common_settings",
             "delay",
-            "mux"
-
+            "mux.preamp_output",
+            "mux.or_output",
+            "mux.intx_output",
+            "mux.psd_cfd_output"
         }
 
         write_config(self.temp_path, self.old_config)
@@ -216,7 +220,10 @@ class ConfigurationManager:
             "cfd.individual_channel_settings.15",
             "cfd.common_settings",
             "delay",
-            "mux"
+            "mux.preamp_output",
+            "mux.or_output",
+            "mux.intx_output",
+            "mux.psd_cfd_output"
 
         }
         if os.path.isfile(auto_save_file_path):

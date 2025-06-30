@@ -25,7 +25,8 @@ logger = logging.getLogger(__name__)
 class ChipboardController(QWidget):
     status_message = Signal(str)
 
-    def __init__(self, parent_ui, ui: Ui_Widget_Chipboard, config_handler: ConfigurationManager, uart_link: UartMiddleware):
+    def __init__(self, parent_ui, ui: Ui_Widget_Chipboard, config_handler: ConfigurationManager,
+                 uart_link: UartMiddleware):
         super().__init__()
         self.parent_ui = parent_ui
         self.ui = ui
@@ -35,6 +36,20 @@ class ChipboardController(QWidget):
         self.delay_sliders: List[QSlider] = []
         self.delay_texts: List[QLineEdit] = []
         self.delay_all_state = False
+
+        self.mux_cmd_map = {
+            "psd_0": "PSD 0",
+            "psd_1": "PSD 1",
+            "psd_0_or_psd_1": "PSD 0 or PSD 1",
+            "cfd": "CFD",
+        }
+
+        self.mux_cmd_index_map = {
+            0: "psd_0",
+            1: "psd_1",
+            2: "psd_0_or_psd_1",
+            3: "cfd",
+        }
 
         self._connect_delay_signals()
         self._connect_mux_signals()
@@ -134,6 +149,36 @@ class ChipboardController(QWidget):
         for i in range(16):
             self.ui.comboBox_pre_amp_mux.addItem(f"{i}")
 
+        self.ui.comboBox_pre_amp_mux.currentTextChanged.connect(self._on_pre_amp_mux_changed)
+        self.ui.comboBox_or_mux.currentIndexChanged.connect(self._on_or_mux_changed)
+        self.ui.comboBox_intx_mux.currentIndexChanged.connect(self._on_intx_mux_changed)
+        self.ui.comboBox_psd_cfd_mux.currentIndexChanged.connect(self._on_psd_cfd_mux_changed)
+
+    @Slot(str)
+    def _on_pre_amp_mux_changed(self, value):
+        """Slot for pre amp mux """
+        logger.debug(f"pre amp mux changed with value {value}")
+
+        self.chipboard_config["mux"]["preamp_output"] = value
+
+    @Slot(int)
+    def _on_or_mux_changed(self, value):
+        """Slot for or mux """
+        logger.debug(f"or mux changed with value {value}")
+        self.chipboard_config["mux"]["or_output"] = self.mux_cmd_index_map[value]
+
+    @Slot(int)
+    def _on_intx_mux_changed(self, value):
+        """Slot for or mux """
+        logger.debug(f"intx mux changed with value {value}")
+        self.chipboard_config["mux"]["intx_output"] = self.mux_cmd_index_map[value]
+
+    @Slot(int)
+    def _on_psd_cfd_mux_changed(self, value):
+        """Slot for psd cfd """
+        logger.debug(f"psd cfd changed with value {value}")
+        self.chipboard_config["mux"]["psd_cfd_output"] = self.mux_cmd_index_map[value]
+
     def _update_ui_delays(self, delay_config: DelayConfigurationDict = None):
 
         if delay_config is None:
@@ -156,7 +201,7 @@ class ChipboardController(QWidget):
         if config is None:
             config = self.chipboard_config
 
-        enable_state = config["mux"]["enable"]
-
-        self.ui.comboBox_pre_amp_mux.setCurrentText(str(config["mux"]["channel"]))
-        set_checkbox_silently(self.ui.checkBox_pre_amp_mux, enable_state)
+        self.ui.comboBox_pre_amp_mux.setCurrentText(str(config["mux"]["preamp_output"]))
+        self.ui.comboBox_or_mux.setCurrentText(self.mux_cmd_map[config["mux"]["or_output"]])
+        self.ui.comboBox_intx_mux.setCurrentText(self.mux_cmd_map[config["mux"]["intx_output"]])
+        self.ui.comboBox_psd_cfd_mux.setCurrentText(self.mux_cmd_map[config["mux"]["psd_cfd_output"]])
