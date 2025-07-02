@@ -2,7 +2,6 @@ import json
 import sys
 
 from chipboard_configuration_software.command_generator import generate_command_string
-from chipboard_configuration_software.gui.configuration_helper import ConfigurationDiffer, ConfigurationManager
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 from chipboard_configuration_software.uart_link.utils import print_with_bars
 

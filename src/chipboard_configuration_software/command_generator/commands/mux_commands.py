@@ -72,7 +72,7 @@ def generate_psd_cfd_mux_subcommands(mux_config):
     mux_command_string = ""
 
     if mux_config["psd_cfd_output"] in psd_cfd_mux_map:
-        mux_word = psd_cfd_mux_map[mux_config["intx_output"]]
+        mux_word = psd_cfd_mux_map[mux_config["psd_cfd_output"]]
         mux_command_string = f'{mux_command_prefix}{psd_cfd_mux_prefix}{mux_word:02X}\0'
 
     return mux_command_string

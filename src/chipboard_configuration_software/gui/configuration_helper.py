@@ -310,7 +310,7 @@ class ConfigurationManager:
 
         """
         if self.currently_loaded_chipboard_config is None:
-            return read_single_chipboard_config(self.auto_save_file_path, self.current_chipboard_number)
+            return read_single_chipboard_config(self.auto_save_file_path, self.current_chipboard_number)[component]
         if component is None:
             return self.currently_loaded_chipboard_config
 

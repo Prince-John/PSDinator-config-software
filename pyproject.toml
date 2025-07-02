@@ -20,7 +20,7 @@ dependencies = [
 
 [tool.poetry]
 packages = [{ include = "chipboard_configuration_software", from = "src" }]
-version = "0.1.0"
+version = "0.2.0"
 
 
 [project.gui-scripts]

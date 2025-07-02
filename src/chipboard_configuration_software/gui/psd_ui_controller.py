@@ -522,22 +522,26 @@ class PsdController(QWidget):
     @Slot(str)
     def _on_test_mode_status_changed(self, value):
         logger.debug(f"PSD test mode status changed {value}")
-        pass
+        self.psd_config["test_mode"]["status"] = value
+
 
     @Slot(int)
     def _on_test_channel_changed(self, channel):
         """Slot for test_channel """
         logger.debug(f"test_channel changed with value {channel}")
+        self.psd_config["test_mode"]["channel"] = channel
 
     @Slot(str)
     def _on_test_subchannel_changed(self, subchannel):
         """Slot for test subchannel """
         logger.debug(f"test subchannel changed with value {subchannel}")
+        self.psd_config["test_mode"]["subchannel"] = subchannel
 
     @Slot()
     def _on_test_mode_configure_clicked(self):
         """Slot for test mode configure """
         logger.debug(f"test mode configure clicked")
+
 
     @Slot()
     def _on_test_mode_reset_clicked(self):

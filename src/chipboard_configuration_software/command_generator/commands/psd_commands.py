@@ -2,7 +2,7 @@ import json
 from itertools import chain
 from typing import List
 from .configuration_types.psd_config_types import PSDConfigurationDict, OctalDacSettingsDict, SubchannelOffsetDacDict, \
-    SerialRegisterSettingsDict, RangeDict, ChannelEnableDict, ChannelOffsetDacDict, SubchannelKey
+    SerialRegisterSettingsDict, RangeDict, ChannelEnableDict, ChannelOffsetDacDict, SubchannelKey, TestModeDict
 from ..board_components import psd, dac
 
 psd_command_prefix = "PSD:"
@@ -22,6 +22,33 @@ def generate_psd_commands_backup(psd_config: PSDConfigurationDict) -> List[str]:
     psd_commands.extend(global_enable_commands)
 
     return psd_commands
+
+
+def generate_psd_test_mode_subcommands(component_dict: TestModeDict) -> str:
+    """
+    Generates the commands required to put the PSD ASIC into its test mode.
+
+    Example: TS0:0a01 => 0a- DAC address channel: 2 - subchannel: c   01- enable
+
+    :param component_dict:
+    :return: Returns the command string followed by 1 byte address ( 7 bits valid)
+            [channel(5 MSB) + subchannel(2 LSB)] and 1 byte (1 bit valid) enable setting in ascii hex.
+    """
+
+    channel = component_dict["channel"]
+    subchannel = component_dict["subchannel"]
+    status = True if component_dict["status"].lower() == "on" else False
+
+    if int(channel) > 15:
+        raise ValueError(f"Channel {channel} exceeds maximum supported channel index (15)")
+
+    test_mode_command_prefix = f"TS0:" if int(channel) < 8 else f"TS1:"
+
+    address = psd.generate_psd_test_mode_word(int(channel), subchannel)
+
+    command = f"{psd_command_prefix}{test_mode_command_prefix}{address:02X}{int(status):02X}\0"
+
+    return command
 
 
 def generate_psd_commands(psd_config: PSDConfigurationDict) -> List[str]:
@@ -46,6 +73,9 @@ def generate_psd_commands(psd_config: PSDConfigurationDict) -> List[str]:
             case "serial_register_settings":
                 psd_commands.append(generate_psd_serial_subcommands(component_dict))
 
+            case "test_mode":
+                psd_commands.append(generate_psd_test_mode_subcommands(component_dict))
+
     return psd_commands
 
 
@@ -63,7 +93,6 @@ def generate_octal_dac_psd_subcommands(psd_octal_dac_config: OctalDacSettingsDic
             dac_subcommands.append(f'{octal_dac_prefix}{dac_word:04X}\0')
 
     for component, component_dict in psd_octal_dac_config.items():
-
 
         match component:
 
@@ -89,7 +118,7 @@ def generate_psd_trigger_subcommands(psd_config: dict) -> str:
 
 def generate_psd_dac_subcommands(psd_offset_dac_config: ChannelOffsetDacDict) -> List[str]:
     """
-    Example: DAC0:000a => 00 - DAC value, 0a- DAC address channel 2 - subchannel c
+    Example: OD0:000a => 00 - DAC value, 0a- DAC address channel 2 - subchannel c
 
     :param psd_offset_dac_config:
     :return: Returns the command string followed by 1 byte dac value (5 valid bits) and 1 byte address ( 7 bits valid)
@@ -129,7 +158,6 @@ def generate_psd_serial_subcommands(psd_config: SerialRegisterSettingsDict) -> s
     :return: Returns the command string with 96bit serial word in ascii hex
     """
     bitmask_lower, bitmask_upper = _get_channel_enable(psd_config["channel_enables"])
-
 
     gains = _get_ordered_ranges(psd_config["gain"])
     delay_ranges = _get_ordered_ranges(psd_config["delay_ranges"])

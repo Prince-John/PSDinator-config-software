@@ -113,6 +113,29 @@ def generate_psd_serial_word_backup(channel_enable_low_mask: int,
     return serial_word
 
 
+def generate_psd_test_mode_word(channel: int, sub_channel: Literal["a", "b", "c"]) -> int:
+    """
+
+This function returns an int with 7 valid bits [channel(5 MSB) + subchannel(2 LSB)] to encode the
+PSD test mode channel selection.
+
+    :return: (int) 7 bit address [channel(5 MSB) + subchannel(2 LSB)].
+
+    """
+
+    sub_channel_map = {"a": 0, "b": 1, "c": 2}
+
+    if sub_channel not in sub_channel_map:
+        raise ValueError("not a valid subchannel")
+
+    if not isinstance(channel, int) or channel > 8 or channel < 0:
+        raise ValueError("not a valid channel")
+
+    address = channel << 2 | sub_channel_map[sub_channel]
+
+    return address
+
+
 def generate_psd_dac_words(dac_setting: int, channel: int, sub_channel: Literal["a", "b", "c"]) -> tuple[int, int]:
     """
 
@@ -327,6 +350,7 @@ def check_bitstring(channel_mask: int) -> int:
     if not 0 <= channel_mask <= 0xFF:
         raise ValueError("Bitmask must fit within 8 bits (0–255)")
     return channel_mask
+
 
 def generate_global_enable_word(global_enable: bool):
     """
