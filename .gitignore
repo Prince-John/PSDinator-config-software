@@ -2,3 +2,4 @@
 .env
 
 /src/chipboard_configuration_software/gui/gui.log
+/src/chipboard_configuration_software/autosave_config.json
