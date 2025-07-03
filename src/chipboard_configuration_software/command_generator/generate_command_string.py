@@ -6,6 +6,7 @@ from .commands.configuration_types.chipboard_config_types import ChipboardConfig
 from .commands.delay_commands import generate_delay_commands
 from .commands.mux_commands import generate_mux_commands
 from .commands.psd_commands import generate_psd_commands
+from .commands.global_commands import generate_global_chipboard_commands
 
 
 def generate_commands(config: ChipboardConfigurationDict) -> List[str]:
@@ -35,5 +36,7 @@ def generate_commands(config: ChipboardConfigurationDict) -> List[str]:
                 commands.extend(generate_delay_commands(component_config))
             case "mux":
                 commands.extend(generate_mux_commands(component_config))
+            case "chipboard_acquisition_state":
+                commands.extend(generate_global_chipboard_commands(config))
 
     return commands

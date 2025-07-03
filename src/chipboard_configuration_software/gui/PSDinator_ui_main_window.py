@@ -131,6 +131,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         device_list = self.uart_link.get_available_devices(print_output=False)
         self.uart_link.cleanup()
+        self.config_handler.reset_currently_loaded_chipboard_config()
         self.comboBox_devices.blockSignals(True)
         self.comboBox_devices.clear()
         self.comboBox_devices.addItem("None")

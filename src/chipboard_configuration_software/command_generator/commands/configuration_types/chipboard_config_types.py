@@ -22,7 +22,7 @@ class MuxConfigurationDict(TypedDict):
 # --- Top-level Configuration ---
 class ChipboardConfigurationDict(TypedDict):
     chipboard_number: int
-    chipboard_mode: str
+    chipboard_acquisition_state: str
     cfd: CFDConfigurationDict
     psd: PSDConfigurationDict
     delay: DelayConfigurationDict

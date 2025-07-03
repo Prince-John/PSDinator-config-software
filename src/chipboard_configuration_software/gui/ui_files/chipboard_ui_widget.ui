@@ -2498,7 +2498,7 @@
    <item row="2" column="1">
     <widget class="QLabel" name="label">
      <property name="text">
-      <string>Chipboard Mode</string>
+      <string>Acquisition Mode</string>
      </property>
     </widget>
    </item>
@@ -2506,12 +2506,12 @@
     <widget class="QComboBox" name="comboBox_chipboard_mode">
      <item>
       <property name="text">
-       <string>Configuration Only Mode</string>
+       <string>Disabled</string>
       </property>
      </item>
      <item>
       <property name="text">
-       <string>Acquisition Mode</string>
+       <string>Enabled</string>
       </property>
      </item>
     </widget>

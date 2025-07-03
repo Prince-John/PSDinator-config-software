@@ -105,3 +105,5 @@ def threaded_configure_chipboard(parent_ui, config_handler, uart_link, component
     thread.started.connect(worker.run)
     logger.debug("Starting Thread now!")
     return thread, worker
+
+

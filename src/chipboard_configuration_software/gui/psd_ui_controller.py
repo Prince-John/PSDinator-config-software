@@ -218,7 +218,7 @@ class PsdController(QWidget):
             delay_range_comboBox: QComboBox = getattr(self.ui, f"comboBox_psd_delay_range_{subchannel}")
             width_range_comboBox: QComboBox = getattr(self.ui, f"comboBox_psd_width_range_{subchannel}")
 
-            gain_comboBox.setCurrentText(current_gains[subchannel])
+            gain_comboBox.setCurrentText(str(current_gains[subchannel]))
             delay_range_comboBox.setCurrentText(current_delay_ranges[subchannel])
             width_range_comboBox.setCurrentText(current_width_ranges[subchannel])
 
@@ -513,8 +513,6 @@ class PsdController(QWidget):
         self.ui.comboBox_psd_test_mode.currentTextChanged.connect(self._on_test_mode_status_changed)
         self.ui.comboBox_psd_test_mode_channel_selection.currentIndexChanged.connect(self._on_test_channel_changed)
         self.ui.comboBox_psd_test_mode_subchannel_selection.currentTextChanged.connect(self._on_test_subchannel_changed)
-        self.ui.pushButton_psd_test_mode_configure.pressed.connect(self._on_test_mode_configure_clicked)
-        self.ui.pushButton_psd_test_mode_reset.pressed.connect(self._on_test_mode_reset_clicked)
 
         logger.debug("PSD test mode signals connected")
         pass
@@ -523,7 +521,6 @@ class PsdController(QWidget):
     def _on_test_mode_status_changed(self, value):
         logger.debug(f"PSD test mode status changed {value}")
         self.psd_config["test_mode"]["status"] = value
-
 
     @Slot(int)
     def _on_test_channel_changed(self, channel):
@@ -538,14 +535,12 @@ class PsdController(QWidget):
         self.psd_config["test_mode"]["subchannel"] = subchannel
 
     @Slot()
-    def _on_test_mode_configure_clicked(self):
-        """Slot for test mode configure """
-        logger.debug(f"test mode configure clicked")
-
-
-    @Slot()
     def _on_test_mode_reset_clicked(self):
-        """Slot for test mode reset """
+        """
+        DEPRECATED- DO not use.
+        Slot for test mode reset
+
+        """
         logger.debug(f"test mode reset clicked")
         last_psd_config = self.config_handler.get_currently_loaded_chipboard_config("psd")
         self._update_ui_psd_test_mode(last_psd_config)
@@ -560,7 +555,7 @@ class PsdController(QWidget):
         subchannel = psd_config["test_mode"]["subchannel"].capitalize()
 
         self.ui.comboBox_psd_test_mode.setCurrentText(status)
-        self.ui.comboBox_psd_test_mode_channel_selection.setCurrentText(channel)
+        self.ui.comboBox_psd_test_mode_channel_selection.setCurrentText(str(channel))
         self.ui.comboBox_psd_test_mode_subchannel_selection.setCurrentText(subchannel)
 
     def _connect_misc_signals(self):
@@ -576,7 +571,7 @@ class PsdController(QWidget):
         state = state == Qt.CheckState.Checked.value
         logger.debug(f"psd global enable changed with value {state}")
 
-        self.psd_config["global_enable"] = cast(BoolStr, state)
+        self.psd_config["global_enable"] = cast(BoolStr, str(state))
 
     @Slot(str)
     def _on_trigger_mode_changed(self, value):

@@ -53,9 +53,10 @@ class ChipboardController(QWidget):
 
         self._connect_delay_signals()
         self._connect_mux_signals()
+        self._connect_misc_signals()
 
         self._update_ui()
-        logger.info("CFD GUI signals connected!")
+        logger.info("Chipboard Settings GUI signals connected!")
 
     def _update_ui(self, config: ChipboardConfigurationDict = None):
 
@@ -64,6 +65,7 @@ class ChipboardController(QWidget):
 
         self._update_ui_delays(config["delay"])
         self._update_ui_mux(config)
+        self._update_ui_misc(config)
         pass
 
     def _connect_delay_signals(self):
@@ -205,3 +207,28 @@ class ChipboardController(QWidget):
         self.ui.comboBox_or_mux.setCurrentText(self.mux_cmd_map[config["mux"]["or_output"]])
         self.ui.comboBox_intx_mux.setCurrentText(self.mux_cmd_map[config["mux"]["intx_output"]])
         self.ui.comboBox_psd_cfd_mux.setCurrentText(self.mux_cmd_map[config["mux"]["psd_cfd_output"]])
+
+    def _connect_misc_signals(self):
+
+        self.ui.comboBox_chipboard_mode.currentTextChanged.connect(self._on_chipboard_mode_changed)
+
+        pass
+
+    @Slot(str)
+    def _on_chipboard_mode_changed(self, mode):
+        """Slot for chipboard mode """
+        logger.debug(f"chipboard acq mode changed with value {mode}")
+        self.chipboard_config["chipboard_acquisition_state"] = mode.lower()
+
+    def _update_ui_misc(self, config):
+        """
+        Update Misc UI elements
+
+        :param config: Top level chipboard config dict
+        :return:
+        """
+
+        acquisition_mode = self.chipboard_config["chipboard_acquisition_state"].capitalize()
+
+        self.ui.comboBox_chipboard_mode.setCurrentText(acquisition_mode)
+

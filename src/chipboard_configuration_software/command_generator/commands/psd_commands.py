@@ -44,7 +44,7 @@ def generate_psd_test_mode_subcommands(component_dict: TestModeDict) -> str:
 
     test_mode_command_prefix = f"TS0:" if int(channel) < 8 else f"TS1:"
 
-    address = psd.generate_psd_test_mode_word(int(channel), subchannel)
+    address = psd.generate_psd_test_mode_word(int(channel) % 8, subchannel.lower())
 
     command = f"{psd_command_prefix}{test_mode_command_prefix}{address:02X}{int(status):02X}\0"
 

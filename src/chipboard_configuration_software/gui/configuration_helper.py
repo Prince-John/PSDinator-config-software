@@ -68,6 +68,7 @@ def generate_default_configuration() -> dict:
                       "configuration": {
                           "0":
                               dict(chipboard_number=0,
+                                   chipboard_acquisition_state="disabled",
                                    cfd=dict(common_settings=
                                             dict(nowlin_mode="short",
                                                  nowlin_delay="1 ns",
@@ -202,6 +203,7 @@ class ConfigurationManager:
         self.configuration_file_path = None
         self.__stop_recurse_paths = {
             "psd.serial_register_settings",
+            "psd.test_mode",
             "cfd.individual_channel_settings.0",
             "cfd.individual_channel_settings.1",
             "cfd.individual_channel_settings.2",
@@ -328,6 +330,14 @@ class ConfigurationManager:
                 self.currently_loaded_chipboard_config = {}
 
             self.currently_loaded_chipboard_config[component] = copy.deepcopy(self.current_chipboard_config[component])
+
+    def reset_currently_loaded_chipboard_config(self) -> None:
+        """
+        Sets the currently_loaded_config attribute to None.
+        :return: None
+        """
+
+        self.currently_loaded_chipboard_config = None
 
     def save_current_configuration(self, configuration_file_path: str = None) -> None:
         """

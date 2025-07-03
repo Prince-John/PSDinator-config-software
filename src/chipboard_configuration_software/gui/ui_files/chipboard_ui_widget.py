@@ -1159,9 +1159,9 @@ class Ui_Widget_Chipboard(object):
 #endif // QT_CONFIG(tooltip)
         self.text_multiplicity_offset_dac.setInputMask(QCoreApplication.translate("Widget_Chipboard", u"0.00 V", None))
         self.text_multiplicity_offset_dac.setText(QCoreApplication.translate("Widget_Chipboard", u"0.0 V", None))
-        self.label.setText(QCoreApplication.translate("Widget_Chipboard", u"Chipboard Mode", None))
-        self.comboBox_chipboard_mode.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"Configuration Only Mode", None))
-        self.comboBox_chipboard_mode.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"Acquisition Mode", None))
+        self.label.setText(QCoreApplication.translate("Widget_Chipboard", u"Acquisition Mode", None))
+        self.comboBox_chipboard_mode.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"Disabled", None))
+        self.comboBox_chipboard_mode.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"Enabled", None))
 
         self.pushButton.setText(QCoreApplication.translate("Widget_Chipboard", u"Configure Chipboard Settings", None))
     # retranslateUi
