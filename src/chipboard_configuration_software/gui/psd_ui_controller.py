@@ -621,7 +621,7 @@ class PsdController(QWidget):
     @Slot()
     def _on_reset_psd_clicked(self):
         """Slot for reset psd """
-        logger.debug(f"reset psd clicked with value")
+        logger.debug(f"reset psd clicked")
         self.parent_ui.reset_thread, self.parent_ui.reset_worker = threaded_reset_chipboard(self.parent_ui,
                                                                                             self.uart_link,
                                                                                             component="psd")
@@ -631,12 +631,21 @@ class PsdController(QWidget):
     def _on_digital_reset_psd_clicked(self):
         """Slot for digital reset psd """
         logger.debug(f"digital reset psd clicked ")
-
+        self.parent_ui.reset_thread, self.parent_ui.reset_worker = threaded_reset_chipboard(self.parent_ui,
+                                                                                            self.uart_link,
+                                                                                            component="psd",
+                                                                                            reset_type="digital")
+        self.parent_ui.reset_thread.start()
 
     @Slot()
     def _on_force_reset_psd_clicked(self):
         """Slot for force reset psd """
         logger.debug(f"force reset psd clicked")
+        self.parent_ui.reset_thread, self.parent_ui.reset_worker = threaded_reset_chipboard(self.parent_ui,
+                                                                                            self.uart_link,
+                                                                                            component="psd",
+                                                                                            reset_type="force")
+        self.parent_ui.reset_thread.start()
 
     def show_failure_details(self, failures):
         dialog = FailureDetailsDialog(failures, parent=self)

@@ -10,7 +10,8 @@ from chipboard_configuration_software.command_generator.commands.configuration_t
     CFDConfigurationDict, NowlinMode, NowlinDelay, LockoutMode
 from chipboard_configuration_software.command_generator.commands.configuration_types.literal_types import ChannelKey, \
     BoolStr
-from chipboard_configuration_software.gui.chipboard_configurator import threaded_configure_chipboard
+from chipboard_configuration_software.gui.chipboard_configurator import threaded_configure_chipboard, \
+    threaded_reset_chipboard
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.gui.ui_files.cfd_ui_widget import Ui_Widget_Cfd
 from chipboard_configuration_software.gui.ui_files.qt_ui_modifications import ClickableLineEdit
@@ -422,5 +423,8 @@ class CfdController(QWidget):
     @Slot()
     def _on_cfd_reset_clicked(self):
         """Slot for cfd reset """
-        # TODO: Implement this.
-        logger.debug(f"cfd reset clicked. Functionality not yet implemented. #TODO")
+        logger.debug(f"cfd reset clicked.")
+        self.parent_ui.reset_thread, self.parent_ui.reset_worker = threaded_reset_chipboard(self.parent_ui,
+                                                                                            self.uart_link,
+                                                                                            component="cfd")
+        self.parent_ui.reset_thread.start()
