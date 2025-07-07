@@ -9,7 +9,7 @@ from serial import PortNotOpenError
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
 from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
-from .chipboard_configurator import threaded_configure_chipboard, ChipboardConfigurator
+from .chipboard_configurator import threaded_configure_chipboard, ChipboardConfigurator, ChipboardResetter
 from .ui_files.top_level_window import Ui_MainWindow
 from .ui_files.psd_ui_widget import Ui_Widget_Psd
 from .ui_files.cfd_ui_widget import Ui_Widget_Cfd
@@ -36,6 +36,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         super().__init__()
         self.configuration_worker: ChipboardConfigurator | None = None
         self.configuration_thread: QThread | None = None
+        self.reset_worker: ChipboardResetter | None = None
+        self.reset_thread: QThread | None = None
         self.config_handler: ConfigurationManager = config_handler
         self.uart_link: UartMiddleware = uart_link
 
@@ -142,9 +144,9 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         data = None
         try:
             self.uart_link.send_stx()
-            logger.error("Sending BID")
+            logger.info("Sending BID")
             self.uart_link.send_CMD(message="Get Board ID", command_string="BID:\0")
-            logger.warning("Waiting for BID data")
+            logger.debug("Waiting for BID data")
             data = int.from_bytes(self.uart_link.get_data(1))
             self.uart_link.send_etx()
         except Exception as e:

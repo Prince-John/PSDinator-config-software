@@ -40,3 +40,5 @@ def generate_commands(config: ChipboardConfigurationDict) -> List[str]:
                 commands.extend(generate_global_chipboard_commands(config))
 
     return commands
+
+

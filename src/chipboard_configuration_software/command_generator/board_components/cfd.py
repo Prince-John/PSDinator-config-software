@@ -69,7 +69,7 @@ def get_mode_0_words(nowlin_mode: NOWLIN_MODES,
                              "leading edge detector pulse": 2,
                              "oneshot input": 3,
                              "oneshot pulse": 5,
-                             "zero cross detector pulse": 6}
+                             "zero crossing detector pulse": 6}
 
     capacitor_bus_map = {"short": {"1 ns": 0,
                                    "2 ns": 1,

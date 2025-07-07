@@ -12,7 +12,8 @@ from chipboard_configuration_software.command_generator.commands.configuration_t
 from chipboard_configuration_software.command_generator.commands.configuration_types.psd_config_types import \
     PSDConfigurationDict
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
-from chipboard_configuration_software.gui.chipboard_configurator import threaded_configure_chipboard
+from chipboard_configuration_software.gui.chipboard_configurator import threaded_configure_chipboard, \
+    threaded_reset_chipboard
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.gui.ui_files.psd_ui_widget import Ui_Widget_Psd
@@ -564,6 +565,9 @@ class PsdController(QWidget):
         self.ui.checkBox_psd_global_enable.stateChanged.connect(self._on_psd_global_enable_changed)
         self.ui.pushButton_reset_psd_ui.pressed.connect(self._on_reset_gui_clicked)
         self.ui.pushButton_configure_psd.pressed.connect(self._on_configure_psd_clicked)
+        self.ui.pushButton_reset_psd.pressed.connect(self._on_reset_psd_clicked)
+        self.ui.pushButton_psd_digital_reset.pressed.connect(self._on_digital_reset_psd_clicked)
+        self.ui.pushButton_psd_force_reset.pressed.connect(self._on_force_reset_psd_clicked)
 
     @Slot(bool)
     def _on_psd_global_enable_changed(self, state):
@@ -613,6 +617,26 @@ class PsdController(QWidget):
         logger.debug(f"configure psd clicked")
 
         self.configure_psd()
+
+    @Slot()
+    def _on_reset_psd_clicked(self):
+        """Slot for reset psd """
+        logger.debug(f"reset psd clicked with value")
+        self.parent_ui.reset_thread, self.parent_ui.reset_worker = threaded_reset_chipboard(self.parent_ui,
+                                                                                            self.uart_link,
+                                                                                            component="psd")
+        self.parent_ui.reset_thread.start()
+
+    @Slot()
+    def _on_digital_reset_psd_clicked(self):
+        """Slot for digital reset psd """
+        logger.debug(f"digital reset psd clicked ")
+
+
+    @Slot()
+    def _on_force_reset_psd_clicked(self):
+        """Slot for force reset psd """
+        logger.debug(f"force reset psd clicked")
 
     def show_failure_details(self, failures):
         dialog = FailureDetailsDialog(failures, parent=self)
