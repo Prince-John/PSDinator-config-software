@@ -10,6 +10,7 @@ from chipboard_configuration_software.command_generator.generate_command_string 
 from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 from .chipboard_configurator import threaded_configure_chipboard, ChipboardConfigurator, ChipboardResetter
+from .debug_console_controller import DebugConsoleWindow
 from .ui_files.top_level_window import Ui_MainWindow
 from .ui_files.psd_ui_widget import Ui_Widget_Psd
 from .ui_files.cfd_ui_widget import Ui_Widget_Cfd
@@ -65,6 +66,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
                                                                  central_dock_widget)  # self.dock_manager
         # .setCentralWidget(central_dock_widget)
 
+        self.debug_window = DebugConsoleWindow()
+
         self._setup_dock_widgets()
 
         self._connect_signals()
@@ -80,8 +83,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.cfd_dock.setWidget(self.cfd_widget)
         self.dock_manager.addDockWidgetTabToArea(self.cfd_dock, self.central_dock_area)
 
-        self.menuWindows.addAction(self.cfd_dock.toggleViewAction())
-
         # Create Chipboard Settings Page
         self.chipboard_widget = QWidget()
         self.chipboard_ui = Ui_Widget_Chipboard()
@@ -91,8 +92,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chipboard_dock = QtAds.CDockWidget(self.dock_manager, "Chipboard Settings")
         self.chipboard_dock.setWidget(self.chipboard_widget)
         self.dock_manager.addDockWidgetTabToArea(self.chipboard_dock, self.central_dock_area)
-
-        self.menuWindows.addAction(self.chipboard_dock.toggleViewAction())
 
         # Create PSD Settings Page
         self.psd_widget = QWidget()  # real widget
@@ -104,8 +103,6 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.psd_dock.setWidget(self.psd_widget)
         self.dock_manager.addDockWidgetTabToArea(self.psd_dock, self.central_dock_area)
 
-        self.menuWindows.addAction(self.psd_dock.toggleViewAction())
-
     def _connect_signals(self):
         self.psd_controller.status_message.connect(self.statusBar().showMessage)
         self.chipboard_controller.status_message.connect(self.statusBar().showMessage)
@@ -113,6 +110,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.status_message.connect(self.statusBar().showMessage)
         self.__connect_bottom_signals()
         self.__connect_menu_signals()
+        self.__connect_window_signals()
         logger.info("Connected GUI Signals!")
 
     def __connect_menu_signals(self):
@@ -120,11 +118,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.actionLoad.triggered.connect(self.load_config)
         self.actionSave_Configuration.triggered.connect(self.save_config)
 
+    def __connect_window_signals(self):
+        self.menuWindows.addAction(self.psd_dock.toggleViewAction())
+        self.menuWindows.addAction(self.chipboard_dock.toggleViewAction())
+        self.menuWindows.addAction(self.cfd_dock.toggleViewAction())
+        self.actionDebug_Console.triggered.connect(self._on_show_debug_console_clicked)
+
     def __connect_bottom_signals(self):
         self.pushButton_configure_chipboard.pressed.connect(self._on_configure_chipboard_clicked)
         self.pushButton_refresh_devices.pressed.connect(self._on_refresh_devices_clicked)
         self.comboBox_devices.currentTextChanged.connect(self._on_device_selection_changed)
         logger.info("Connected bottom bar Signals!")
+
+    @Slot()
+    def _on_show_debug_console_clicked(self):
+        """Slot for show debug console """
+        logger.debug(f"show debug console clicked.")
+        self.debug_window.show()
 
     @Slot()
     def _on_refresh_devices_clicked(self):

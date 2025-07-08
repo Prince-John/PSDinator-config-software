@@ -3,7 +3,7 @@
 ################################################################################
 ## Form generated from reading UI file 'top_level_window.ui'
 ##
-## Created by: Qt User Interface Compiler version 6.5.1
+## Created by: Qt User Interface Compiler version 6.9.0
 ##
 ## WARNING! All changes made in this file will be lost when recompiling UI file!
 ################################################################################
@@ -26,7 +26,7 @@ class Ui_MainWindow(object):
         if not MainWindow.objectName():
             MainWindow.setObjectName(u"MainWindow")
         MainWindow.resize(928, 902)
-        MainWindow.setDockOptions(QMainWindow.AllowTabbedDocks|QMainWindow.AnimatedDocks|QMainWindow.ForceTabbedDocks)
+        MainWindow.setDockOptions(QMainWindow.DockOption.AllowTabbedDocks|QMainWindow.DockOption.AnimatedDocks|QMainWindow.DockOption.ForceTabbedDocks)
         self.actionSave_Configuration = QAction(MainWindow)
         self.actionSave_Configuration.setObjectName(u"actionSave_Configuration")
         self.actionSave_As = QAction(MainWindow)
@@ -47,13 +47,16 @@ class Ui_MainWindow(object):
         self.actionChipboard_Firmware.setObjectName(u"actionChipboard_Firmware")
         self.actionCommand_Description = QAction(MainWindow)
         self.actionCommand_Description.setObjectName(u"actionCommand_Description")
+        self.actionDebug_Console = QAction(MainWindow)
+        self.actionDebug_Console.setObjectName(u"actionDebug_Console")
+        self.actionDebug_Console.setCheckable(True)
         self.top_level = QWidget(MainWindow)
         self.top_level.setObjectName(u"top_level")
         self.verticalLayout = QVBoxLayout(self.top_level)
         self.verticalLayout.setObjectName(u"verticalLayout")
         self.dock_area_placeholder = QWidget(self.top_level)
         self.dock_area_placeholder.setObjectName(u"dock_area_placeholder")
-        sizePolicy = QSizePolicy(QSizePolicy.Expanding, QSizePolicy.Expanding)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)
         sizePolicy.setVerticalStretch(0)
         sizePolicy.setHeightForWidth(self.dock_area_placeholder.sizePolicy().hasHeightForWidth())
@@ -66,7 +69,7 @@ class Ui_MainWindow(object):
         self.gridLayout.setObjectName(u"gridLayout")
         self.label_2 = QLabel(self.Widget_closed_tabs_page)
         self.label_2.setObjectName(u"label_2")
-        self.label_2.setAlignment(Qt.AlignCenter)
+        self.label_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label_2.setWordWrap(True)
 
         self.gridLayout.addWidget(self.label_2, 2, 0, 1, 1)
@@ -78,16 +81,16 @@ class Ui_MainWindow(object):
         font.setBold(True)
         font.setKerning(True)
         self.label.setFont(font)
-        self.label.setAlignment(Qt.AlignCenter)
+        self.label.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.label.setWordWrap(True)
 
         self.gridLayout.addWidget(self.label, 0, 0, 1, 1)
 
-        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout.addItem(self.verticalSpacer, 1, 0, 1, 1)
 
-        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Minimum, QSizePolicy.Expanding)
+        self.verticalSpacer_2 = QSpacerItem(20, 40, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Expanding)
 
         self.gridLayout.addItem(self.verticalSpacer_2, 3, 0, 1, 1)
 
@@ -96,7 +99,7 @@ class Ui_MainWindow(object):
 
         self.bottom_fixed_area = QWidget(self.top_level)
         self.bottom_fixed_area.setObjectName(u"bottom_fixed_area")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Preferred, QSizePolicy.Minimum)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Minimum)
         sizePolicy1.setHorizontalStretch(0)
         sizePolicy1.setVerticalStretch(0)
         sizePolicy1.setHeightForWidth(self.bottom_fixed_area.sizePolicy().hasHeightForWidth())
@@ -112,8 +115,8 @@ class Ui_MainWindow(object):
 
         self.line_2 = QFrame(self.bottom_fixed_area)
         self.line_2.setObjectName(u"line_2")
-        self.line_2.setFrameShape(QFrame.VLine)
-        self.line_2.setFrameShadow(QFrame.Sunken)
+        self.line_2.setFrameShape(QFrame.Shape.VLine)
+        self.line_2.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.horizontalLayout_bottom_configure.addWidget(self.line_2)
 
@@ -126,8 +129,8 @@ class Ui_MainWindow(object):
 
         self.line = QFrame(self.bottom_fixed_area)
         self.line.setObjectName(u"line")
-        self.line.setFrameShape(QFrame.VLine)
-        self.line.setFrameShadow(QFrame.Sunken)
+        self.line.setFrameShape(QFrame.Shape.VLine)
+        self.line.setFrameShadow(QFrame.Shadow.Sunken)
 
         self.horizontalLayout_bottom_configure.addWidget(self.line)
 
@@ -153,7 +156,7 @@ class Ui_MainWindow(object):
         MainWindow.setCentralWidget(self.top_level)
         self.menubar = QMenuBar(MainWindow)
         self.menubar.setObjectName(u"menubar")
-        self.menubar.setGeometry(QRect(0, 0, 928, 37))
+        self.menubar.setGeometry(QRect(0, 0, 928, 24))
         self.menuFile = QMenu(self.menubar)
         self.menuFile.setObjectName(u"menuFile")
         self.menuWindows = QMenu(self.menubar)
@@ -172,6 +175,8 @@ class Ui_MainWindow(object):
         self.menuFile.addAction(self.actionSave_As)
         self.menuFile.addAction(self.actionLoad)
         self.menuFile.addAction(self.actionReset_to_default)
+        self.menuWindows.addSeparator()
+        self.menuWindows.addAction(self.actionDebug_Console)
         self.menuAbout.addAction(self.actionGithub_Repo)
         self.menuAbout.addAction(self.actionChipboard_Firmware)
         self.menuAbout.addAction(self.actionCommand_Description)
@@ -193,6 +198,7 @@ class Ui_MainWindow(object):
         self.actionGithub_Repo.setText(QCoreApplication.translate("MainWindow", u"Github Repo", None))
         self.actionChipboard_Firmware.setText(QCoreApplication.translate("MainWindow", u"Chipboard Firmware Build Guide", None))
         self.actionCommand_Description.setText(QCoreApplication.translate("MainWindow", u"Command Description", None))
+        self.actionDebug_Console.setText(QCoreApplication.translate("MainWindow", u"Debug Console", None))
         self.label_2.setText(QCoreApplication.translate("MainWindow", u"All configuration tabs have been closed. Open them from Menu bar -> Windows. ", None))
         self.label.setText(QCoreApplication.translate("MainWindow", u"WashU CFD-PSD Chipboard Configuration Utility", None))
         self.pushButton_configure_chipboard.setText(QCoreApplication.translate("MainWindow", u"Configure Chipboard", None))
