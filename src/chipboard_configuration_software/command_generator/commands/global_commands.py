@@ -2,7 +2,7 @@ from typing import List
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
     ChipboardConfigurationDict
-from src.chipboard_configuration_software.command_generator.board_components.dac import generate_dac_word
+from chipboard_configuration_software.command_generator.board_components.dac import generate_dac_word
 
 
 def generate_global_chipboard_commands(config_dict: ChipboardConfigurationDict) -> List[str]:
@@ -36,6 +36,7 @@ def generate_chipboard_mode_command(config_dict: ChipboardConfigurationDict) -> 
     command = f"{chipboard_mode_command_prefix}{mode_map[mode]:02X}\0"
 
     return command
+
 
 def generate_single_dac_command(channel: int, value: float) -> str:
     """

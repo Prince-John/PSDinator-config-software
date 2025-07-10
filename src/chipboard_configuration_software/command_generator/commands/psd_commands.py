@@ -206,11 +206,11 @@ def _get_channel_enable(channels: ChannelEnableDict) -> (int, int):
 
     for channel, channel_value in channels.items():
         if channel_value == 'True':
-            bitmask |= (1 << (15 - int(channel)))
+            bitmask |= (1 << (int(channel)))
 
     bitmask = 0xFFFF & ~bitmask
-    bitmask_lower = (bitmask >> 8) & 0xFF
-    bitmask_upper = bitmask & 0xFF
+    bitmask_upper = (bitmask >> 8) & 0xFF
+    bitmask_lower = bitmask & 0xFF
 
     return bitmask_lower, bitmask_upper
 

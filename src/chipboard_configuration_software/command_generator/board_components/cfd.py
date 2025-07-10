@@ -183,6 +183,7 @@ a list of the three configuration word tuples.
 
 Mode 0 is returned last since the test point channel selection is reset when address lines change on the common bus.
 Passing it last ensures that the address lines correspond to the selected test point channel.
+#TODO A bug is present here that prevents mode 0 words from being latched if the channel selection != 0
 
     :param lockout_dac_input:
     :param nowlin_mode: Nowlin mode length, also accepts 1 bit int (0: Long, 1: Short)
