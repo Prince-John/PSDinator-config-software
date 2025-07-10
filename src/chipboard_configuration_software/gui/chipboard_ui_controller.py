@@ -47,8 +47,8 @@ class ChipboardController(QWidget):
         self.mux_cmd_index_map = {
             0: "psd_0",
             1: "psd_1",
-            2: "psd_0_or_psd_1",
-            3: "cfd",
+            3: "psd_0_or_psd_1",
+            2: "cfd",
         }
 
         self._connect_delay_signals()
@@ -166,7 +166,7 @@ class ChipboardController(QWidget):
     @Slot(int)
     def _on_or_mux_changed(self, value):
         """Slot for or mux """
-        logger.debug(f"or mux changed with value {value}")
+        logger.debug(f"or mux changed with value {value}, cmd { self.mux_cmd_index_map[value]}")
         self.chipboard_config["mux"]["or_output"] = self.mux_cmd_index_map[value]
 
     @Slot(int)

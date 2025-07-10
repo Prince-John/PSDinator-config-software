@@ -1,12 +1,9 @@
 import logging
-import sys
 import time
 
 import serial
 from serial.tools.list_ports import comports
 
-from chipboard_configuration_software.command_generator import generate_command_string
-from chipboard_configuration_software.gui.configuration_helper import read_config, write_config
 from chipboard_configuration_software.uart_link.utils import print_with_bars
 
 # from utils import print_with_bars
@@ -14,9 +11,6 @@ from .ascii_constants import *
 
 logger = logging.getLogger(__name__)
 
-
-# from ..gui.configuration_helper import read_config
-# from ..command_generator import generate_command_string
 
 class CommandRejectedError(Exception):
     def __init__(self, message, command=None):
@@ -28,7 +22,7 @@ class CommandRejectedError(Exception):
 
 class UartMiddleware:
 
-    def __init__(self):
+    def __init__(self, baudrate: int = 3000000):
         """
         Middle ware object that opens and manages the configuration and data acquisition link between the chipboard
         and this host software.
@@ -37,7 +31,7 @@ class UartMiddleware:
         self.configuration_change_list = None
         self.configuration = None
         self.usb_location = None
-        self.serial_handler = serial.Serial(baudrate=3000000)
+        self.serial_handler = serial.Serial(baudrate=baudrate)
         self.available_ports = comports()
 
     def get_available_devices(self, print_output: bool = True) -> list:
@@ -127,7 +121,7 @@ class UartMiddleware:
             logger.warning(f"Error with sending {command_string}: {e}")
             raise CommandRejectedError(f"Error with sending {command_string[:-1]}: {e}")
 
-    def get_data(self, bytes_expected, timeout = 5):
+    def get_data(self, bytes_expected, timeout=5):
 
         start_time = time.time()
         while True:
@@ -139,10 +133,6 @@ class UartMiddleware:
 
             if self.serial_handler.in_waiting:
                 return self.serial_handler.read(bytes_expected)
-
-
-
-
 
     def cleanup(self) -> None:
         """

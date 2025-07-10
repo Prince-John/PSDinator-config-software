@@ -17,7 +17,7 @@ def main():
     """
 
     FORMAT = "%(asctime)s [%(process)7d] %(levelname)8s - %(name)-30s - %(message)s"
-    logging.basicConfig(filename='gui.log', level=logging.DEBUG, format=FORMAT)
+    logging.basicConfig(filename='gui.log', level=logging.INFO, format=FORMAT)
     logger.info('Started')
 
     app = QtWidgets.QApplication(sys.argv)

@@ -5,6 +5,7 @@ import logging
 from serial import PortNotOpenError
 
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
+from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 logger = logging.getLogger(__name__)
 
@@ -167,6 +168,29 @@ class ChipboardResetter(BaseCommandWorker):
             self.status_update.emit(f"❌ {self.component} reset failed.")
 
         self.reset_done.emit()
+
+
+class ThreadedSerialReader(QThread):
+    data_received = Signal(str)
+
+    def __init__(self, uart_link: UartMiddleware, parent=None):
+        super().__init__(parent)
+        self.serial_handler = uart_link.serial_handler
+        self._running = True
+
+    def run(self):
+        while self._running:
+            if self.serial_handler.is_open and self.serial_handler.in_waiting:
+                try:
+                    data = self.serial_handler.read(self.serial_handler.in_waiting).decode(errors='replace')
+                    self.data_received.emit(data)
+                except Exception as e:
+                    self.data_received.emit(f"[ERROR] {e}")
+            self.msleep(100)
+
+    def stop(self):
+        self._running = False
+        self.wait()
 
 
 def threaded_configure_chipboard(parent_ui, config_handler, uart_link, component=None) -> (

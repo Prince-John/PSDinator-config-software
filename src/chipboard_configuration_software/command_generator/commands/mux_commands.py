@@ -25,7 +25,7 @@ def generate_preamp_mux_subcommands(mux_config):
     try:
         mux_word = mux.generate_mux_word(int(mux_config["preamp_output"]), True)
     except ValueError as e:
-        print(f"Could not parse channel, pre amp mux disabled. ")
+        #print(f"Could not parse channel, pre amp mux disabled. ")
         mux_word = mux.generate_mux_word(0, False)
 
     mux_command_string = f'{mux_command_prefix}{preamp_mux_prefix}{mux_word:02X}\0'
