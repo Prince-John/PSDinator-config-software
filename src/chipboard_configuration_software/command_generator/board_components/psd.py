@@ -60,12 +60,13 @@ def generate_psd_serial_word(channel_enable_low_mask: int,
     channel_enable_mask_lower_byte = check_bitstring(channel_enable_low_mask)
     # chip_id should always be 0 for PSDv4
     chip_id = 0
-
+    #print(f"Range word: {range_word:0b}")
     # assembling the serial word
     serial_word = chip_id << 40 | polarity_mode_bit << 39 | bias_mode_bit << 38 | vtc_range_bit << 37 | \
                   range_word << 25 | gain_word << 16 | channel_enable_mask_upper_byte << 8 | \
                   channel_enable_mask_lower_byte
 
+    #print(f"Serial word: {serial_word:048b}")
     return serial_word
 
 

@@ -110,6 +110,6 @@ class TestGainWord(TestCase):
 
 class TestRangeWord(TestCase):
     def test_get_range_word(self):
-        range_word = psd.get_range_word(subchannel_delay_ranges=(1, 0, 3), subchannel_width_ranges=(3, 0, 1))
+        range_word = psd.get_range_word(subchannel_delay_ranges=(0, 3, 3), subchannel_width_ranges=(3, 3, 3))
         print(f"{range_word:012b}")
         self.fail()

@@ -484,8 +484,8 @@ class PsdController(QWidget):
         width_slider.setSliderPosition(int((float(width) / 5.0) * 1023))
 
         gain_comboBox.setCurrentText(gain)
-        delay_range_comboBox.setCurrentText(delay_range)
-        width_range_comboBox.setCurrentText(width_range)
+        delay_range_comboBox.setCurrentText(str(delay_range))
+        width_range_comboBox.setCurrentText(str(width_range))
 
     def _update_ui_psd_integrators(self, psd_config=None):
 

@@ -1,5 +1,10 @@
 .idea
 .env
+__pycache__
+.DS_Store
 
-/src/chipboard_configuration_software/gui/gui.log
-/src/chipboard_configuration_software/autosave_config.json
+poetry.lock
+dist/
+
+gui.log
+autosave_config.json
