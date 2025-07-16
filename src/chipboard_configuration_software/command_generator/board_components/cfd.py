@@ -60,7 +60,15 @@ Generates the data word and address + mode word required to configure individual
 def get_mode_0_words(nowlin_mode: NOWLIN_MODES,
                      test_point_select: TEST_POINT_SELECT_NODES,
                      test_point_channel: int,
-                     capacitor_bus: CAPACITOR_BUS_TIME_CONSTS) -> Tuple[int, int]:
+                     capacitor_bus: CAPACITOR_BUS_TIME_CONSTS) -> Tuple[Tuple[int, int], Tuple[int, int]]:
+    """
+    Returns mode 0 words
+    :param nowlin_mode:
+    :param test_point_select:
+    :param test_point_channel:
+    :param capacitor_bus:
+    :return: (address 0 words)(actual words)
+    """
     nowlin_mode_map = {"long": 0,
                        "short": 1}
 
@@ -109,7 +117,7 @@ def get_mode_0_words(nowlin_mode: NOWLIN_MODES,
         raise ValueError("Invalid test point channel selection")
 
     address_word = ((test_point_channel & 0xF) << 4) | 0x0
-
+    zero_address_word = 0x00
     try:
         nowlin_delay = capacitor_bus_map[nowlin_mode][capacitor_bus]
     except KeyError as e:
@@ -119,7 +127,7 @@ def get_mode_0_words(nowlin_mode: NOWLIN_MODES,
     data_word = nowlin_mode_map[nowlin_mode] << 7 | test_point_select_map[test_point_select] << 4 | \
                 nowlin_delay
 
-    return address_word, data_word
+    return (zero_address_word, data_word), (address_word, data_word)
 
 
 def get_mode_1_words(lockout_mode, agnd_trim_voltage, oneshot_width_select) -> Tuple[int, int]:
@@ -183,7 +191,7 @@ a list of the three configuration word tuples.
 
 Mode 0 is returned last since the test point channel selection is reset when address lines change on the common bus.
 Passing it last ensures that the address lines correspond to the selected test point channel.
-#TODO A bug is present here that prevents mode 0 words from being latched if the channel selection != 0
+Fixed probably -Jul 16- #TODO A bug is present here that prevents mode 0 words from being latched if the channel selection != 0
 
     :param lockout_dac_input:
     :param nowlin_mode: Nowlin mode length, also accepts 1 bit int (0: Long, 1: Short)
@@ -196,14 +204,16 @@ Passing it last ensures that the address lines correspond to the selected test p
     :param oneshot_width_select: This sets the length of the output CFD pulse.
 
 
-    :return: List of 3 tuples (8-bit address|mode word, 8-bit data word)
+    :return: List of 4 tuples (8-bit address|mode word, 8-bit data word), mode_0 is sent twice once with address 0,
+    once with actual test point channel
+
     """
 
-    mode_0 = get_mode_0_words(nowlin_mode, test_point_select, test_point_channel, capacitor_bus)
+    mode_0_0_address, mode_0_actual = get_mode_0_words(nowlin_mode, test_point_select, test_point_channel, capacitor_bus)
     mode_1 = get_mode_1_words(lockout_mode, agnd_trim_voltage, oneshot_width_select)
     mode_5 = get_mode_5_words(lockout_mode, lockout_dac_input)
 
-    return [mode_5, mode_1, mode_0]
+    return [mode_5, mode_1, mode_0_0_address, mode_0_actual]
 
 
 def generate_global_enable_word(global_enable: bool):

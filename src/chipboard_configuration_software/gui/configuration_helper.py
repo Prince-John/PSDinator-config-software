@@ -352,6 +352,8 @@ class ConfigurationManager:
         if configuration_file_path is not None:
             self.configuration_file_path = configuration_file_path
 
+        if self.configuration_file_path is None:
+            self.configuration_file_path = self.auto_save_file_path
         self.configuration["date_modified"] = datetime.today().strftime('%Y-%m-%d %H:%M:%S')
         write_config(path=self.configuration_file_path, config=self.configuration)
 

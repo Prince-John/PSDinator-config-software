@@ -20,7 +20,7 @@ def generate_commands(config: ChipboardConfigurationDict) -> List[str]:
     """
 
     commands = []
-
+    last_command = []
     if config is None:
         return []
 
@@ -37,7 +37,9 @@ def generate_commands(config: ChipboardConfigurationDict) -> List[str]:
             case "mux":
                 commands.extend(generate_mux_commands(component_config))
             case "chipboard_acquisition_state":
-                commands.extend(generate_global_chipboard_commands(config))
+                last_command = generate_global_chipboard_commands(config)
+
+    commands.extend(last_command)
 
     return commands
 
