@@ -1,5 +1,9 @@
+import importlib.metadata
 import json
 import sys
+import threading
+from typing import Tuple
+
 from PySide6.QtWidgets import QApplication, QMainWindow, QWidget, QSizePolicy, QLabel, QFileDialog, QMessageBox
 import PySide6QtAds as QtAds
 from PySide6 import QtWidgets
@@ -24,6 +28,7 @@ from chipboard_configuration_software.gui.configuration_helper import Configurat
 import logging
 
 from .utilities import configure_chipboard
+from ..uart_link.event_handler import DataAcquisitionThread
 
 logger = logging.getLogger(__name__)
 relative_configuration_dir = r"../configurations/"
@@ -41,8 +46,13 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.reset_thread: QThread | None = None
         self.config_handler: ConfigurationManager = config_handler
         self.uart_link: UartMiddleware = uart_link
+        self.daq_stop: threading.Event = threading.Event()
+        self.daq_thread: DataAcquisitionThread | None = None
 
         self.setupUi(self)
+
+        self.device_status_message = QLabel("Device Status: Not Connected")
+        self.statusbar.addPermanentWidget(self.device_status_message)
 
         QtAds.CDockManager.setConfigFlag(QtAds.CDockManager.OpaqueSplitterResize, True)
         QtAds.CDockManager.setConfigFlag(QtAds.CDockManager.XmlCompressionEnabled, False)
@@ -71,6 +81,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self._setup_dock_widgets()
 
         self._connect_signals()
+        self._update_build_version()
 
     def _setup_dock_widgets(self):
         # Create CFD Settings Page
@@ -130,11 +141,21 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.comboBox_devices.currentTextChanged.connect(self._on_device_selection_changed)
         logger.info("Connected bottom bar Signals!")
 
+    def _update_build_version(self):
+        """Updates the build version of this configuration software in the about section in the menu bar"""
+
+        software_version = importlib.metadata.version('Psdinator-configuration-software')
+        logger.info(f"GUI version updated to v{software_version}")
+        self.action_version.setText(f"Build Version: v{software_version}")
+
     @Slot()
     def _on_show_debug_console_clicked(self):
         """Slot for show debug console """
         logger.debug(f"show debug console clicked.")
-        self.debug_window.show()
+        if self.debug_window.isVisible():
+            self.debug_window.hide()
+        else:
+            self.debug_window.show()
 
     @Slot()
     def _on_refresh_devices_clicked(self):
@@ -144,17 +165,23 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         device_list = self.uart_link.get_available_devices(print_output=False)
         self.uart_link.cleanup()
         self.config_handler.reset_currently_loaded_chipboard_config()
+        self.device_status_message.setText("Device Status: Not Connected")
         self.comboBox_devices.blockSignals(True)
         self.comboBox_devices.clear()
         self.comboBox_devices.addItem("None")
         self.comboBox_devices.addItems(device_list)
         self.comboBox_devices.blockSignals(False)
 
-    def validate_chipboard_self_id(self):
+    def get_chipboard_self_id(self):
+        """
+       Fetches the chipboard board ID
+
+       :return: board id
+    """
         data = None
         try:
             self.uart_link.send_stx()
-            logger.info("Sending BID")
+            logger.info("Getting BID")
             self.uart_link.send_CMD(message="Get Board ID", command_string="BID:\0")
             logger.debug("Waiting for BID data")
             data = int.from_bytes(self.uart_link.get_data(1))
@@ -164,6 +191,47 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
 
         logger.debug(f"Received {data}")
         return data
+
+    def validate_chipboard_self_id(self):
+        board_id = self.get_chipboard_self_id()
+
+        if self.config_handler.current_chipboard_number != board_id:
+            alert = f" - ⚠️ Chipboard Board ID:{board_id} != Current setting: {self.config_handler.current_chipboard_number}"
+        else:
+            alert = f""
+
+        return board_id, alert
+
+    def get_chipboard_firmware(self) -> str:
+        """
+        Fetches the chipboard firmware version
+
+        :return: firmware_version
+        """
+        data = None
+        try:
+            self.uart_link.send_stx()
+            logger.info("Getting Firmware Version")
+            self.uart_link.send_CMD(message="Get Firmware", command_string="VER:\0")
+            logger.debug("Waiting  Firmware Version")
+            data = self.uart_link.get_data(6).decode("ascii")
+            self.uart_link.send_etx()
+        except Exception as e:
+            logger.warning(f"Could not get Firmware Version: {e}")
+
+        logger.debug(f"Received {data}")
+        print(f"Received firmware {data}")
+        return data
+
+    def validate_chipboard_firmware(self, supported_firmware_version: Tuple[str, str, str] = (
+            "v0.0.0", "v0.0.0", "v0.0.0")) -> Tuple[str, str]:
+        """
+        Fetches the chipboard firmware version and returns if the firmware is supported by this version of the GUI.
+
+        :param supported_firmware_version: str tuple of (min, target, max) supported firmware versions.
+        :return: (firmware_version, support_status)
+        """
+        pass
 
     @Slot(str)
     def _on_device_selection_changed(self, device):
@@ -175,15 +243,17 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         except IOError as e:
             status = f"Error connecting to {device}: {e}"
 
-        board_id = self.validate_chipboard_self_id()
+        board_id, alert = self.validate_chipboard_self_id()
 
-        if self.config_handler.current_chipboard_number != board_id:
-            alert = f"⚠️ Board ID:{board_id} != Current setting: {self.config_handler.current_chipboard_number}"
-        else:
-            alert = f"Board ID ({board_id})"
+        if board_id is not None:
+            firmware_version = self.get_chipboard_firmware()
+            logger.info(f"Connected to chipboard running firmware version: {firmware_version}")
+            self.device_status_message.setText(
+                f"Connected to Chipboard #{board_id} running firmware {firmware_version}")
 
-        status = f"{status} - {alert}"
-        self.statusBar().showMessage(status)
+        status = f"{status} {alert}"
+        self.statusBar().showMessage(status, timeout=10000)
+        logger.info(status)
 
     def save_config(self):
         logger.debug("Save Configuration Clicked!")
@@ -230,6 +300,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
     def update_global_ui(self):
 
         self.psd_controller.update_ui()
+        self.chipboard_controller.update_ui()
         self.cfd_controller.update_ui()
         logger.info("Updated Global UI!")
 

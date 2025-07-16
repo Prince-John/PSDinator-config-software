@@ -215,6 +215,8 @@
     <property name="title">
      <string>About</string>
     </property>
+    <addaction name="action_version"/>
+    <addaction name="separator"/>
     <addaction name="actionGithub_Repo"/>
     <addaction name="actionChipboard_Firmware"/>
     <addaction name="actionCommand_Description"/>
@@ -280,6 +282,14 @@
    </property>
    <property name="text">
     <string>Debug Console</string>
+   </property>
+  </action>
+  <action name="action_version">
+   <property name="text">
+    <string>vX.X.X</string>
+   </property>
+   <property name="toolTip">
+    <string>Software Version</string>
    </property>
   </action>
  </widget>

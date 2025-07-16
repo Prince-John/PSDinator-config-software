@@ -1,4 +1,6 @@
 import logging
+import threading
+from datetime import datetime
 from functools import partial
 from typing import get_args, cast, List
 
@@ -17,6 +19,7 @@ from chipboard_configuration_software.gui.ui_files.chipboard_ui_widget import Ui
 from chipboard_configuration_software.gui.ui_files.qt_ui_modifications import EvenNumberValidator
 from chipboard_configuration_software.gui.utilities import configure_chipboard, set_checkbox_silently, \
     set_checkbox_silently, set_slider_silently
+from chipboard_configuration_software.uart_link.event_handler import DataAcquisitionThread
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 logger = logging.getLogger(__name__)
@@ -55,10 +58,10 @@ class ChipboardController(QWidget):
         self._connect_mux_signals()
         self._connect_misc_signals()
 
-        self._update_ui()
+        self.update_ui()
         logger.info("Chipboard Settings GUI signals connected!")
 
-    def _update_ui(self, config: ChipboardConfigurationDict = None):
+    def update_ui(self, config: ChipboardConfigurationDict = None):
 
         if config is None:
             config = self.chipboard_config
@@ -166,7 +169,7 @@ class ChipboardController(QWidget):
     @Slot(int)
     def _on_or_mux_changed(self, value):
         """Slot for or mux """
-        logger.debug(f"or mux changed with value {value}, cmd { self.mux_cmd_index_map[value]}")
+        logger.debug(f"or mux changed with value {value}, cmd {self.mux_cmd_index_map[value]}")
         self.chipboard_config["mux"]["or_output"] = self.mux_cmd_index_map[value]
 
     @Slot(int)
@@ -220,6 +223,46 @@ class ChipboardController(QWidget):
         logger.debug(f"chipboard acq mode changed with value {mode}")
         self.chipboard_config["chipboard_acquisition_state"] = mode.lower()
 
+
+        # TODO Make this work better- Very ugly way to do things.
+        if self.chipboard_config["chipboard_acquisition_state"] == "enabled":
+            # Launch config in a thread
+            self.parent_ui.configuration_thread, self.parent_ui.configuration_worker = threaded_configure_chipboard(
+                self.parent_ui,
+                config_handler=self.config_handler,
+                uart_link=self.uart_link
+            )
+
+            # Connect signal to start DAQ after config is done
+            self.parent_ui.configuration_thread.finished.connect(self._start_data_acquisition)
+
+            # Start config thread
+            self.parent_ui.configuration_thread.start()
+
+        else:
+            self.parent_ui.daq_stop.set()
+            self.parent_ui.daq_thread.join()
+            self.parent_ui.configuration_thread, self.parent_ui.configuration_worker = threaded_configure_chipboard(
+                self.parent_ui,
+                config_handler=self.config_handler,
+                uart_link=self.uart_link
+            )
+            self.parent_ui.configuration_thread.start()
+
+
+    @Slot()
+    def _start_data_acquisition(self):
+        logger.debug("Chipboard configuration complete. Starting data acquisition.")
+        time_stamp = datetime.today().strftime('%Y-%m-%d_%H:%M:%S')
+        self.config_handler.save_current_configuration(configuration_file_path=f'configuration_{time_stamp}.json')
+        self.parent_ui.daq_stop = threading.Event()
+        self.parent_ui.daq_thread = DataAcquisitionThread(
+            serial_link=self.uart_link,
+            binary_file_name=f"output_events_{time_stamp}.bin",
+            stop_event=self.parent_ui.daq_stop
+        )
+        self.parent_ui.daq_thread.start()
+
     def _update_ui_misc(self, config):
         """
         Update Misc UI elements
@@ -231,4 +274,3 @@ class ChipboardController(QWidget):
         acquisition_mode = self.chipboard_config["chipboard_acquisition_state"].capitalize()
 
         self.ui.comboBox_chipboard_mode.setCurrentText(acquisition_mode)
-

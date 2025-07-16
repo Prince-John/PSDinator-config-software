@@ -28,8 +28,10 @@ def main():
     w = MainWindow(configuration_manager, uart_link)
 
     w.show()
+    status = app.exec()
+    configuration_manager.save_current_configuration()
 
-    sys.exit(app.exec())
+    sys.exit(status)
 
 
 if __name__ == "__main__":
