@@ -1,12 +1,16 @@
 import logging
+import os
+import subprocess
+import sys
 import threading
 from datetime import datetime
 from functools import partial
+import shlex
 from typing import get_args, cast, List
 
 from PySide6.QtCore import Slot, Qt, QObject, Signal
 from PySide6.QtGui import QIntValidator
-from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit, QWidget
+from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit, QWidget, QFileDialog
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
     ChipboardConfigurationDict, DelayConfigurationDict
@@ -39,7 +43,7 @@ class ChipboardController(QWidget):
         self.delay_sliders: List[QSlider] = []
         self.delay_texts: List[QLineEdit] = []
         self.delay_all_state = False
-
+        self.last_binary_file_name = ""
         self.mux_cmd_map = {
             "psd_0": "PSD 0",
             "psd_1": "PSD 1",
@@ -214,7 +218,7 @@ class ChipboardController(QWidget):
     def _connect_misc_signals(self):
 
         self.ui.comboBox_chipboard_mode.currentTextChanged.connect(self._on_chipboard_mode_changed)
-
+        self.ui.pushButton_post_acq.pressed.connect(self._on_script_browse_clicked)
         pass
 
     @Slot(str)
@@ -222,7 +226,6 @@ class ChipboardController(QWidget):
         """Slot for chipboard mode """
         logger.debug(f"chipboard acq mode changed with value {mode}")
         self.chipboard_config["chipboard_acquisition_state"] = mode.lower()
-
 
         # TODO Make this work better- Very ugly way to do things.
         if self.chipboard_config["chipboard_acquisition_state"] == "enabled":
@@ -233,7 +236,7 @@ class ChipboardController(QWidget):
                 uart_link=self.uart_link
             )
 
-            # Connect signal to start DAQ after config is done
+            # TODO Error handle if configuration is not successful.
             self.parent_ui.configuration_thread.finished.connect(self._start_data_acquisition)
 
             # Start config thread
@@ -241,12 +244,14 @@ class ChipboardController(QWidget):
 
         else:
             self.parent_ui.daq_stop.set()
-            self.parent_ui.daq_thread.join()
+            if self.parent_ui.daq_thread is not None:
+                self.parent_ui.daq_thread.join()
             self.parent_ui.configuration_thread, self.parent_ui.configuration_worker = threaded_configure_chipboard(
                 self.parent_ui,
                 config_handler=self.config_handler,
                 uart_link=self.uart_link
             )
+            self.parent_ui.configuration_thread.finished.connect(self._post_acquisition_handler)
             self.parent_ui.configuration_thread.start()
 
 
@@ -254,13 +259,15 @@ class ChipboardController(QWidget):
     def _start_data_acquisition(self):
         logger.debug("Chipboard configuration complete. Starting data acquisition.")
         time_stamp = datetime.today().strftime('%Y-%m-%d_%H:%M:%S')
+        self.last_binary_file_name = f"output_events_{time_stamp}.bin"
         self.config_handler.save_current_configuration(configuration_file_path=f'configuration_{time_stamp}.json')
         self.parent_ui.daq_stop = threading.Event()
         self.parent_ui.daq_thread = DataAcquisitionThread(
             serial_link=self.uart_link,
-            binary_file_name=f"output_events_{time_stamp}.bin",
+            binary_file_name=self.last_binary_file_name,
             stop_event=self.parent_ui.daq_stop
         )
+
         self.parent_ui.daq_thread.start()
 
     def _update_ui_misc(self, config):
@@ -274,3 +281,63 @@ class ChipboardController(QWidget):
         acquisition_mode = self.chipboard_config["chipboard_acquisition_state"].capitalize()
 
         self.ui.comboBox_chipboard_mode.setCurrentText(acquisition_mode)
+
+    @Slot()
+    def _on_script_browse_clicked(self):
+        """Slot for script browse """
+        logger.debug(f"script browse clicked.")
+
+        script_path, _ = QFileDialog.getOpenFileName(
+            self,
+            "Post Acquisition Script",
+            "~",
+            "Python Scripts (*.py);;All Files (*)"
+        )
+
+        if script_path:
+            self.ui.lineEdit_post_ack.setText(script_path)
+
+    @Slot()
+    def _on_script_clear_clicked(self):
+        """Slot for script clear """
+        logger.debug(f"script clear clicked.")
+        self.ui.lineEdit_post_ack.setText("")
+
+    def _post_acquisition_handler(self):
+        """
+        Spawns a new process to execute the program specified in ui.lineEdit_post_ack,
+        replacing $LAST_ACQ with the current binary file name `self.last_binary_file_name`.
+        :return:
+        """
+
+        command_line = self.ui.lineEdit_post_ack.text().strip()
+
+        if not command_line:
+            logger.warning("No post-acquisition script specified.")
+            return
+
+        # Replace placeholder with actual filename
+        if hasattr(self, 'last_binary_file_name'):
+            command_line = command_line.replace("$LAST_ACQ", self.last_binary_file_name)
+        else:
+            logger.error("No binary_file_name defined.")
+            return
+
+        try:
+            # Parse safely to handle quotes/spaces
+            args = shlex.split(command_line)
+
+            # Optional: check script existence
+            if not os.path.exists(args[0]):
+                logger.error(f"Script or executable does not exist: {args[0]}")
+                self.status_message.emit("❌ Error launching post-acquisition script! See log for details.")
+                return
+
+            # Launch the external program as-is (with its own interpreter if needed)
+            subprocess.Popen(args)
+            logger.info(f"Launched post-acquisition process: {args}")
+            self.status_message.emit(f"Launched post-acquisition process!")
+
+        except Exception as e:
+            logger.exception(f"Failed to launch post-acquisition program: {e}")
+            self.status_message.emit("❌ Error launching post-acquisition script! See log for details.")

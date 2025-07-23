@@ -27,6 +27,7 @@ logger = logging.getLogger(__name__)
 
 class PsdController(QWidget):
     status_message = Signal(str)
+    test_mode_flag = Signal()
 
     def __init__(self, parent_ui, ui: Ui_Widget_Psd, config_handler: ConfigurationManager, uart_link: UartMiddleware):
         """

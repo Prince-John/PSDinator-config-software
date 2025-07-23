@@ -216,14 +216,14 @@ Converts pythons 2's complement into the 5 bit sign/mag notation expected by PSD
 
 
 def get_mode_bit(mode: BIAS_MODES | POLARITY_MODES | int) -> int:
-    test_mode_map = {"positive": 1, "negative": 0}
+    polarity_mode_map = {"positive": 1, "negative": 0}
     bias_mode_map = {"high": 0, "low": 1}
 
     if isinstance(mode, int):
         return int(mode) & 0x1
 
-    if mode in test_mode_map:
-        return test_mode_map[mode]
+    if mode in polarity_mode_map:
+        return polarity_mode_map[mode]
 
     if mode in bias_mode_map:
         return bias_mode_map[mode]
