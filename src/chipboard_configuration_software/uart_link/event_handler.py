@@ -1,8 +1,10 @@
 import threading
 
 import serial
-
+import sys
+import subprocess
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
+
 
 
 class DataAcquisitionThread(threading.Thread):

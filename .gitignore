@@ -8,3 +8,7 @@ dist/
 
 gui.log
 autosave_config.json
+/configuration_*.json
+/src/chipboard_configuration_software/configuration_*.json
+/output_events_*.bin
+/src/chipboard_configuration_software/output_events*.bin
