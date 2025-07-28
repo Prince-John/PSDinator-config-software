@@ -120,6 +120,10 @@ def generate_psd_dac_subcommands(psd_offset_dac_config: ChannelOffsetDacDict) ->
     """
     Example: OD0:000a => 00 - DAC value, 0a- DAC address channel 2 - subchannel c
 
+    Also issues a PSD TEST mode command if `psd_test_mode_status` is enabled. This is done since the chipboard
+    offset dac configuration routine pulls the sel_external_address pin low.
+
+
     :param psd_offset_dac_config:
     :return: Returns the command string followed by 1 byte dac value (5 valid bits) and 1 byte address ( 7 bits valid)
             [channel(5 MSB) + subchannel(2 LSB)] in ascii hex.

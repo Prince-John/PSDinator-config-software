@@ -145,6 +145,7 @@ class PsdController(QWidget):
         line = getattr(self.ui, f"lineEdit_psd_offset_dac_{subchannel}")
         line.setText(str(value))
         logger.debug(f"Offset Subchannel {subchannel} text auto set to {value}.")
+        self._update_psd_offset_dac_state(subchannel, value)
 
     @Slot(str, str)
     def _on_psd_offset_subchannel_text_textEdited(self, subchannel: str, text: str):
@@ -190,7 +191,28 @@ class PsdController(QWidget):
     def _on_psd_offset_dac_reset(self):
         logger.debug(f"Pressed offset_dac_reset.")
 
-        self._update_ui_psd_offset_dac()
+        sliders = (self.ui.verticalSlider_psd_single_channel_offset_dac_a,
+                   self.ui.verticalSlider_psd_single_channel_offset_dac_b,
+                   self.ui.verticalSlider_psd_single_channel_offset_dac_c)
+
+        lines = (self.ui.lineEdit_psd_offset_dac_a,
+                 self.ui.lineEdit_psd_offset_dac_b,
+                 self.ui.lineEdit_psd_offset_dac_c)
+
+        values = (0, 0, 0)
+
+        self.__set_ui_triple_value(sliders, lines, values, label="Offset DAC")
+
+    def _update_psd_offset_dac_state(self, subchannel: str, value: int):
+        channel_combobox_value = str(self.ui.comboBox_psd_offset_dac_channel_selection.currentIndex())
+        if channel_combobox_value not in get_args(ChannelKey):
+            logger.warning(f"Invalid channel selected: {channel_combobox_value}")
+            return
+
+        current_channel = cast(ChannelKey, channel_combobox_value)
+        subchannel = cast(SubchannelKey, subchannel)
+        self.psd_config["channel_offset_dacs"][current_channel][subchannel] = value
+        logger.debug(f"Updated psd_config: channel {current_channel} subchannel {subchannel} = {value}")
 
     def _update_ui_psd_channel_enable_checkbox(self, psd_config: PSDConfigurationDict = None):
 
@@ -564,11 +586,40 @@ class PsdController(QWidget):
 
         self.ui.comboBox_psd_trigger_mode.currentTextChanged.connect(self._on_trigger_mode_changed)
         self.ui.checkBox_psd_global_enable.stateChanged.connect(self._on_psd_global_enable_changed)
-        self.ui.pushButton_reset_psd_ui.pressed.connect(self._on_reset_gui_clicked)
+        self.ui.pushButton_real_time_config.clicked.connect(self._on_real_time_config_clicked)
         self.ui.pushButton_configure_psd.pressed.connect(self._on_configure_psd_clicked)
         self.ui.pushButton_reset_psd.pressed.connect(self._on_reset_psd_clicked)
         self.ui.pushButton_psd_digital_reset.pressed.connect(self._on_digital_reset_psd_clicked)
         self.ui.pushButton_psd_force_reset.pressed.connect(self._on_force_reset_psd_clicked)
+
+    @Slot(bool)
+    def _on_real_time_config_clicked(self, state):
+        """Slot for real time config """
+        logger.info(f"real time config clicked with value {state}")
+
+        if state:
+
+            self.parent_ui.configuration_thread, self.parent_ui.configuration_worker = threaded_configure_chipboard(
+                self.parent_ui,
+                config_handler=self.config_handler,
+                uart_link=self.uart_link
+            )
+
+            # TODO Error handle if configuration is not successful.
+            self.parent_ui.configuration_thread.finished.connect(self.__start_real_time_config)
+            self.parent_ui.configuration_thread.start()
+
+        else:
+            self.parent_ui.real_time_configurator.disable()
+
+    def __start_real_time_config(self):
+        """
+        Helper to start the polled real time configurator after the bulk configuration thread has finished.
+
+        :return: None.
+        """
+        logger.info(f"real time config started")
+        self.parent_ui.real_time_configurator.enable()
 
     @Slot(bool)
     def _on_psd_global_enable_changed(self, state):
