@@ -267,7 +267,7 @@ class ChipboardController(QWidget):
             binary_file_name=self.last_binary_file_name,
             stop_event=self.parent_ui.daq_stop
         )
-
+        self.parent_ui.real_time_configurator.disable()
         self.parent_ui.daq_thread.start()
 
     def _update_ui_misc(self, config):

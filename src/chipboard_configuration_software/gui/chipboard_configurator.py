@@ -1,10 +1,11 @@
-from PySide6.QtCore import QObject, Signal, QThread
+from PySide6.QtCore import QObject, Signal, QThread, QTimer
 from PySide6.QtWidgets import QApplication
 import logging
 
 from serial import PortNotOpenError
 
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
+from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 logger = logging.getLogger(__name__)
@@ -201,9 +202,10 @@ def threaded_configure_chipboard(parent_ui, config_handler, uart_link, component
     logger.debug("IN threaded configure")
     worker.status_update.connect(parent_ui.status_message.emit)
     worker.progress_update.connect(parent_ui.progressBar.setValue)
-    worker.partial_success.connect(parent_ui._on_chipboard_config_done)
+    worker.partial_success.connect(parent_ui._on_partial_chipboard_config_done)
 
     worker.config_done.connect(thread.quit)
+    worker.config_done.connect(parent_ui._on_chipboard_config_done)
     worker.config_done.connect(worker.deleteLater)
     thread.finished.connect(thread.deleteLater)
 
@@ -228,3 +230,48 @@ def threaded_reset_chipboard(parent_ui, uart_link, component: str = None, reset_
     thread.started.connect(worker.run)
     logger.debug("Starting Thread now!")
     return thread, worker
+
+
+class RealtimeConfigurator(QObject):
+    status_update = Signal(str)
+
+    def __init__(self, config_handler: ConfigurationManager, uart_link, poll_interval_ms=300):
+        super().__init__()
+        self.config_handler = config_handler
+        self.uart_link = uart_link
+        self.enabled = False
+        self.timer = QTimer()
+        self.timer.setInterval(poll_interval_ms)
+        self.timer.timeout.connect(self._on_timer_timeout)
+
+    def enable(self):
+        self.enabled = True
+        self.timer.start()
+
+    def disable(self):
+        self.enabled = False
+        self.timer.stop()
+
+    def _on_timer_timeout(self):
+
+        if not self.enabled:
+            return
+
+        changes = self.config_handler.get_changes()
+        if not changes:
+            return
+
+        try:
+            self.uart_link.send_stx()
+            commands = generate_commands(changes)
+            for cmd in commands:
+                self.uart_link.send_CMD(command_string=cmd, message=f"Sending: {cmd}")
+                self.status_update.emit(f"✔️ Command sent: {cmd}")
+            self.uart_link.send_etx()
+
+            # Update last loaded config to reflect what's now applied
+            self.config_handler.update_currently_loaded_chipboard_config()
+            logger.info(f"✅ Sent {len(commands)} real-time command(s)")
+
+        except Exception as e:
+            logger.error(f"❌ Real-time config send failed: {e}")

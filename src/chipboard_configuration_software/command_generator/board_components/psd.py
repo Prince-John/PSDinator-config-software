@@ -216,7 +216,11 @@ Converts pythons 2's complement into the 5 bit sign/mag notation expected by PSD
 
 
 def get_mode_bit(mode: BIAS_MODES | POLARITY_MODES | int) -> int:
-    polarity_mode_map = {"positive": 1, "negative": 0}
+    polarity_mode_map = {"positive": 0, "negative": 1}
+    # Polarity Map disagrees with the proctor thesis but as of 2017 for PSDv4 an output swapper is added,
+    # I'm not quite sure how that works but experimentally, for this bit set to '1' causes negative values on the
+    # Analog A,B,C output buffers.
+
     bias_mode_map = {"high": 0, "low": 1}
 
     if isinstance(mode, int):

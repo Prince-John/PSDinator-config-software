@@ -13,7 +13,8 @@ from serial import PortNotOpenError
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
 from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
-from .chipboard_configurator import threaded_configure_chipboard, ChipboardConfigurator, ChipboardResetter
+from .chipboard_configurator import threaded_configure_chipboard, ChipboardConfigurator, ChipboardResetter, \
+    RealtimeConfigurator
 from .debug_console_controller import DebugConsoleWindow
 from .ui_files.top_level_window import Ui_MainWindow
 from .ui_files.psd_ui_widget import Ui_Widget_Psd
@@ -48,6 +49,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.uart_link: UartMiddleware = uart_link
         self.daq_stop: threading.Event = threading.Event()
         self.daq_thread: DataAcquisitionThread | None = None
+
+        self.real_time_configurator: RealtimeConfigurator = RealtimeConfigurator(self.config_handler, self.uart_link)
 
         self.setupUi(self)
 
@@ -119,6 +122,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.chipboard_controller.status_message.connect(self.statusBar().showMessage)
         self.cfd_controller.status_message.connect(self.statusBar().showMessage)
         self.status_message.connect(self.statusBar().showMessage)
+        self.real_time_configurator.status_update.connect(self.statusBar().showMessage)
         self.__connect_bottom_signals()
         self.__connect_menu_signals()
         self.__connect_window_signals()
@@ -315,10 +319,14 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.configure_chipboard()
 
     @Slot(list)
-    def _on_chipboard_config_done(self, failures):
+    def _on_partial_chipboard_config_done(self, failures):
         logger.debug(f"Configuration thread exit!")
         self.progressBar.setValue(0)
         self.show_failure_details(failures)
+
+    @Slot()
+    def _on_chipboard_config_done(self):
+        logger.debug(f"Configuration thread exit with no errors!")
 
     def configure_chipboard(self):
         """

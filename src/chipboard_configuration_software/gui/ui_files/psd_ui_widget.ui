@@ -10,7 +10,7 @@
     <x>0</x>
     <y>0</y>
     <width>855</width>
-    <height>708</height>
+    <height>791</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -25,20 +25,6 @@
      <property name="verticalSpacing">
       <number>6</number>
      </property>
-     <item row="8" column="0" colspan="4">
-      <widget class="Line" name="line_12">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
-       </property>
-      </widget>
-     </item>
-     <item row="9" column="0">
-      <widget class="QPushButton" name="pushButton_configure_psd">
-       <property name="text">
-        <string>Configure PSD</string>
-       </property>
-      </widget>
-     </item>
      <item row="1" column="3">
       <widget class="QGroupBox" name="groupBox">
        <property name="sizePolicy">
@@ -165,6 +151,19 @@
          </widget>
         </item>
        </layout>
+      </widget>
+     </item>
+     <item row="3" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
+      <widget class="QCheckBox" name="checkBox_psd_global_enable">
+       <property name="font">
+        <font>
+         <pointsize>14</pointsize>
+         <bold>true</bold>
+        </font>
+       </property>
+       <property name="text">
+        <string>PSD Global Enable </string>
+       </property>
       </widget>
      </item>
      <item row="0" column="1" rowspan="7" colspan="2">
@@ -357,118 +356,118 @@
        </layout>
       </widget>
      </item>
-     <item row="0" column="3">
-      <widget class="QGroupBox" name="groupBox_psd_test_mode">
-       <property name="sizePolicy">
-        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-         <horstretch>0</horstretch>
-         <verstretch>0</verstretch>
-        </sizepolicy>
+     <item row="9" column="0">
+      <widget class="QPushButton" name="pushButton_configure_psd">
+       <property name="text">
+        <string>Configure PSD</string>
        </property>
-       <property name="minimumSize">
-        <size>
-         <width>0</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="baseSize">
-        <size>
-         <width>201</width>
-         <height>0</height>
-        </size>
-       </property>
-       <property name="title">
-        <string>PSD Test Mode</string>
-       </property>
-       <layout class="QGridLayout" name="gridLayout_5">
-        <property name="verticalSpacing">
-         <number>5</number>
-        </property>
-        <item row="1" column="0">
-         <widget class="QLabel" name="label_37">
-          <property name="text">
-           <string>Test Channel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="1" column="1" colspan="2">
-         <widget class="QComboBox" name="comboBox_psd_test_mode_channel_selection">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="0">
-         <widget class="QLabel" name="label_36">
-          <property name="text">
-           <string>Status</string>
-          </property>
-         </widget>
-        </item>
-        <item row="2" column="1" rowspan="2" colspan="2">
-         <widget class="QComboBox" name="comboBox_psd_test_mode_subchannel_selection">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <item>
-           <property name="text">
-            <string>A</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>B</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>C</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-        <item row="2" column="0">
-         <widget class="QLabel" name="label_38">
-          <property name="text">
-           <string>Test Sub Channel</string>
-          </property>
-         </widget>
-        </item>
-        <item row="0" column="1" colspan="2">
-         <widget class="QComboBox" name="comboBox_psd_test_mode">
-          <property name="sizePolicy">
-           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
-            <horstretch>0</horstretch>
-            <verstretch>0</verstretch>
-           </sizepolicy>
-          </property>
-          <item>
-           <property name="text">
-            <string>On</string>
-           </property>
-          </item>
-          <item>
-           <property name="text">
-            <string>Off</string>
-           </property>
-          </item>
-         </widget>
-        </item>
-       </layout>
       </widget>
      </item>
-     <item row="9" column="1">
-      <widget class="QPushButton" name="pushButton_reset_psd">
-       <property name="text">
-        <string>Reset PSD</string>
+     <item row="6" column="0">
+      <widget class="QSplitter" name="splitter">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
        </property>
+       <widget class="QLabel" name="label_psd_auto_veto_dac_2">
+        <property name="toolTip">
+         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Auto Veto Time: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Configures the time at which the ASIC auto resets if the &lt;span style=&quot; font-weight:700;&quot;&gt;Veto Reset(Take Event)&lt;/span&gt; signal is not asserted.  &lt;/p&gt;&lt;p&gt;Inversely related to DAC voltage, not linear; Higher Voltage -&amp;gt; Quicker reset.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+        </property>
+        <property name="text">
+         <string>Auto Veto DAC voltage</string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+       </widget>
+       <widget class="QSlider" name="horizontalSlider_psd_auto_veto_dac">
+        <property name="toolTip">
+         <string>Voltage Slider for PSD Delay DAC A</string>
+        </property>
+        <property name="maximum">
+         <number>1023</number>
+        </property>
+        <property name="singleStep">
+         <number>10</number>
+        </property>
+        <property name="pageStep">
+         <number>128</number>
+        </property>
+        <property name="orientation">
+         <enum>Qt::Orientation::Horizontal</enum>
+        </property>
+        <property name="invertedControls">
+         <bool>false</bool>
+        </property>
+        <property name="tickPosition">
+         <enum>QSlider::TickPosition::TicksBelow</enum>
+        </property>
+        <property name="tickInterval">
+         <number>128</number>
+        </property>
+       </widget>
+       <widget class="QLineEdit" name="text_psd_auto_veto_dac">
+        <property name="sizePolicy">
+         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+          <horstretch>0</horstretch>
+          <verstretch>0</verstretch>
+         </sizepolicy>
+        </property>
+        <property name="minimumSize">
+         <size>
+          <width>21</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="maximumSize">
+         <size>
+          <width>50</width>
+          <height>16777215</height>
+         </size>
+        </property>
+        <property name="baseSize">
+         <size>
+          <width>30</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="inputMask">
+         <string>0.00 V</string>
+        </property>
+        <property name="text">
+         <string>0.0 V</string>
+        </property>
+        <property name="maxLength">
+         <number>6</number>
+        </property>
+        <property name="cursorPosition">
+         <number>6</number>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignCenter</set>
+        </property>
+        <property name="clearButtonEnabled">
+         <bool>false</bool>
+        </property>
+       </widget>
       </widget>
+     </item>
+     <item row="9" column="3">
+      <layout class="QHBoxLayout" name="horizontalLayout">
+       <item>
+        <widget class="QPushButton" name="pushButton_psd_force_reset">
+         <property name="text">
+          <string>Force Reset</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QPushButton" name="pushButton_psd_digital_reset">
+         <property name="text">
+          <string>Digital Reset</string>
+         </property>
+        </widget>
+       </item>
+      </layout>
      </item>
      <item row="0" column="0" rowspan="6">
       <widget class="QGroupBox" name="groupBox_psd_offset_dac">
@@ -918,35 +917,10 @@
        </layout>
       </widget>
      </item>
-     <item row="9" column="3">
-      <layout class="QHBoxLayout" name="horizontalLayout">
-       <item>
-        <widget class="QPushButton" name="pushButton_psd_force_reset">
-         <property name="text">
-          <string>Force Reset</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QPushButton" name="pushButton_psd_digital_reset">
-         <property name="text">
-          <string>Digital Reset</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
      <item row="5" column="3">
       <widget class="QPushButton" name="pushButton_reset_all_dacs">
        <property name="text">
         <string>Reset DACs</string>
-       </property>
-      </widget>
-     </item>
-     <item row="6" column="3">
-      <widget class="QPushButton" name="pushButton_reset_psd_ui">
-       <property name="text">
-        <string>Reset PSD GUI to last configured state</string>
        </property>
       </widget>
      </item>
@@ -2389,104 +2363,126 @@
        </layout>
       </widget>
      </item>
-     <item row="6" column="0">
-      <widget class="QSplitter" name="splitter">
-       <property name="orientation">
-        <enum>Qt::Orientation::Horizontal</enum>
+     <item row="0" column="3">
+      <widget class="QGroupBox" name="groupBox_psd_test_mode">
+       <property name="sizePolicy">
+        <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+         <horstretch>0</horstretch>
+         <verstretch>0</verstretch>
+        </sizepolicy>
        </property>
-       <widget class="QLabel" name="label_psd_auto_veto_dac_2">
-        <property name="toolTip">
-         <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Auto Veto Time: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Configures the time at which the ASIC auto resets if the &lt;span style=&quot; font-weight:700;&quot;&gt;Veto Reset(Take Event)&lt;/span&gt; signal is not asserted.  &lt;/p&gt;&lt;p&gt;Inversely related to DAC voltage, not linear; Higher Voltage -&amp;gt; Quicker reset.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+       <property name="minimumSize">
+        <size>
+         <width>0</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="baseSize">
+        <size>
+         <width>201</width>
+         <height>0</height>
+        </size>
+       </property>
+       <property name="title">
+        <string>PSD Test Mode</string>
+       </property>
+       <layout class="QGridLayout" name="gridLayout_5">
+        <property name="verticalSpacing">
+         <number>5</number>
         </property>
-        <property name="text">
-         <string>Auto Veto DAC voltage</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
-       </widget>
-       <widget class="QSlider" name="horizontalSlider_psd_auto_veto_dac">
-        <property name="toolTip">
-         <string>Voltage Slider for PSD Delay DAC A</string>
-        </property>
-        <property name="maximum">
-         <number>1023</number>
-        </property>
-        <property name="singleStep">
-         <number>10</number>
-        </property>
-        <property name="pageStep">
-         <number>128</number>
-        </property>
-        <property name="orientation">
-         <enum>Qt::Orientation::Horizontal</enum>
-        </property>
-        <property name="invertedControls">
-         <bool>false</bool>
-        </property>
-        <property name="tickPosition">
-         <enum>QSlider::TickPosition::TicksBelow</enum>
-        </property>
-        <property name="tickInterval">
-         <number>128</number>
-        </property>
-       </widget>
-       <widget class="QLineEdit" name="text_psd_auto_veto_dac">
-        <property name="sizePolicy">
-         <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-          <horstretch>0</horstretch>
-          <verstretch>0</verstretch>
-         </sizepolicy>
-        </property>
-        <property name="minimumSize">
-         <size>
-          <width>21</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="maximumSize">
-         <size>
-          <width>50</width>
-          <height>16777215</height>
-         </size>
-        </property>
-        <property name="baseSize">
-         <size>
-          <width>30</width>
-          <height>0</height>
-         </size>
-        </property>
-        <property name="inputMask">
-         <string>0.00 V</string>
-        </property>
-        <property name="text">
-         <string>0.0 V</string>
-        </property>
-        <property name="maxLength">
-         <number>6</number>
-        </property>
-        <property name="cursorPosition">
-         <number>6</number>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
-        <property name="clearButtonEnabled">
-         <bool>false</bool>
-        </property>
-       </widget>
+        <item row="1" column="0">
+         <widget class="QLabel" name="label_37">
+          <property name="text">
+           <string>Test Channel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="1" column="1" colspan="2">
+         <widget class="QComboBox" name="comboBox_psd_test_mode_channel_selection">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="0">
+         <widget class="QLabel" name="label_36">
+          <property name="text">
+           <string>Status</string>
+          </property>
+         </widget>
+        </item>
+        <item row="2" column="1" rowspan="2" colspan="2">
+         <widget class="QComboBox" name="comboBox_psd_test_mode_subchannel_selection">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>A</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>B</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>C</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+        <item row="2" column="0">
+         <widget class="QLabel" name="label_38">
+          <property name="text">
+           <string>Test Sub Channel</string>
+          </property>
+         </widget>
+        </item>
+        <item row="0" column="1" colspan="2">
+         <widget class="QComboBox" name="comboBox_psd_test_mode">
+          <property name="sizePolicy">
+           <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+            <horstretch>0</horstretch>
+            <verstretch>0</verstretch>
+           </sizepolicy>
+          </property>
+          <item>
+           <property name="text">
+            <string>On</string>
+           </property>
+          </item>
+          <item>
+           <property name="text">
+            <string>Off</string>
+           </property>
+          </item>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </item>
-     <item row="3" column="3" alignment="Qt::AlignmentFlag::AlignHCenter">
-      <widget class="QCheckBox" name="checkBox_psd_global_enable">
-       <property name="font">
-        <font>
-         <pointsize>14</pointsize>
-         <bold>true</bold>
-        </font>
-       </property>
+     <item row="6" column="3">
+      <widget class="QPushButton" name="pushButton_real_time_config">
        <property name="text">
-        <string>PSD Global Enable </string>
+        <string>Enable Real Time Configuration</string>
+       </property>
+       <property name="checkable">
+        <bool>true</bool>
+       </property>
+      </widget>
+     </item>
+     <item row="9" column="1">
+      <widget class="QPushButton" name="pushButton_reset_psd">
+       <property name="text">
+        <string>Reset PSD</string>
        </property>
       </widget>
      </item>
@@ -2505,6 +2501,13 @@
         </size>
        </property>
       </spacer>
+     </item>
+     <item row="8" column="0" colspan="4">
+      <widget class="Line" name="line_12">
+       <property name="orientation">
+        <enum>Qt::Orientation::Horizontal</enum>
+       </property>
+      </widget>
      </item>
     </layout>
    </item>
@@ -2559,7 +2562,7 @@
   <tabstop>pushButton_psd_offset_dac_configure</tabstop>
   <tabstop>pushButton_psd_offset_dac_reset</tabstop>
   <tabstop>pushButton_reset_all_dacs</tabstop>
-  <tabstop>pushButton_reset_psd_ui</tabstop>
+  <tabstop>pushButton_real_time_config</tabstop>
   <tabstop>comboBox_psd_width_range_c</tabstop>
   <tabstop>lineEdit_psd_offset_dac_b</tabstop>
   <tabstop>text_psd_width_dac_c</tabstop>

@@ -6,7 +6,6 @@ import subprocess
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 
-
 class DataAcquisitionThread(threading.Thread):
     def __init__(self,
                  serial_link: UartMiddleware,
@@ -58,4 +57,3 @@ class DataAcquisitionThread(threading.Thread):
 
         fid_bin.write(cobs_packet)
         self.event_count += 1
-

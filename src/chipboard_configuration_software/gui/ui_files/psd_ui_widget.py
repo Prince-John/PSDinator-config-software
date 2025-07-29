@@ -26,25 +26,13 @@ class Ui_Widget_Psd(object):
         if not Widget_Psd.objectName():
             Widget_Psd.setObjectName(u"Widget_Psd")
         Widget_Psd.setWindowModality(Qt.WindowModality.WindowModal)
-        Widget_Psd.resize(855, 708)
+        Widget_Psd.resize(855, 791)
         self.horizontalLayout_2 = QHBoxLayout(Widget_Psd)
         self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
         self.gridLayout_3 = QGridLayout()
         self.gridLayout_3.setObjectName(u"gridLayout_3")
         self.gridLayout_3.setHorizontalSpacing(-1)
         self.gridLayout_3.setVerticalSpacing(6)
-        self.line_12 = QFrame(Widget_Psd)
-        self.line_12.setObjectName(u"line_12")
-        self.line_12.setFrameShape(QFrame.Shape.HLine)
-        self.line_12.setFrameShadow(QFrame.Shadow.Sunken)
-
-        self.gridLayout_3.addWidget(self.line_12, 8, 0, 1, 4)
-
-        self.pushButton_configure_psd = QPushButton(Widget_Psd)
-        self.pushButton_configure_psd.setObjectName(u"pushButton_configure_psd")
-
-        self.gridLayout_3.addWidget(self.pushButton_configure_psd, 9, 0, 1, 1)
-
         self.groupBox = QGroupBox(Widget_Psd)
         self.groupBox.setObjectName(u"groupBox")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Preferred, QSizePolicy.Policy.Preferred)
@@ -114,6 +102,15 @@ class Ui_Widget_Psd(object):
 
 
         self.gridLayout_3.addWidget(self.groupBox, 1, 3, 1, 1)
+
+        self.checkBox_psd_global_enable = QCheckBox(Widget_Psd)
+        self.checkBox_psd_global_enable.setObjectName(u"checkBox_psd_global_enable")
+        font1 = QFont()
+        font1.setPointSize(14)
+        font1.setBold(True)
+        self.checkBox_psd_global_enable.setFont(font1)
+
+        self.gridLayout_3.addWidget(self.checkBox_psd_global_enable, 3, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
 
         self.verticalGroupBox = QGroupBox(Widget_Psd)
         self.verticalGroupBox.setObjectName(u"verticalGroupBox")
@@ -194,9 +191,9 @@ class Ui_Widget_Psd(object):
 
         self.label_34 = QLabel(self.verticalGroupBox)
         self.label_34.setObjectName(u"label_34")
-        font1 = QFont()
-        font1.setBold(True)
-        self.label_34.setFont(font1)
+        font2 = QFont()
+        font2.setBold(True)
+        self.label_34.setFont(font2)
 
         self.gridLayout_7.addWidget(self.label_34, 0, 0, 1, 1)
 
@@ -234,71 +231,68 @@ class Ui_Widget_Psd(object):
 
         self.gridLayout_3.addWidget(self.verticalGroupBox, 0, 1, 7, 2)
 
-        self.groupBox_psd_test_mode = QGroupBox(Widget_Psd)
-        self.groupBox_psd_test_mode.setObjectName(u"groupBox_psd_test_mode")
-        sizePolicy.setHeightForWidth(self.groupBox_psd_test_mode.sizePolicy().hasHeightForWidth())
-        self.groupBox_psd_test_mode.setSizePolicy(sizePolicy)
-        self.groupBox_psd_test_mode.setMinimumSize(QSize(0, 0))
-        self.groupBox_psd_test_mode.setBaseSize(QSize(201, 0))
-        self.gridLayout_5 = QGridLayout(self.groupBox_psd_test_mode)
-        self.gridLayout_5.setObjectName(u"gridLayout_5")
-        self.gridLayout_5.setVerticalSpacing(5)
-        self.label_37 = QLabel(self.groupBox_psd_test_mode)
-        self.label_37.setObjectName(u"label_37")
+        self.pushButton_configure_psd = QPushButton(Widget_Psd)
+        self.pushButton_configure_psd.setObjectName(u"pushButton_configure_psd")
 
-        self.gridLayout_5.addWidget(self.label_37, 1, 0, 1, 1)
+        self.gridLayout_3.addWidget(self.pushButton_configure_psd, 9, 0, 1, 1)
 
-        self.comboBox_psd_test_mode_channel_selection = QComboBox(self.groupBox_psd_test_mode)
-        self.comboBox_psd_test_mode_channel_selection.setObjectName(u"comboBox_psd_test_mode_channel_selection")
-        sizePolicy.setHeightForWidth(self.comboBox_psd_test_mode_channel_selection.sizePolicy().hasHeightForWidth())
-        self.comboBox_psd_test_mode_channel_selection.setSizePolicy(sizePolicy)
+        self.splitter = QSplitter(Widget_Psd)
+        self.splitter.setObjectName(u"splitter")
+        self.splitter.setOrientation(Qt.Orientation.Horizontal)
+        self.label_psd_auto_veto_dac_2 = QLabel(self.splitter)
+        self.label_psd_auto_veto_dac_2.setObjectName(u"label_psd_auto_veto_dac_2")
+        self.label_psd_auto_veto_dac_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.splitter.addWidget(self.label_psd_auto_veto_dac_2)
+        self.horizontalSlider_psd_auto_veto_dac = QSlider(self.splitter)
+        self.horizontalSlider_psd_auto_veto_dac.setObjectName(u"horizontalSlider_psd_auto_veto_dac")
+        self.horizontalSlider_psd_auto_veto_dac.setMaximum(1023)
+        self.horizontalSlider_psd_auto_veto_dac.setSingleStep(10)
+        self.horizontalSlider_psd_auto_veto_dac.setPageStep(128)
+        self.horizontalSlider_psd_auto_veto_dac.setOrientation(Qt.Orientation.Horizontal)
+        self.horizontalSlider_psd_auto_veto_dac.setInvertedControls(False)
+        self.horizontalSlider_psd_auto_veto_dac.setTickPosition(QSlider.TickPosition.TicksBelow)
+        self.horizontalSlider_psd_auto_veto_dac.setTickInterval(128)
+        self.splitter.addWidget(self.horizontalSlider_psd_auto_veto_dac)
+        self.text_psd_auto_veto_dac = QLineEdit(self.splitter)
+        self.text_psd_auto_veto_dac.setObjectName(u"text_psd_auto_veto_dac")
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.text_psd_auto_veto_dac.sizePolicy().hasHeightForWidth())
+        self.text_psd_auto_veto_dac.setSizePolicy(sizePolicy1)
+        self.text_psd_auto_veto_dac.setMinimumSize(QSize(21, 0))
+        self.text_psd_auto_veto_dac.setMaximumSize(QSize(50, 16777215))
+        self.text_psd_auto_veto_dac.setBaseSize(QSize(30, 0))
+        self.text_psd_auto_veto_dac.setMaxLength(6)
+        self.text_psd_auto_veto_dac.setCursorPosition(6)
+        self.text_psd_auto_veto_dac.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.text_psd_auto_veto_dac.setClearButtonEnabled(False)
+        self.splitter.addWidget(self.text_psd_auto_veto_dac)
 
-        self.gridLayout_5.addWidget(self.comboBox_psd_test_mode_channel_selection, 1, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.splitter, 6, 0, 1, 1)
 
-        self.label_36 = QLabel(self.groupBox_psd_test_mode)
-        self.label_36.setObjectName(u"label_36")
+        self.horizontalLayout = QHBoxLayout()
+        self.horizontalLayout.setObjectName(u"horizontalLayout")
+        self.pushButton_psd_force_reset = QPushButton(Widget_Psd)
+        self.pushButton_psd_force_reset.setObjectName(u"pushButton_psd_force_reset")
 
-        self.gridLayout_5.addWidget(self.label_36, 0, 0, 1, 1)
+        self.horizontalLayout.addWidget(self.pushButton_psd_force_reset)
 
-        self.comboBox_psd_test_mode_subchannel_selection = QComboBox(self.groupBox_psd_test_mode)
-        self.comboBox_psd_test_mode_subchannel_selection.addItem("")
-        self.comboBox_psd_test_mode_subchannel_selection.addItem("")
-        self.comboBox_psd_test_mode_subchannel_selection.addItem("")
-        self.comboBox_psd_test_mode_subchannel_selection.setObjectName(u"comboBox_psd_test_mode_subchannel_selection")
-        sizePolicy.setHeightForWidth(self.comboBox_psd_test_mode_subchannel_selection.sizePolicy().hasHeightForWidth())
-        self.comboBox_psd_test_mode_subchannel_selection.setSizePolicy(sizePolicy)
+        self.pushButton_psd_digital_reset = QPushButton(Widget_Psd)
+        self.pushButton_psd_digital_reset.setObjectName(u"pushButton_psd_digital_reset")
 
-        self.gridLayout_5.addWidget(self.comboBox_psd_test_mode_subchannel_selection, 2, 1, 2, 2)
-
-        self.label_38 = QLabel(self.groupBox_psd_test_mode)
-        self.label_38.setObjectName(u"label_38")
-
-        self.gridLayout_5.addWidget(self.label_38, 2, 0, 1, 1)
-
-        self.comboBox_psd_test_mode = QComboBox(self.groupBox_psd_test_mode)
-        self.comboBox_psd_test_mode.addItem("")
-        self.comboBox_psd_test_mode.addItem("")
-        self.comboBox_psd_test_mode.setObjectName(u"comboBox_psd_test_mode")
-        sizePolicy.setHeightForWidth(self.comboBox_psd_test_mode.sizePolicy().hasHeightForWidth())
-        self.comboBox_psd_test_mode.setSizePolicy(sizePolicy)
-
-        self.gridLayout_5.addWidget(self.comboBox_psd_test_mode, 0, 1, 1, 2)
+        self.horizontalLayout.addWidget(self.pushButton_psd_digital_reset)
 
 
-        self.gridLayout_3.addWidget(self.groupBox_psd_test_mode, 0, 3, 1, 1)
-
-        self.pushButton_reset_psd = QPushButton(Widget_Psd)
-        self.pushButton_reset_psd.setObjectName(u"pushButton_reset_psd")
-
-        self.gridLayout_3.addWidget(self.pushButton_reset_psd, 9, 1, 1, 1)
+        self.gridLayout_3.addLayout(self.horizontalLayout, 9, 3, 1, 1)
 
         self.groupBox_psd_offset_dac = QGroupBox(Widget_Psd)
         self.groupBox_psd_offset_dac.setObjectName(u"groupBox_psd_offset_dac")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.groupBox_psd_offset_dac.sizePolicy().hasHeightForWidth())
-        self.groupBox_psd_offset_dac.setSizePolicy(sizePolicy1)
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Preferred)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.groupBox_psd_offset_dac.sizePolicy().hasHeightForWidth())
+        self.groupBox_psd_offset_dac.setSizePolicy(sizePolicy2)
         self.groupBox_psd_offset_dac.setMinimumSize(QSize(180, 270))
         self.groupBox_psd_offset_dac.setMaximumSize(QSize(3500, 16777215))
         self.groupBox_psd_offset_dac.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -322,11 +316,8 @@ class Ui_Widget_Psd(object):
 
         self.comboBox_psd_offset_dac_channel_selection = QComboBox(self.groupBox_psd_offset_dac)
         self.comboBox_psd_offset_dac_channel_selection.setObjectName(u"comboBox_psd_offset_dac_channel_selection")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.comboBox_psd_offset_dac_channel_selection.sizePolicy().hasHeightForWidth())
-        self.comboBox_psd_offset_dac_channel_selection.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.comboBox_psd_offset_dac_channel_selection.sizePolicy().hasHeightForWidth())
+        self.comboBox_psd_offset_dac_channel_selection.setSizePolicy(sizePolicy1)
         self.comboBox_psd_offset_dac_channel_selection.setMinimumSize(QSize(75, 0))
 
         self.horizontalLayout_47.addWidget(self.comboBox_psd_offset_dac_channel_selection, 0, Qt.AlignmentFlag.AlignLeft)
@@ -408,7 +399,7 @@ class Ui_Widget_Psd(object):
         sizePolicy4.setVerticalStretch(0)
         sizePolicy4.setHeightForWidth(self.label_30.sizePolicy().hasHeightForWidth())
         self.label_30.setSizePolicy(sizePolicy4)
-        self.label_30.setFont(font1)
+        self.label_30.setFont(font2)
         self.label_30.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout.addWidget(self.label_30, 1, 0, 1, 1)
@@ -472,7 +463,7 @@ class Ui_Widget_Psd(object):
         self.label_32.setObjectName(u"label_32")
         sizePolicy4.setHeightForWidth(self.label_32.sizePolicy().hasHeightForWidth())
         self.label_32.setSizePolicy(sizePolicy4)
-        self.label_32.setFont(font1)
+        self.label_32.setFont(font2)
         self.label_32.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.gridLayout.addWidget(self.label_32, 1, 4, 1, 1)
@@ -509,7 +500,7 @@ class Ui_Widget_Psd(object):
         self.label_31.setObjectName(u"label_31")
         sizePolicy4.setHeightForWidth(self.label_31.sizePolicy().hasHeightForWidth())
         self.label_31.setSizePolicy(sizePolicy4)
-        self.label_31.setFont(font1)
+        self.label_31.setFont(font2)
         self.label_31.setTabletTracking(False)
         self.label_31.setScaledContents(False)
         self.label_31.setAlignment(Qt.AlignmentFlag.AlignCenter)
@@ -544,30 +535,10 @@ class Ui_Widget_Psd(object):
 
         self.gridLayout_3.addWidget(self.groupBox_psd_offset_dac, 0, 0, 6, 1)
 
-        self.horizontalLayout = QHBoxLayout()
-        self.horizontalLayout.setObjectName(u"horizontalLayout")
-        self.pushButton_psd_force_reset = QPushButton(Widget_Psd)
-        self.pushButton_psd_force_reset.setObjectName(u"pushButton_psd_force_reset")
-
-        self.horizontalLayout.addWidget(self.pushButton_psd_force_reset)
-
-        self.pushButton_psd_digital_reset = QPushButton(Widget_Psd)
-        self.pushButton_psd_digital_reset.setObjectName(u"pushButton_psd_digital_reset")
-
-        self.horizontalLayout.addWidget(self.pushButton_psd_digital_reset)
-
-
-        self.gridLayout_3.addLayout(self.horizontalLayout, 9, 3, 1, 1)
-
         self.pushButton_reset_all_dacs = QPushButton(Widget_Psd)
         self.pushButton_reset_all_dacs.setObjectName(u"pushButton_reset_all_dacs")
 
         self.gridLayout_3.addWidget(self.pushButton_reset_all_dacs, 5, 3, 1, 1)
-
-        self.pushButton_reset_psd_ui = QPushButton(Widget_Psd)
-        self.pushButton_reset_psd_ui.setObjectName(u"pushButton_reset_psd_ui")
-
-        self.gridLayout_3.addWidget(self.pushButton_reset_psd_ui, 6, 3, 1, 1)
 
         self.horizontalGroupBox_5 = QGroupBox(Widget_Psd)
         self.horizontalGroupBox_5.setObjectName(u"horizontalGroupBox_5")
@@ -599,10 +570,10 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_32.setObjectName(u"horizontalLayout_32")
         self.label_24 = QLabel(self.groupBox_subchannel_B)
         self.label_24.setObjectName(u"label_24")
-        font2 = QFont()
-        font2.setPointSize(36)
-        font2.setBold(True)
-        self.label_24.setFont(font2)
+        font3 = QFont()
+        font3.setPointSize(36)
+        font3.setBold(True)
+        self.label_24.setFont(font3)
 
         self.horizontalLayout_32.addWidget(self.label_24)
 
@@ -643,10 +614,10 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_36.setObjectName(u"horizontalLayout_36")
         self.label_25 = QLabel(self.groupBox_subchannel_B)
         self.label_25.setObjectName(u"label_25")
-        font3 = QFont()
-        font3.setPointSize(15)
-        font3.setBold(True)
-        self.label_25.setFont(font3)
+        font4 = QFont()
+        font4.setPointSize(15)
+        font4.setBold(True)
+        self.label_25.setFont(font4)
 
         self.horizontalLayout_36.addWidget(self.label_25)
 
@@ -696,8 +667,8 @@ class Ui_Widget_Psd(object):
 
         self.text_psd_delay_dac_b = QLineEdit(self.groupBox_subchannel_B)
         self.text_psd_delay_dac_b.setObjectName(u"text_psd_delay_dac_b")
-        sizePolicy2.setHeightForWidth(self.text_psd_delay_dac_b.sizePolicy().hasHeightForWidth())
-        self.text_psd_delay_dac_b.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_psd_delay_dac_b.sizePolicy().hasHeightForWidth())
+        self.text_psd_delay_dac_b.setSizePolicy(sizePolicy1)
         self.text_psd_delay_dac_b.setMinimumSize(QSize(21, 0))
         self.text_psd_delay_dac_b.setMaximumSize(QSize(50, 16777215))
         self.text_psd_delay_dac_b.setBaseSize(QSize(30, 0))
@@ -720,7 +691,7 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_38.setObjectName(u"horizontalLayout_38")
         self.label_26 = QLabel(self.groupBox_subchannel_B)
         self.label_26.setObjectName(u"label_26")
-        self.label_26.setFont(font3)
+        self.label_26.setFont(font4)
 
         self.horizontalLayout_38.addWidget(self.label_26)
 
@@ -767,8 +738,8 @@ class Ui_Widget_Psd(object):
 
         self.text_psd_width_dac_b = QLineEdit(self.groupBox_subchannel_B)
         self.text_psd_width_dac_b.setObjectName(u"text_psd_width_dac_b")
-        sizePolicy2.setHeightForWidth(self.text_psd_width_dac_b.sizePolicy().hasHeightForWidth())
-        self.text_psd_width_dac_b.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_psd_width_dac_b.sizePolicy().hasHeightForWidth())
+        self.text_psd_width_dac_b.setSizePolicy(sizePolicy1)
         self.text_psd_width_dac_b.setMinimumSize(QSize(21, 0))
         self.text_psd_width_dac_b.setMaximumSize(QSize(50, 16777215))
         self.text_psd_width_dac_b.setBaseSize(QSize(30, 0))
@@ -807,7 +778,7 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_30.setObjectName(u"horizontalLayout_30")
         self.label_17 = QLabel(self.groupBox_subchannel_A)
         self.label_17.setObjectName(u"label_17")
-        self.label_17.setFont(font2)
+        self.label_17.setFont(font3)
 
         self.horizontalLayout_30.addWidget(self.label_17)
 
@@ -848,7 +819,7 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_31.setObjectName(u"horizontalLayout_31")
         self.label_19 = QLabel(self.groupBox_subchannel_A)
         self.label_19.setObjectName(u"label_19")
-        self.label_19.setFont(font3)
+        self.label_19.setFont(font4)
 
         self.horizontalLayout_31.addWidget(self.label_19)
 
@@ -895,8 +866,8 @@ class Ui_Widget_Psd(object):
 
         self.text_psd_delay_dac_a = QLineEdit(self.groupBox_subchannel_A)
         self.text_psd_delay_dac_a.setObjectName(u"text_psd_delay_dac_a")
-        sizePolicy2.setHeightForWidth(self.text_psd_delay_dac_a.sizePolicy().hasHeightForWidth())
-        self.text_psd_delay_dac_a.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_psd_delay_dac_a.sizePolicy().hasHeightForWidth())
+        self.text_psd_delay_dac_a.setSizePolicy(sizePolicy1)
         self.text_psd_delay_dac_a.setMinimumSize(QSize(21, 0))
         self.text_psd_delay_dac_a.setMaximumSize(QSize(50, 16777215))
         self.text_psd_delay_dac_a.setBaseSize(QSize(30, 0))
@@ -919,7 +890,7 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_34.setObjectName(u"horizontalLayout_34")
         self.label_23 = QLabel(self.groupBox_subchannel_A)
         self.label_23.setObjectName(u"label_23")
-        self.label_23.setFont(font3)
+        self.label_23.setFont(font4)
 
         self.horizontalLayout_34.addWidget(self.label_23)
 
@@ -966,8 +937,8 @@ class Ui_Widget_Psd(object):
 
         self.text_psd_width_dac_a = QLineEdit(self.groupBox_subchannel_A)
         self.text_psd_width_dac_a.setObjectName(u"text_psd_width_dac_a")
-        sizePolicy2.setHeightForWidth(self.text_psd_width_dac_a.sizePolicy().hasHeightForWidth())
-        self.text_psd_width_dac_a.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_psd_width_dac_a.sizePolicy().hasHeightForWidth())
+        self.text_psd_width_dac_a.setSizePolicy(sizePolicy1)
         self.text_psd_width_dac_a.setMinimumSize(QSize(21, 0))
         self.text_psd_width_dac_a.setMaximumSize(QSize(50, 16777215))
         self.text_psd_width_dac_a.setBaseSize(QSize(30, 0))
@@ -999,7 +970,7 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_40.setObjectName(u"horizontalLayout_40")
         self.label_27 = QLabel(self.groupBox_subchannel_C)
         self.label_27.setObjectName(u"label_27")
-        self.label_27.setFont(font2)
+        self.label_27.setFont(font3)
 
         self.horizontalLayout_40.addWidget(self.label_27)
 
@@ -1040,7 +1011,7 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_41.setObjectName(u"horizontalLayout_41")
         self.label_28 = QLabel(self.groupBox_subchannel_C)
         self.label_28.setObjectName(u"label_28")
-        self.label_28.setFont(font3)
+        self.label_28.setFont(font4)
 
         self.horizontalLayout_41.addWidget(self.label_28)
 
@@ -1087,8 +1058,8 @@ class Ui_Widget_Psd(object):
 
         self.text_psd_delay_dac_c = QLineEdit(self.groupBox_subchannel_C)
         self.text_psd_delay_dac_c.setObjectName(u"text_psd_delay_dac_c")
-        sizePolicy2.setHeightForWidth(self.text_psd_delay_dac_c.sizePolicy().hasHeightForWidth())
-        self.text_psd_delay_dac_c.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_psd_delay_dac_c.sizePolicy().hasHeightForWidth())
+        self.text_psd_delay_dac_c.setSizePolicy(sizePolicy1)
         self.text_psd_delay_dac_c.setMinimumSize(QSize(21, 0))
         self.text_psd_delay_dac_c.setMaximumSize(QSize(50, 16777215))
         self.text_psd_delay_dac_c.setBaseSize(QSize(30, 0))
@@ -1111,7 +1082,7 @@ class Ui_Widget_Psd(object):
         self.horizontalLayout_43.setObjectName(u"horizontalLayout_43")
         self.label_29 = QLabel(self.groupBox_subchannel_C)
         self.label_29.setObjectName(u"label_29")
-        self.label_29.setFont(font3)
+        self.label_29.setFont(font4)
 
         self.horizontalLayout_43.addWidget(self.label_29)
 
@@ -1158,8 +1129,8 @@ class Ui_Widget_Psd(object):
 
         self.text_psd_width_dac_c = QLineEdit(self.groupBox_subchannel_C)
         self.text_psd_width_dac_c.setObjectName(u"text_psd_width_dac_c")
-        sizePolicy2.setHeightForWidth(self.text_psd_width_dac_c.sizePolicy().hasHeightForWidth())
-        self.text_psd_width_dac_c.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_psd_width_dac_c.sizePolicy().hasHeightForWidth())
+        self.text_psd_width_dac_c.setSizePolicy(sizePolicy1)
         self.text_psd_width_dac_c.setMinimumSize(QSize(21, 0))
         self.text_psd_width_dac_c.setMaximumSize(QSize(50, 16777215))
         self.text_psd_width_dac_c.setBaseSize(QSize(30, 0))
@@ -1182,50 +1153,80 @@ class Ui_Widget_Psd(object):
 
         self.gridLayout_3.addWidget(self.horizontalGroupBox_5, 7, 0, 1, 4)
 
-        self.splitter = QSplitter(Widget_Psd)
-        self.splitter.setObjectName(u"splitter")
-        self.splitter.setOrientation(Qt.Orientation.Horizontal)
-        self.label_psd_auto_veto_dac_2 = QLabel(self.splitter)
-        self.label_psd_auto_veto_dac_2.setObjectName(u"label_psd_auto_veto_dac_2")
-        self.label_psd_auto_veto_dac_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.splitter.addWidget(self.label_psd_auto_veto_dac_2)
-        self.horizontalSlider_psd_auto_veto_dac = QSlider(self.splitter)
-        self.horizontalSlider_psd_auto_veto_dac.setObjectName(u"horizontalSlider_psd_auto_veto_dac")
-        self.horizontalSlider_psd_auto_veto_dac.setMaximum(1023)
-        self.horizontalSlider_psd_auto_veto_dac.setSingleStep(10)
-        self.horizontalSlider_psd_auto_veto_dac.setPageStep(128)
-        self.horizontalSlider_psd_auto_veto_dac.setOrientation(Qt.Orientation.Horizontal)
-        self.horizontalSlider_psd_auto_veto_dac.setInvertedControls(False)
-        self.horizontalSlider_psd_auto_veto_dac.setTickPosition(QSlider.TickPosition.TicksBelow)
-        self.horizontalSlider_psd_auto_veto_dac.setTickInterval(128)
-        self.splitter.addWidget(self.horizontalSlider_psd_auto_veto_dac)
-        self.text_psd_auto_veto_dac = QLineEdit(self.splitter)
-        self.text_psd_auto_veto_dac.setObjectName(u"text_psd_auto_veto_dac")
-        sizePolicy2.setHeightForWidth(self.text_psd_auto_veto_dac.sizePolicy().hasHeightForWidth())
-        self.text_psd_auto_veto_dac.setSizePolicy(sizePolicy2)
-        self.text_psd_auto_veto_dac.setMinimumSize(QSize(21, 0))
-        self.text_psd_auto_veto_dac.setMaximumSize(QSize(50, 16777215))
-        self.text_psd_auto_veto_dac.setBaseSize(QSize(30, 0))
-        self.text_psd_auto_veto_dac.setMaxLength(6)
-        self.text_psd_auto_veto_dac.setCursorPosition(6)
-        self.text_psd_auto_veto_dac.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.text_psd_auto_veto_dac.setClearButtonEnabled(False)
-        self.splitter.addWidget(self.text_psd_auto_veto_dac)
+        self.groupBox_psd_test_mode = QGroupBox(Widget_Psd)
+        self.groupBox_psd_test_mode.setObjectName(u"groupBox_psd_test_mode")
+        sizePolicy.setHeightForWidth(self.groupBox_psd_test_mode.sizePolicy().hasHeightForWidth())
+        self.groupBox_psd_test_mode.setSizePolicy(sizePolicy)
+        self.groupBox_psd_test_mode.setMinimumSize(QSize(0, 0))
+        self.groupBox_psd_test_mode.setBaseSize(QSize(201, 0))
+        self.gridLayout_5 = QGridLayout(self.groupBox_psd_test_mode)
+        self.gridLayout_5.setObjectName(u"gridLayout_5")
+        self.gridLayout_5.setVerticalSpacing(5)
+        self.label_37 = QLabel(self.groupBox_psd_test_mode)
+        self.label_37.setObjectName(u"label_37")
 
-        self.gridLayout_3.addWidget(self.splitter, 6, 0, 1, 1)
+        self.gridLayout_5.addWidget(self.label_37, 1, 0, 1, 1)
 
-        self.checkBox_psd_global_enable = QCheckBox(Widget_Psd)
-        self.checkBox_psd_global_enable.setObjectName(u"checkBox_psd_global_enable")
-        font4 = QFont()
-        font4.setPointSize(14)
-        font4.setBold(True)
-        self.checkBox_psd_global_enable.setFont(font4)
+        self.comboBox_psd_test_mode_channel_selection = QComboBox(self.groupBox_psd_test_mode)
+        self.comboBox_psd_test_mode_channel_selection.setObjectName(u"comboBox_psd_test_mode_channel_selection")
+        sizePolicy.setHeightForWidth(self.comboBox_psd_test_mode_channel_selection.sizePolicy().hasHeightForWidth())
+        self.comboBox_psd_test_mode_channel_selection.setSizePolicy(sizePolicy)
 
-        self.gridLayout_3.addWidget(self.checkBox_psd_global_enable, 3, 3, 1, 1, Qt.AlignmentFlag.AlignHCenter)
+        self.gridLayout_5.addWidget(self.comboBox_psd_test_mode_channel_selection, 1, 1, 1, 2)
+
+        self.label_36 = QLabel(self.groupBox_psd_test_mode)
+        self.label_36.setObjectName(u"label_36")
+
+        self.gridLayout_5.addWidget(self.label_36, 0, 0, 1, 1)
+
+        self.comboBox_psd_test_mode_subchannel_selection = QComboBox(self.groupBox_psd_test_mode)
+        self.comboBox_psd_test_mode_subchannel_selection.addItem("")
+        self.comboBox_psd_test_mode_subchannel_selection.addItem("")
+        self.comboBox_psd_test_mode_subchannel_selection.addItem("")
+        self.comboBox_psd_test_mode_subchannel_selection.setObjectName(u"comboBox_psd_test_mode_subchannel_selection")
+        sizePolicy.setHeightForWidth(self.comboBox_psd_test_mode_subchannel_selection.sizePolicy().hasHeightForWidth())
+        self.comboBox_psd_test_mode_subchannel_selection.setSizePolicy(sizePolicy)
+
+        self.gridLayout_5.addWidget(self.comboBox_psd_test_mode_subchannel_selection, 2, 1, 2, 2)
+
+        self.label_38 = QLabel(self.groupBox_psd_test_mode)
+        self.label_38.setObjectName(u"label_38")
+
+        self.gridLayout_5.addWidget(self.label_38, 2, 0, 1, 1)
+
+        self.comboBox_psd_test_mode = QComboBox(self.groupBox_psd_test_mode)
+        self.comboBox_psd_test_mode.addItem("")
+        self.comboBox_psd_test_mode.addItem("")
+        self.comboBox_psd_test_mode.setObjectName(u"comboBox_psd_test_mode")
+        sizePolicy.setHeightForWidth(self.comboBox_psd_test_mode.sizePolicy().hasHeightForWidth())
+        self.comboBox_psd_test_mode.setSizePolicy(sizePolicy)
+
+        self.gridLayout_5.addWidget(self.comboBox_psd_test_mode, 0, 1, 1, 2)
+
+
+        self.gridLayout_3.addWidget(self.groupBox_psd_test_mode, 0, 3, 1, 1)
+
+        self.pushButton_real_time_config = QPushButton(Widget_Psd)
+        self.pushButton_real_time_config.setObjectName(u"pushButton_real_time_config")
+        self.pushButton_real_time_config.setCheckable(True)
+
+        self.gridLayout_3.addWidget(self.pushButton_real_time_config, 6, 3, 1, 1)
+
+        self.pushButton_reset_psd = QPushButton(Widget_Psd)
+        self.pushButton_reset_psd.setObjectName(u"pushButton_reset_psd")
+
+        self.gridLayout_3.addWidget(self.pushButton_reset_psd, 9, 1, 1, 1)
 
         self.verticalSpacer_2 = QSpacerItem(20, 5, QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Minimum)
 
         self.gridLayout_3.addItem(self.verticalSpacer_2, 4, 3, 1, 1)
+
+        self.line_12 = QFrame(Widget_Psd)
+        self.line_12.setObjectName(u"line_12")
+        self.line_12.setFrameShape(QFrame.Shape.HLine)
+        self.line_12.setFrameShadow(QFrame.Shadow.Sunken)
+
+        self.gridLayout_3.addWidget(self.line_12, 8, 0, 1, 4)
 
 
         self.horizontalLayout_2.addLayout(self.gridLayout_3)
@@ -1277,8 +1278,8 @@ class Ui_Widget_Psd(object):
         QWidget.setTabOrder(self.verticalSlider_psd_single_channel_offset_dac_c, self.pushButton_psd_offset_dac_configure)
         QWidget.setTabOrder(self.pushButton_psd_offset_dac_configure, self.pushButton_psd_offset_dac_reset)
         QWidget.setTabOrder(self.pushButton_psd_offset_dac_reset, self.pushButton_reset_all_dacs)
-        QWidget.setTabOrder(self.pushButton_reset_all_dacs, self.pushButton_reset_psd_ui)
-        QWidget.setTabOrder(self.pushButton_reset_psd_ui, self.comboBox_psd_width_range_c)
+        QWidget.setTabOrder(self.pushButton_reset_all_dacs, self.pushButton_real_time_config)
+        QWidget.setTabOrder(self.pushButton_real_time_config, self.comboBox_psd_width_range_c)
         QWidget.setTabOrder(self.comboBox_psd_width_range_c, self.lineEdit_psd_offset_dac_b)
         QWidget.setTabOrder(self.lineEdit_psd_offset_dac_b, self.text_psd_width_dac_c)
         QWidget.setTabOrder(self.text_psd_width_dac_c, self.text_psd_auto_veto_dac)
@@ -1303,7 +1304,6 @@ class Ui_Widget_Psd(object):
 
     def retranslateUi(self, Widget_Psd):
         Widget_Psd.setWindowTitle(QCoreApplication.translate("Widget_Psd", u"Form", None))
-        self.pushButton_configure_psd.setText(QCoreApplication.translate("Widget_Psd", u"Configure PSD", None))
         self.label_psd_polarity.setText(QCoreApplication.translate("Widget_Psd", u"Polarity", None))
         self.comboBox_psd_polarity.setItemText(0, QCoreApplication.translate("Widget_Psd", u"positive", None))
         self.comboBox_psd_polarity.setItemText(1, QCoreApplication.translate("Widget_Psd", u"negative", None))
@@ -1321,6 +1321,7 @@ class Ui_Widget_Psd(object):
         self.comboBox_psd_vtc_range.setItemText(0, QCoreApplication.translate("Widget_Psd", u"250 ns", None))
         self.comboBox_psd_vtc_range.setItemText(1, QCoreApplication.translate("Widget_Psd", u"2 us", None))
 
+        self.checkBox_psd_global_enable.setText(QCoreApplication.translate("Widget_Psd", u"PSD Global Enable ", None))
         self.verticalGroupBox.setTitle(QCoreApplication.translate("Widget_Psd", u"Channel Enable ", None))
         self.checkBox_psd_channel_enable_10.setText(QCoreApplication.translate("Widget_Psd", u"10", None))
         self.checkBox_psd_channel_enable_12.setText(QCoreApplication.translate("Widget_Psd", u"12", None))
@@ -1342,18 +1343,18 @@ class Ui_Widget_Psd(object):
         self.checkBox_psd_channel_enable_6.setText(QCoreApplication.translate("Widget_Psd", u"6", None))
         self.checkBox_psd_channel_enable_8_15.setText(QCoreApplication.translate("Widget_Psd", u"8-15", None))
         self.checkBox_psd_channel_enable_1.setText(QCoreApplication.translate("Widget_Psd", u"1", None))
-        self.groupBox_psd_test_mode.setTitle(QCoreApplication.translate("Widget_Psd", u"PSD Test Mode", None))
-        self.label_37.setText(QCoreApplication.translate("Widget_Psd", u"Test Channel", None))
-        self.label_36.setText(QCoreApplication.translate("Widget_Psd", u"Status", None))
-        self.comboBox_psd_test_mode_subchannel_selection.setItemText(0, QCoreApplication.translate("Widget_Psd", u"A", None))
-        self.comboBox_psd_test_mode_subchannel_selection.setItemText(1, QCoreApplication.translate("Widget_Psd", u"B", None))
-        self.comboBox_psd_test_mode_subchannel_selection.setItemText(2, QCoreApplication.translate("Widget_Psd", u"C", None))
-
-        self.label_38.setText(QCoreApplication.translate("Widget_Psd", u"Test Sub Channel", None))
-        self.comboBox_psd_test_mode.setItemText(0, QCoreApplication.translate("Widget_Psd", u"On", None))
-        self.comboBox_psd_test_mode.setItemText(1, QCoreApplication.translate("Widget_Psd", u"Off", None))
-
-        self.pushButton_reset_psd.setText(QCoreApplication.translate("Widget_Psd", u"Reset PSD", None))
+        self.pushButton_configure_psd.setText(QCoreApplication.translate("Widget_Psd", u"Configure PSD", None))
+#if QT_CONFIG(tooltip)
+        self.label_psd_auto_veto_dac_2.setToolTip(QCoreApplication.translate("Widget_Psd", u"<html><head/><body><p><span style=\" font-weight:700;\">Auto Veto Time: </span></p><p><br/></p><p>Configures the time at which the ASIC auto resets if the <span style=\" font-weight:700;\">Veto Reset(Take Event)</span> signal is not asserted.  </p><p>Inversely related to DAC voltage, not linear; Higher Voltage -&gt; Quicker reset.  </p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_psd_auto_veto_dac_2.setText(QCoreApplication.translate("Widget_Psd", u"Auto Veto DAC voltage", None))
+#if QT_CONFIG(tooltip)
+        self.horizontalSlider_psd_auto_veto_dac.setToolTip(QCoreApplication.translate("Widget_Psd", u"Voltage Slider for PSD Delay DAC A", None))
+#endif // QT_CONFIG(tooltip)
+        self.text_psd_auto_veto_dac.setInputMask(QCoreApplication.translate("Widget_Psd", u"0.00 V", None))
+        self.text_psd_auto_veto_dac.setText(QCoreApplication.translate("Widget_Psd", u"0.0 V", None))
+        self.pushButton_psd_force_reset.setText(QCoreApplication.translate("Widget_Psd", u"Force Reset", None))
+        self.pushButton_psd_digital_reset.setText(QCoreApplication.translate("Widget_Psd", u"Digital Reset", None))
         self.groupBox_psd_offset_dac.setTitle(QCoreApplication.translate("Widget_Psd", u"Offset DAC Config", None))
         self.label_33.setText(QCoreApplication.translate("Widget_Psd", u"Channel", None))
         self.label_30.setText(QCoreApplication.translate("Widget_Psd", u"A", None))
@@ -1361,10 +1362,7 @@ class Ui_Widget_Psd(object):
         self.label_31.setText(QCoreApplication.translate("Widget_Psd", u"B", None))
         self.pushButton_psd_offset_dac_configure.setText(QCoreApplication.translate("Widget_Psd", u"Configure", None))
         self.pushButton_psd_offset_dac_reset.setText(QCoreApplication.translate("Widget_Psd", u"Reset", None))
-        self.pushButton_psd_force_reset.setText(QCoreApplication.translate("Widget_Psd", u"Force Reset", None))
-        self.pushButton_psd_digital_reset.setText(QCoreApplication.translate("Widget_Psd", u"Digital Reset", None))
         self.pushButton_reset_all_dacs.setText(QCoreApplication.translate("Widget_Psd", u"Reset DACs", None))
-        self.pushButton_reset_psd_ui.setText(QCoreApplication.translate("Widget_Psd", u"Reset PSD GUI to last configured state", None))
         self.horizontalGroupBox_5.setTitle(QCoreApplication.translate("Widget_Psd", u"Integrator Gates", None))
         self.groupBox_subchannel_B.setTitle("")
         self.label_24.setText(QCoreApplication.translate("Widget_Psd", u"B", None))
@@ -1477,15 +1475,18 @@ class Ui_Widget_Psd(object):
 #endif // QT_CONFIG(tooltip)
         self.text_psd_width_dac_c.setInputMask(QCoreApplication.translate("Widget_Psd", u"0.00 V", None))
         self.text_psd_width_dac_c.setText(QCoreApplication.translate("Widget_Psd", u"0.0 V", None))
-#if QT_CONFIG(tooltip)
-        self.label_psd_auto_veto_dac_2.setToolTip(QCoreApplication.translate("Widget_Psd", u"<html><head/><body><p><span style=\" font-weight:700;\">Auto Veto Time: </span></p><p><br/></p><p>Configures the time at which the ASIC auto resets if the <span style=\" font-weight:700;\">Veto Reset(Take Event)</span> signal is not asserted.  </p><p>Inversely related to DAC voltage, not linear; Higher Voltage -&gt; Quicker reset.  </p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_psd_auto_veto_dac_2.setText(QCoreApplication.translate("Widget_Psd", u"Auto Veto DAC voltage", None))
-#if QT_CONFIG(tooltip)
-        self.horizontalSlider_psd_auto_veto_dac.setToolTip(QCoreApplication.translate("Widget_Psd", u"Voltage Slider for PSD Delay DAC A", None))
-#endif // QT_CONFIG(tooltip)
-        self.text_psd_auto_veto_dac.setInputMask(QCoreApplication.translate("Widget_Psd", u"0.00 V", None))
-        self.text_psd_auto_veto_dac.setText(QCoreApplication.translate("Widget_Psd", u"0.0 V", None))
-        self.checkBox_psd_global_enable.setText(QCoreApplication.translate("Widget_Psd", u"PSD Global Enable ", None))
+        self.groupBox_psd_test_mode.setTitle(QCoreApplication.translate("Widget_Psd", u"PSD Test Mode", None))
+        self.label_37.setText(QCoreApplication.translate("Widget_Psd", u"Test Channel", None))
+        self.label_36.setText(QCoreApplication.translate("Widget_Psd", u"Status", None))
+        self.comboBox_psd_test_mode_subchannel_selection.setItemText(0, QCoreApplication.translate("Widget_Psd", u"A", None))
+        self.comboBox_psd_test_mode_subchannel_selection.setItemText(1, QCoreApplication.translate("Widget_Psd", u"B", None))
+        self.comboBox_psd_test_mode_subchannel_selection.setItemText(2, QCoreApplication.translate("Widget_Psd", u"C", None))
+
+        self.label_38.setText(QCoreApplication.translate("Widget_Psd", u"Test Sub Channel", None))
+        self.comboBox_psd_test_mode.setItemText(0, QCoreApplication.translate("Widget_Psd", u"On", None))
+        self.comboBox_psd_test_mode.setItemText(1, QCoreApplication.translate("Widget_Psd", u"Off", None))
+
+        self.pushButton_real_time_config.setText(QCoreApplication.translate("Widget_Psd", u"Enable Real Time Configuration", None))
+        self.pushButton_reset_psd.setText(QCoreApplication.translate("Widget_Psd", u"Reset PSD", None))
     # retranslateUi
 
