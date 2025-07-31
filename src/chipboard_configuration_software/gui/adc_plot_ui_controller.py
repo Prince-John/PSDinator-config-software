@@ -19,9 +19,7 @@ from chipboard_configuration_software.command_generator.commands.configuration_t
 from chipboard_configuration_software.gui.background_threads.decoded_pipe_reader import DecodePipeReaderThread
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.gui.ui_files.adc_plot_ui_widget import Ui_adc_plots
-from chipboard_configuration_software.gui.ui_files.qt_ui_modifications import MplCanvas
-from chipboard_configuration_software.uart_link.middleware import UartMiddleware
-from chipboard_configuration_software.c_decoder import event_decoder_lib
+
 
 logger = logging.getLogger(__name__)
 
