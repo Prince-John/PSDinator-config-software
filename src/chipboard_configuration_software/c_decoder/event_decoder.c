@@ -151,7 +151,6 @@ int unpack_regular_event(const uint8_t *decoded, int len, DecodedPacket *out) {
 }
 
 
-
 /**
 * Unpack the special timestamp packet from decoded COBS data.
 *
@@ -169,7 +168,7 @@ int unpack_timestamp_event(uint8_t *decoded, int len, DecodedPacket *out) {
         return -1;
     }
 
-    u_int64_t timestamp = 0;
+    uint64_t timestamp = 0;
 
     memcpy(&timestamp, decoded + 5, 7);
 

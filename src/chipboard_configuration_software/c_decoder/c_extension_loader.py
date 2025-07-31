@@ -109,7 +109,7 @@ def build_c_extension():
             print(f"Warning: make clean failed: {result.stderr}")
 
         # Build
-        result = subprocess.run(["make"],
+        result = subprocess.run(["make", "all"],
                                 capture_output=True, text=True)
         if result.returncode != 0:
             raise RuntimeError(f"Make failed: {result.stderr}")
