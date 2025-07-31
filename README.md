@@ -20,16 +20,10 @@ I strongly recommend using **[pipx](https://pipx.pypa.io/stable/)** for installa
 
 #### Steps:
 
-1. **Download the latest release wheel:**
+1. **Install using pipx:**
 
 ```shell
-wget https://github.com/Prince-John/PSDinator-config-software/releases/download/v0.1.1/psdinator_configuration_software-0.1.1-py3-none-any.whl
-```
-
-2. **Install using pipx:**
-
-```shell
-pipx install ./psdinator_configuration_software-0.1.1-py3-none-any.whl
+pipx install https://github.com/Prince-John/PSDinator-config-software/releases/latest/download/psdinator_configuration_software-0.3.1-py3-none-any.whl 
 ```
 
 ### Alternative Installation (Using pip)

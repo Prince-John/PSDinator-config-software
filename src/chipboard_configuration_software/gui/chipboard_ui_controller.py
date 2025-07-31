@@ -43,7 +43,7 @@ class ChipboardController(QWidget):
         self.delay_sliders: List[QSlider] = []
         self.delay_texts: List[QLineEdit] = []
         self.delay_all_state = False
-        self.last_binary_file_name = ""
+        self.last_binary_file_path = ""
         self.mux_cmd_map = {
             "psd_0": "PSD 0",
             "psd_1": "PSD 1",
@@ -259,13 +259,19 @@ class ChipboardController(QWidget):
     def _start_data_acquisition(self):
         logger.debug("Chipboard configuration complete. Starting data acquisition.")
         time_stamp = datetime.today().strftime('%Y-%m-%d_%H:%M:%S')
-        self.last_binary_file_name = f"output_events_{time_stamp}.bin"
-        self.config_handler.save_current_configuration(configuration_file_path=f'configuration_{time_stamp}.json')
+
+        output_dir = './data'
+        if not os.path.isdir(output_dir):
+            os.mkdir(output_dir)
+
+        self.last_binary_file_path = f"{output_dir}/output_events_{time_stamp}.bin"
+        self.config_handler.save_current_configuration(configuration_file_path=f'{output_dir}/configuration_{time_stamp}.json')
         self.parent_ui.daq_stop = threading.Event()
         self.parent_ui.daq_thread = DataAcquisitionThread(
             serial_link=self.uart_link,
-            binary_file_name=self.last_binary_file_name,
-            stop_event=self.parent_ui.daq_stop
+            binary_file_name=self.last_binary_file_path,
+            stop_event=self.parent_ui.daq_stop,
+            pipe_path="/tmp/daq_pipe"
         )
         self.parent_ui.real_time_configurator.disable()
         self.parent_ui.daq_thread.start()
@@ -306,7 +312,7 @@ class ChipboardController(QWidget):
     def _post_acquisition_handler(self):
         """
         Spawns a new process to execute the program specified in ui.lineEdit_post_ack,
-        replacing $LAST_ACQ with the current binary file name `self.last_binary_file_name`.
+        replacing $LAST_ACQ with the current binary file name `self.last_binary_file_path`.
         :return:
         """
 
@@ -317,8 +323,8 @@ class ChipboardController(QWidget):
             return
 
         # Replace placeholder with actual filename
-        if hasattr(self, 'last_binary_file_name'):
-            command_line = command_line.replace("$LAST_ACQ", self.last_binary_file_name)
+        if hasattr(self, 'last_binary_file_path'):
+            command_line = command_line.replace("$LAST_ACQ", self.last_binary_file_path)
         else:
             logger.error("No binary_file_name defined.")
             return

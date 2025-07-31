@@ -210,6 +210,7 @@
     </property>
     <addaction name="separator"/>
     <addaction name="actionDebug_Console"/>
+    <addaction name="actionShow_ADC_Plots"/>
    </widget>
    <widget class="QMenu" name="menuAbout">
     <property name="title">
@@ -290,6 +291,11 @@
    </property>
    <property name="toolTip">
     <string>Software Version</string>
+   </property>
+  </action>
+  <action name="actionShow_ADC_Plots">
+   <property name="text">
+    <string>Show ADC Plots</string>
    </property>
   </action>
  </widget>

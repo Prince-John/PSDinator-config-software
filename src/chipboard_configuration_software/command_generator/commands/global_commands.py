@@ -47,8 +47,9 @@ def generate_single_dac_command(channel: int, value: float) -> str:
     :return: A formatted DAC command string in the form 'DAC:XXXX\\0',
              where XXXX is the 4-digit hexadecimal representation of the
              DAC word.
-    :raises ValueError
+    :raises: ValueError
     """
+
     octal_dac_prefix = 'DAC:'
     dac_word = generate_dac_word(channel, value)
 

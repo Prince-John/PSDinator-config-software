@@ -12,3 +12,5 @@ autosave_config.json
 /src/chipboard_configuration_software/configuration_*.json
 /output_events_*.bin
 /src/chipboard_configuration_software/output_events*.bin
+/src/chipboard_configuration_software/c_decoder/libevent_decoder.so
+/src/chipboard_configuration_software/data/
