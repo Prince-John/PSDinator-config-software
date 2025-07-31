@@ -122,7 +122,7 @@ void close_pipe(int fd) {
  *       Expects a sequence of 9-byte blocks starting at byte 5
  */
 
-int unpack_regular_event(const uint8_t *decoded, int len, DecodedPacket *out) {
+int unpack_regular_event(const uint8_t decoded[MAX_DECODED_PACKET_LEN], int len, DecodedPacket *out) {
 
     uint8_t multiplicity = (len - 5) / 9 ;
 
@@ -162,7 +162,7 @@ int unpack_regular_event(const uint8_t *decoded, int len, DecodedPacket *out) {
 * @note Assumes all other fields in the DecodedPacket are populated beforehand.
 *       Copies 7 bytes starting from byte 5 into the 64-bit timestamp field.
 */
-int unpack_timestamp_event(uint8_t *decoded, int len, DecodedPacket *out) {
+int unpack_timestamp_event(uint8_t decoded[MAX_DECODED_PACKET_LEN], int len, DecodedPacket *out) {
 
     if (len != 12){
         return -1;
