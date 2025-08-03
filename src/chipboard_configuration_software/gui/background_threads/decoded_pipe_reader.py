@@ -60,6 +60,33 @@ class DecodePipeReaderThread(QThread):
         self.max_points = max_points
         self.emit_interval = refresh_rate_in_s
 
+    def clear_histogram_data(self, channel: int | None = None) -> None:
+        """
+        Clears histogram data in the buffers for the specified channel.
+        If no channel is specified all buffers are cleared.
+
+        :param channel: int channel number
+        :return: None
+        """
+
+        if channel is not None:
+            if 0 <= channel < MAX_ADC_CHANNELS:
+                self.buffers[channel] = {'a': [], 'b': [], 'c': []}
+                return
+
+        self.buffers = {
+            ch: {'a': [], 'b': [], 'c': []} for ch in range(MAX_ADC_CHANNELS)
+        }
+
+    def set_histogram_counts(self, counts: int):
+        """
+        Sets the max counts to the specified value
+        :param counts:
+        :return:
+        """
+        if counts != self.max_points:
+            self.max_points = counts
+
     def run(self):
         # Timer for emitting histograms
 
