@@ -52,7 +52,7 @@ class DecodePipeReaderThread(QThread):
 
         # Per-channel, per-type buffers
         self.buffers = {
-            ch: {'a': [], 'b': [], 'c': []} for ch in range(MAX_ADC_CHANNELS)
+            ch: {'a': [], 'b': [], 'c': [], 't': []} for ch in range(MAX_ADC_CHANNELS)
         }
 
         # Bin parameters
@@ -106,7 +106,7 @@ class DecodePipeReaderThread(QThread):
                 event_adc_data = packet.data.adc.channels[:packet.data.adc.num_channels]
                 for single_channel_data in event_adc_data:
 
-                    for sub_channel in ['a', 'b', 'c']:
+                    for sub_channel in ['a', 'b', 'c', 't']:
                         val = getattr(single_channel_data, f'adc_{sub_channel}')
                         self.buffers[single_channel_data.channel][sub_channel].append(val)
 
@@ -125,7 +125,7 @@ class DecodePipeReaderThread(QThread):
 
     def _emit_histograms(self):
         for ch, data_dict in self.buffers.items():
-            for sub_ch in ['a', 'b', 'c']:
+            for sub_ch in ['a', 'b', 'c', 't']:
                 data = np.array(data_dict[sub_ch], dtype=np.int16)
                 if len(data) > 0:
                     counts, _ = np.histogram(data, bins=self.bins)

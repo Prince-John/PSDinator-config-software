@@ -46,7 +46,7 @@ class ADCPlotsController(QWidget):
         self.chipboard_config: ChipboardConfigurationDict = config_handler.current_chipboard_config
 
         self.ui.setupUi(self)
-        self.histogram_data = defaultdict(lambda: {'a': [], 'b': [], 'c': []})
+        self.histogram_data = defaultdict(lambda: {'a': [], 'b': [], 'c': [], 't': []})
 
         self.plots = {}
         self.bar_items = {}
@@ -83,11 +83,11 @@ class ADCPlotsController(QWidget):
         font.setPointSize(14)
 
         self.plots = {}
-        self.bar_items = {'a': {}, 'b': {}, 'c': {}}  # per-channel bar graphs
+        self.bar_items = {'a': {}, 'b': {}, 'c': {}, 't': {}}  # per-channel bar graphs
         self.text_items = {}
         self.legends = {}
 
-        for row, adc_type in enumerate(("a", "b", "c")):
+        for row, adc_type in enumerate(("a", "b", "c", "t")):
             plot = layout_widget.addPlot(row=row, col=0)
             plot.setTitle(f"ADC {adc_type.upper()}")
             plot.setLabel("left", "Count")

@@ -39,6 +39,13 @@ version = "0.2.0"
 [tool.poetry.group.dev.dependencies]
 build = "^1.2.2.post1"
 
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^8.2.3"
+toml = "^0.10.2"
+sphinx-autodoc-typehints = "^3.2.0"
+furo = "^2025.7.19"
+
 [project.gui-scripts]
 psdinator = 'chipboard_configuration_software.main:main'
 
