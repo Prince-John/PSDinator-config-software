@@ -13,9 +13,11 @@ from serial import PortNotOpenError
 from chipboard_configuration_software.command_generator.generate_command_string import generate_commands
 from chipboard_configuration_software.gui.ui_files.log_window import FailureDetailsDialog
 from chipboard_configuration_software.uart_link.middleware import UartMiddleware
+from .adc_plot_ui_controller import ADCPlotsController
 from .chipboard_configurator import threaded_configure_chipboard, ChipboardConfigurator, ChipboardResetter, \
     RealtimeConfigurator
 from .debug_console_controller import DebugConsoleWindow
+from .ui_files.adc_plot_ui_widget import Ui_adc_plots
 from .ui_files.top_level_window import Ui_MainWindow
 from .ui_files.psd_ui_widget import Ui_Widget_Psd
 from .ui_files.cfd_ui_widget import Ui_Widget_Cfd
@@ -80,6 +82,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         # .setCentralWidget(central_dock_widget)
 
         self.debug_window = DebugConsoleWindow()
+        self.adc_plot_window = None
 
         self._setup_dock_widgets()
 
@@ -138,6 +141,7 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.menuWindows.addAction(self.chipboard_dock.toggleViewAction())
         self.menuWindows.addAction(self.cfd_dock.toggleViewAction())
         self.actionDebug_Console.triggered.connect(self._on_show_debug_console_clicked)
+        self.actionShow_ADC_Plots.triggered.connect(self.show_adc_plot_window)
 
     def __connect_bottom_signals(self):
         self.pushButton_configure_chipboard.pressed.connect(self._on_configure_chipboard_clicked)
@@ -175,6 +179,19 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         self.comboBox_devices.addItem("None")
         self.comboBox_devices.addItems(device_list)
         self.comboBox_devices.blockSignals(False)
+
+    def show_adc_plot_window(self):
+        # Create the widget instance
+        adc_ui = Ui_adc_plots()
+        self.adc_plot_window = ADCPlotsController(self, adc_ui, self.config_handler)
+
+        # Set up the UI (important if you're not using `setupUi` inside controller)
+        #adc_ui.setupUi(self.adc_plot_window)
+
+        # Make it behave like a top-level window
+        self.adc_plot_window.setWindowTitle("ADC Plot Viewer")
+        self.adc_plot_window.resize(800, 600)  # Optional: set initial size
+        self.adc_plot_window.show()
 
     def get_chipboard_self_id(self):
         """

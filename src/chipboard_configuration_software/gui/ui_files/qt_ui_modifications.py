@@ -52,3 +52,4 @@ class EvenNumberValidator(QValidator):
             return str(value)
         except ValueError:
             return str(self.min_value)
+

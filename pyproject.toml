@@ -15,13 +15,36 @@ dependencies = [
   "PySide6-QtAds==4.4.0",
   "PySide6_Addons==6.9.0",
   "PySide6_Essentials==6.9.0",
-  "shiboken6==6.9.0"
+  "shiboken6==6.9.0",
+  "pyqtgraph (>=0.13.7,<0.14.0)"
 ]
+
+[project.optional-dependencies]
+plots = ["matplotlib==3.10.3"]
+
 
 [tool.poetry]
 packages = [{ include = "chipboard_configuration_software", from = "src" }]
+
+# Include C source files and build artifacts
+include = [
+    "src/chipboard_configuration_software/c_decoder/*.c",
+    "src/chipboard_configuration_software/c_decoder/*.h",
+    "src/chipboard_configuration_software/c_decoder/Makefile",
+    "src/chipboard_configuration_software/c_decoder/*.so"
+]
 version = "0.2.0"
 
+
+[tool.poetry.group.dev.dependencies]
+build = "^1.2.2.post1"
+
+
+[tool.poetry.group.docs.dependencies]
+sphinx = "^8.2.3"
+toml = "^0.10.2"
+sphinx-autodoc-typehints = "^3.2.0"
+furo = "^2025.7.19"
 
 [project.gui-scripts]
 psdinator = 'chipboard_configuration_software.main:main'
