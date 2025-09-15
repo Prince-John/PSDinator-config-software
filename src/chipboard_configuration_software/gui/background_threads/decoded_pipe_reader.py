@@ -71,11 +71,11 @@ class DecodePipeReaderThread(QThread):
 
         if channel is not None:
             if 0 <= channel < MAX_ADC_CHANNELS:
-                self.buffers[channel] = {'a': [], 'b': [], 'c': []}
+                self.buffers[channel] = {'a': [], 'b': [], 'c': [], 't': []}
                 return
 
         self.buffers = {
-            ch: {'a': [], 'b': [], 'c': []} for ch in range(MAX_ADC_CHANNELS)
+            ch: {'a': [], 'b': [], 'c': [], 't':[]} for ch in range(MAX_ADC_CHANNELS)
         }
 
     def set_histogram_counts(self, counts: int):

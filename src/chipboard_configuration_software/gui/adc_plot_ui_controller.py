@@ -98,7 +98,7 @@ class ADCPlotsController(QWidget):
             plot.setMouseEnabled(x=True, y=False)
 
             # Create persistent text label (for peak/FWHM stats)
-            text_item = TextItem("", anchor=(1, 1), color='w')
+            text_item = TextItem("", anchor=(0, 1), color='w')
             text_item.setFont(font)
             plot.addItem(text_item)
 
@@ -162,30 +162,13 @@ class ADCPlotsController(QWidget):
             bar.setOpts(x=x, height=counts, width=width)
 
             label = self.text_items[adc_type]
-            label.setText(f"FWHM: {fwhm:.2f}\nPeak: {peak:.0f}")
-            label.setPos(peak + 10, max(counts) * 0.75)
+
+            label.setText(f"FWHM: {fwhm:.0f} codes \n ~ {fwhm*11:.1f} ps  \nPeak: {peak:.0f}")
+            label.setPos(peak + 2*fwhm, max(counts) * 0.50)
 
         self.ui.label_status_adc.setText(
             f"CH {channel} : ADC {adc_type.upper()} ({'All' if self.selected_channel is None else f'CH {self.selected_channel}'})")
 
-    @Slot(int, str, np.ndarray, np.ndarray, float, float)
-    def __on_histogram_ready(self, channel, adc_type, bins, counts, peak, fwhm):
-        if adc_type not in self.bar_items:
-            return
-
-        x = (bins[:-1] + bins[1:]) / 2
-        width = bins[1] - bins[0]
-
-        bar_item = self.bar_items[adc_type]
-        plot = self.plots[adc_type]
-        label = self.text_items[adc_type]
-
-        bar_item.setOpts(x=x, height=counts, width=width)
-
-        label.setText(f"FWHM: {fwhm:.2f}\nPeak: {peak:.0f}")
-        label.setPos(peak + 10, max(counts) * 0.75)
-
-        # plot.enableAutoRange("y")
 
     @Slot()
     def _on_clear_plots_clicked(self):
@@ -194,9 +177,9 @@ class ADCPlotsController(QWidget):
         self.clear_plots()
 
     def clear_plots(self):
-        self.histogram_data = defaultdict(lambda: {'a': [], 'b': [], 'c': []})
+        self.histogram_data = defaultdict(lambda: {'a': [], 'b': [], 'c': [], 't': []})
         self.decoded_reader_thread.clear_histogram_data()
-        for adc_type in ('a', 'b', 'c'):
+        for adc_type in ('a', 'b', 'c', 't'):
             for bar in self.bar_items[adc_type].values():
                 bar.setOpts(x=[], height=[], width=1)
             self.text_items[adc_type].setText("")

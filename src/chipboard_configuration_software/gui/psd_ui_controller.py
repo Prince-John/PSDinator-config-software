@@ -243,10 +243,10 @@ class PsdController(QWidget):
             width_range_comboBox: QComboBox = getattr(self.ui, f"comboBox_psd_width_range_{subchannel}")
 
             gain_comboBox.setCurrentText(str(current_gains[subchannel]))
-            delay_range_comboBox.setCurrentText(current_delay_ranges[subchannel])
-            width_range_comboBox.setCurrentText(current_width_ranges[subchannel])
+            delay_range_comboBox.setCurrentText(str(current_delay_ranges[subchannel]))
+            width_range_comboBox.setCurrentText(str(current_width_ranges[subchannel]))
 
-        self.ui.comboBox_psd_vtc_range.setCurrentText(psd_config["serial_register_settings"]["vtc_range"])
+        self.ui.comboBox_psd_vtc_range.setCurrentText(str(psd_config["serial_register_settings"]["vtc_range"]))
         self.ui.comboBox_psd_bias.setCurrentText(psd_config["serial_register_settings"]["bias"])
         self.ui.comboBox_psd_polarity.setCurrentText(psd_config["serial_register_settings"]["polarity"])
         logger.debug(f"Updated Serial Config ComboBoxes!")

@@ -379,7 +379,7 @@ class CfdController(QWidget):
                 "leading_edge_DAC_value"]
             enable_state = cfd_config["individual_channel_settings"][cast(ChannelKey, str(channel))]["enable"]
 
-            self.leading_edge_dac_text[channel].setText(text_value)
+            self.leading_edge_dac_text[channel].setText(str(text_value))
             set_checkbox_silently(self.channel_enable_checkboxes[channel], enable_state)
 
     @Slot()
