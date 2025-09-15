@@ -26,7 +26,8 @@ AGND_TRIM_VOLTAGES: Type[str] = Literal["1.36 V", "1.43 V", "1.49 V", "1.56 V", 
 ONESHOT_WIDTH_SELECTS: Type[str] = Literal["50", "100", "200", "500"]
 
 LOCKOUT_MODES: Type[str] = Literal["short", "long", "disabled"]
-LOCKOUT_DAC_VALUES: Type[str] = Literal['110 ns', '220 ns', '330 ns', '440 ns', '550 ns', '660 ns', '770 ns', '880 ns', '990 ns', '1.10 us', '1.21 us', '1.32 us', '1.43 us', '1.54 us', '1.65 us', '1.76 us', '1.87 us', '1.98 us', '2.09 us', '2.20 us', '2.31 us', '2.42 us', '2.53 us', '2.64 us', '2.75 us', '2.86 us', '2.97 us', '3.08 us', '3.19 us', '3.30 us', '3.41 us', '535 ns', '1.1 us', '1.6 us', '2.1 us', '2.7 us', '3.2 us', '3.7 us', '4.3 us', '4.8 us', '5.3 us', '5.9 us', '6.4 us', '7.0 us', '7.5 us', '8.0 us', '8.6 us', '9.1 us', '9.6 us', '10.2 us', '10.7 us', '11.2 us', '11.8 us', '12.3 us', '12.8 us', '13.4 us', '13.9 us', '14.4 us', '15.0 us', '15.5 us', '16.1 us', '16.6 us']
+LOCKOUT_DAC_VALUES: Type[str] = Literal[
+    '110 ns', '220 ns', '330 ns', '440 ns', '550 ns', '660 ns', '770 ns', '880 ns', '990 ns', '1.10 us', '1.21 us', '1.32 us', '1.43 us', '1.54 us', '1.65 us', '1.76 us', '1.87 us', '1.98 us', '2.09 us', '2.20 us', '2.31 us', '2.42 us', '2.53 us', '2.64 us', '2.75 us', '2.86 us', '2.97 us', '3.08 us', '3.19 us', '3.30 us', '3.41 us', '535 ns', '1.1 us', '1.6 us', '2.1 us', '2.7 us', '3.2 us', '3.7 us', '4.3 us', '4.8 us', '5.3 us', '5.9 us', '6.4 us', '7.0 us', '7.5 us', '8.0 us', '8.6 us', '9.1 us', '9.6 us', '10.2 us', '10.7 us', '11.2 us', '11.8 us', '12.3 us', '12.8 us', '13.4 us', '13.9 us', '14.4 us', '15.0 us', '15.5 us', '16.1 us', '16.6 us']
 
 
 def generate_individual_channel_word(channel: int, channel_enable: int | bool,
@@ -158,18 +159,25 @@ def get_mode_1_words(lockout_mode, agnd_trim_voltage, oneshot_width_select) -> T
     return address_word, data_word
 
 
-def get_mode_5_words(lockout_enable, lockout_dac: int | LOCKOUT_DAC_VALUES) -> Tuple[int, int]:
+def get_mode_5_words(lockout_enable, lockout_dac: int ) -> Tuple[int, int]:
     """
 
     :param lockout_enable:
-    :param lockout_dac: 5 bit unsigned int lockout dac value
+    :param lockout_dac: 5 bit unsigned int lockout dac value, lower magnitude is longer lockout time
     :return:
     """
 
-    lockout_mode_map = {"short": 1, "long": 1, "disabled": 0}  # TODO: Verify this
-    lockout_bits = lockout_mode_map[lockout_enable]
-    data_word = lockout_bits << 5 | (lockout_dac & 0x1F)
+    lockout_mode_map = {"short": 0, "long": 0, "disabled": 1}
 
+    lockout_dac_bits = lockout_dac
+
+    # if isinstance(lockout_dac, str) and lockout_enable != "disabled":
+    #     lockout_dac_bits = lockout_dac_value_map[lockout_enable][lockout_dac]
+
+    lockout_enable_bit = lockout_mode_map[lockout_enable]
+    data_word = lockout_enable_bit << 5 | (lockout_dac_bits & 0x1F)
+    print(f"Lockout Dac Value: {lockout_dac}, lockout mode: {lockout_enable}")
+    print(f"Lockout data word: {data_word:08b}")
     address_word = 0x05
 
     return address_word, data_word
@@ -182,7 +190,7 @@ def generate_common_channel_words(nowlin_mode: int | NOWLIN_MODES,
                                   lockout_mode: int | LOCKOUT_MODES,
                                   agnd_trim_voltage: int | AGND_TRIM_VOLTAGES,
                                   oneshot_width_select: int | ONESHOT_WIDTH_SELECTS,
-                                  lockout_dac_input: int| LOCKOUT_DAC_VALUES) -> List[Tuple[int, int], ...]:
+                                  lockout_dac_input: int | LOCKOUT_DAC_VALUES) -> List[Tuple[int, int], ...]:
     """
 
 This function generates the (address-mode,data) 8-bit words that are used to configure the common channel for the CFD
@@ -209,7 +217,8 @@ Fixed probably -Jul 16- #TODO A bug is present here that prevents mode 0 words f
 
     """
 
-    mode_0_0_address, mode_0_actual = get_mode_0_words(nowlin_mode, test_point_select, test_point_channel, capacitor_bus)
+    mode_0_0_address, mode_0_actual = get_mode_0_words(nowlin_mode, test_point_select, test_point_channel,
+                                                       capacitor_bus)
     mode_1 = get_mode_1_words(lockout_mode, agnd_trim_voltage, oneshot_width_select)
     mode_5 = get_mode_5_words(lockout_mode, lockout_dac_input)
 
