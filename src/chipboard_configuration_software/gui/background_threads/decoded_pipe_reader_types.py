@@ -1,5 +1,12 @@
+import numpy as np
+
 from chipboard_configuration_software.c_decoder import event_decoder_lib
 from ctypes import Structure, Union, c_uint8, c_int16, c_uint32, c_uint64, c_float, c_int, POINTER, c_char_p
+
+from numpy.ctypeslib import ndpointer
+
+
+
 
 MAX_ADC_CHANNELS = 16
 
@@ -21,7 +28,16 @@ class ADCReading(Structure):
     ]
 
 
-# Match `union` inside `DecodedPacket`
+# for numpy converstion from ctypes
+adc_reading_np_dtype = np.dtype([
+    ("channel", np.uint8),
+    ("adc_a", np.int16),
+    ("adc_b", np.int16),
+    ("adc_c", np.int16),
+    ("adc_t", np.int16),
+], align=True)
+
+
 class ADCData(Structure):
     _fields_ = [
         ("num_channels", c_uint8),
@@ -55,6 +71,12 @@ class DecodedPacket(Structure):
 decode_next_event = lib.decode_next_event
 decode_next_event.argtypes = [c_int, POINTER(DecodedPacket), c_int]
 decode_next_event.restype = c_int
+
+# some_dll.f.argtypes = [ndpointer(numpy.uint8, flags="C_CONTIGUOUS"),
+#                        ctypes.c_size_t]
+# some_dll.f.restype = None
+
+
 
 # int open_pipe(const char *path)
 lib.open_pipe.argtypes = [c_char_p]

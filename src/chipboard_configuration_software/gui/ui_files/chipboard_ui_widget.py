@@ -18,48 +18,110 @@ from PySide6.QtGui import (QBrush, QColor, QConicalGradient, QCursor,
 from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QGroupBox, QHBoxLayout, QLabel, QLayout,
     QLineEdit, QPushButton, QRadioButton, QSizePolicy,
-    QSlider, QSpacerItem, QVBoxLayout, QWidget)
+    QSlider, QSpacerItem, QToolButton, QVBoxLayout,
+    QWidget)
+
+from . import resources_rc
 
 class Ui_Widget_Chipboard(object):
     def setupUi(self, Widget_Chipboard):
         if not Widget_Chipboard.objectName():
             Widget_Chipboard.setObjectName(u"Widget_Chipboard")
-        Widget_Chipboard.resize(862, 727)
+        Widget_Chipboard.resize(953, 622)
         self.gridLayout = QGridLayout(Widget_Chipboard)
         self.gridLayout.setObjectName(u"gridLayout")
-        self.label = QLabel(Widget_Chipboard)
+        self.groupBox_2 = QGroupBox(Widget_Chipboard)
+        self.groupBox_2.setObjectName(u"groupBox_2")
+        self.gridLayout_3 = QGridLayout(self.groupBox_2)
+        self.gridLayout_3.setObjectName(u"gridLayout_3")
+        self.label = QLabel(self.groupBox_2)
         self.label.setObjectName(u"label")
 
-        self.gridLayout.addWidget(self.label, 2, 1, 1, 1)
+        self.gridLayout_3.addWidget(self.label, 1, 0, 1, 1)
 
-        self.pushButton = QPushButton(Widget_Chipboard)
-        self.pushButton.setObjectName(u"pushButton")
+        self.label_8 = QLabel(self.groupBox_2)
+        self.label_8.setObjectName(u"label_8")
+        self.label_8.setAlignment(Qt.AlignmentFlag.AlignRight|Qt.AlignmentFlag.AlignTrailing|Qt.AlignmentFlag.AlignVCenter)
 
-        self.gridLayout.addWidget(self.pushButton, 4, 1, 1, 2)
+        self.gridLayout_3.addWidget(self.label_8, 1, 3, 1, 1)
+
+        self.comboBox_chipboard_mode = QComboBox(self.groupBox_2)
+        self.comboBox_chipboard_mode.addItem("")
+        self.comboBox_chipboard_mode.addItem("")
+        self.comboBox_chipboard_mode.setObjectName(u"comboBox_chipboard_mode")
+
+        self.gridLayout_3.addWidget(self.comboBox_chipboard_mode, 1, 1, 1, 1)
+
+        self.pushButton_open_adc_plots = QPushButton(self.groupBox_2)
+        self.pushButton_open_adc_plots.setObjectName(u"pushButton_open_adc_plots")
+
+        self.gridLayout_3.addWidget(self.pushButton_open_adc_plots, 2, 0, 1, 1)
+
+        self.horizontalLayout_2 = QHBoxLayout()
+        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
+        self.label_post_acq = QLabel(self.groupBox_2)
+        self.label_post_acq.setObjectName(u"label_post_acq")
+
+        self.horizontalLayout_2.addWidget(self.label_post_acq)
+
+        self.lineEdit_post_ack = QLineEdit(self.groupBox_2)
+        self.lineEdit_post_ack.setObjectName(u"lineEdit_post_ack")
+        font = QFont()
+        font.setPointSize(13)
+        self.lineEdit_post_ack.setFont(font)
+
+        self.horizontalLayout_2.addWidget(self.lineEdit_post_ack)
+
+        self.pushButton_post_acq = QToolButton(self.groupBox_2)
+        self.pushButton_post_acq.setObjectName(u"pushButton_post_acq")
+
+        self.horizontalLayout_2.addWidget(self.pushButton_post_acq)
+
+
+        self.gridLayout_3.addLayout(self.horizontalLayout_2, 4, 0, 1, 4)
+
+        self.label_event_counter = QLabel(self.groupBox_2)
+        self.label_event_counter.setObjectName(u"label_event_counter")
+        self.label_event_counter.setMinimumSize(QSize(100, 0))
+
+        self.gridLayout_3.addWidget(self.label_event_counter, 2, 3, 1, 1)
+
+        self.label_acq_status_led = QLabel(self.groupBox_2)
+        self.label_acq_status_led.setObjectName(u"label_acq_status_led")
+        self.label_acq_status_led.setMaximumSize(QSize(20, 20))
+        self.label_acq_status_led.setPixmap(QPixmap(u":/icons/blue-led-on.png"))
+        self.label_acq_status_led.setScaledContents(True)
+
+        self.gridLayout_3.addWidget(self.label_acq_status_led, 1, 4, 1, 1)
+
+
+        self.gridLayout.addWidget(self.groupBox_2, 3, 4, 1, 1)
 
         self.groupBox = QGroupBox(Widget_Chipboard)
         self.groupBox.setObjectName(u"groupBox")
         self.gridLayout_2 = QGridLayout(self.groupBox)
         self.gridLayout_2.setObjectName(u"gridLayout_2")
-        self.label_3 = QLabel(self.groupBox)
-        self.label_3.setObjectName(u"label_3")
-
-        self.gridLayout_2.addWidget(self.label_3, 1, 0, 1, 1)
-
-        self.label_5 = QLabel(self.groupBox)
-        self.label_5.setObjectName(u"label_5")
-
-        self.gridLayout_2.addWidget(self.label_5, 0, 0, 1, 1)
-
         self.label_4 = QLabel(self.groupBox)
         self.label_4.setObjectName(u"label_4")
 
         self.gridLayout_2.addWidget(self.label_4, 2, 0, 1, 1)
 
-        self.label_6 = QLabel(self.groupBox)
-        self.label_6.setObjectName(u"label_6")
+        self.label_take_event_mux = QLabel(self.groupBox)
+        self.label_take_event_mux.setObjectName(u"label_take_event_mux")
 
-        self.gridLayout_2.addWidget(self.label_6, 4, 0, 1, 1)
+        self.gridLayout_2.addWidget(self.label_take_event_mux, 5, 0, 1, 1)
+
+        self.comboBox_timestamp_clock_input = QComboBox(self.groupBox)
+        self.comboBox_timestamp_clock_input.addItem("")
+        self.comboBox_timestamp_clock_input.addItem("")
+        self.comboBox_timestamp_clock_input.setObjectName(u"comboBox_timestamp_clock_input")
+
+        self.gridLayout_2.addWidget(self.comboBox_timestamp_clock_input, 6, 3, 1, 1)
+
+        self.label_2 = QLabel(self.groupBox)
+        self.label_2.setObjectName(u"label_2")
+
+        self.gridLayout_2.addWidget(self.label_2, 6, 0, 1, 1)
 
         self.comboBox_pre_amp_mux = QComboBox(self.groupBox)
         self.comboBox_pre_amp_mux.addItem("")
@@ -67,12 +129,36 @@ class Ui_Widget_Chipboard(object):
 
         self.gridLayout_2.addWidget(self.comboBox_pre_amp_mux, 4, 3, 1, 1)
 
+        self.label_3 = QLabel(self.groupBox)
+        self.label_3.setObjectName(u"label_3")
+
+        self.gridLayout_2.addWidget(self.label_3, 1, 0, 1, 1)
+
+        self.label_6 = QLabel(self.groupBox)
+        self.label_6.setObjectName(u"label_6")
+
+        self.gridLayout_2.addWidget(self.label_6, 4, 0, 1, 1)
+
+        self.label_5 = QLabel(self.groupBox)
+        self.label_5.setObjectName(u"label_5")
+
+        self.gridLayout_2.addWidget(self.label_5, 0, 0, 1, 1)
+
         self.comboBox_intx_mux = QComboBox(self.groupBox)
         self.comboBox_intx_mux.addItem("")
         self.comboBox_intx_mux.addItem("")
         self.comboBox_intx_mux.setObjectName(u"comboBox_intx_mux")
 
         self.gridLayout_2.addWidget(self.comboBox_intx_mux, 2, 3, 1, 1)
+
+        self.comboBox_take_event_input = QComboBox(self.groupBox)
+        self.comboBox_take_event_input.addItem("")
+        self.comboBox_take_event_input.addItem("")
+        self.comboBox_take_event_input.addItem("")
+        self.comboBox_take_event_input.addItem("")
+        self.comboBox_take_event_input.setObjectName(u"comboBox_take_event_input")
+
+        self.gridLayout_2.addWidget(self.comboBox_take_event_input, 5, 3, 1, 1)
 
         self.comboBox_or_mux = QComboBox(self.groupBox)
         self.comboBox_or_mux.addItem("")
@@ -91,37 +177,7 @@ class Ui_Widget_Chipboard(object):
         self.gridLayout_2.addWidget(self.comboBox_psd_cfd_mux, 0, 3, 1, 1)
 
 
-        self.gridLayout.addWidget(self.groupBox, 1, 0, 4, 1)
-
-        self.label_psd_auto_veto_dac_2 = QLabel(Widget_Chipboard)
-        self.label_psd_auto_veto_dac_2.setObjectName(u"label_psd_auto_veto_dac_2")
-        self.label_psd_auto_veto_dac_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
-
-        self.gridLayout.addWidget(self.label_psd_auto_veto_dac_2, 1, 1, 1, 1)
-
-        self.text_multiplicity_offset_dac = QLineEdit(Widget_Chipboard)
-        self.text_multiplicity_offset_dac.setObjectName(u"text_multiplicity_offset_dac")
-        sizePolicy = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
-        sizePolicy.setHorizontalStretch(0)
-        sizePolicy.setVerticalStretch(0)
-        sizePolicy.setHeightForWidth(self.text_multiplicity_offset_dac.sizePolicy().hasHeightForWidth())
-        self.text_multiplicity_offset_dac.setSizePolicy(sizePolicy)
-        self.text_multiplicity_offset_dac.setMinimumSize(QSize(21, 0))
-        self.text_multiplicity_offset_dac.setMaximumSize(QSize(50, 16777215))
-        self.text_multiplicity_offset_dac.setBaseSize(QSize(30, 0))
-        self.text_multiplicity_offset_dac.setMaxLength(6)
-        self.text_multiplicity_offset_dac.setCursorPosition(6)
-        self.text_multiplicity_offset_dac.setAlignment(Qt.AlignmentFlag.AlignCenter)
-        self.text_multiplicity_offset_dac.setClearButtonEnabled(False)
-
-        self.gridLayout.addWidget(self.text_multiplicity_offset_dac, 1, 3, 1, 1)
-
-        self.comboBox_chipboard_mode = QComboBox(Widget_Chipboard)
-        self.comboBox_chipboard_mode.addItem("")
-        self.comboBox_chipboard_mode.addItem("")
-        self.comboBox_chipboard_mode.setObjectName(u"comboBox_chipboard_mode")
-
-        self.gridLayout.addWidget(self.comboBox_chipboard_mode, 2, 2, 1, 1)
+        self.gridLayout.addWidget(self.groupBox, 0, 4, 1, 1)
 
         self.groupBox_delays = QGroupBox(Widget_Chipboard)
         self.groupBox_delays.setObjectName(u"groupBox_delays")
@@ -134,11 +190,11 @@ class Ui_Widget_Chipboard(object):
         self.horizontal_layout_delay_label.setSizeConstraint(QLayout.SizeConstraint.SetMinimumSize)
         self.label_15 = QLabel(self.groupBox_delays)
         self.label_15.setObjectName(u"label_15")
-        font = QFont()
-        font.setFamilies([u"Arial"])
-        font.setPointSize(14)
-        font.setBold(True)
-        self.label_15.setFont(font)
+        font1 = QFont()
+        font1.setFamilies([u"Arial"])
+        font1.setPointSize(14)
+        font1.setBold(True)
+        self.label_15.setFont(font1)
 
         self.horizontal_layout_delay_label.addWidget(self.label_15)
 
@@ -148,7 +204,7 @@ class Ui_Widget_Chipboard(object):
 
         self.label_21 = QLabel(self.groupBox_delays)
         self.label_21.setObjectName(u"label_21")
-        self.label_21.setFont(font)
+        self.label_21.setFont(font1)
         self.label_21.setAlignment(Qt.AlignmentFlag.AlignCenter)
 
         self.horizontal_layout_delay_label.addWidget(self.label_21)
@@ -178,11 +234,11 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_0 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_0.setObjectName(u"slider_delay_ch_0")
-        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
-        sizePolicy1.setHorizontalStretch(0)
-        sizePolicy1.setVerticalStretch(0)
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_0.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_0.setSizePolicy(sizePolicy1)
+        sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Fixed)
+        sizePolicy.setHorizontalStretch(0)
+        sizePolicy.setVerticalStretch(0)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_0.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_0.setSizePolicy(sizePolicy)
         self.slider_delay_ch_0.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_0.setMaximum(62)
         self.slider_delay_ch_0.setSingleStep(2)
@@ -198,11 +254,11 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_0 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_0.setObjectName(u"text_delay_ch_0")
-        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
-        sizePolicy2.setHorizontalStretch(0)
-        sizePolicy2.setVerticalStretch(0)
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_0.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_0.setSizePolicy(sizePolicy2)
+        sizePolicy1 = QSizePolicy(QSizePolicy.Policy.Minimum, QSizePolicy.Policy.Fixed)
+        sizePolicy1.setHorizontalStretch(0)
+        sizePolicy1.setVerticalStretch(0)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_0.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_0.setSizePolicy(sizePolicy1)
         self.text_delay_ch_0.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_0.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_0.setMaxLength(5)
@@ -237,8 +293,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_1 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_1.setObjectName(u"slider_delay_ch_1")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_1.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_1.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_1.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_1.setSizePolicy(sizePolicy)
         self.slider_delay_ch_1.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_1.setMaximum(62)
         self.slider_delay_ch_1.setSingleStep(2)
@@ -254,8 +310,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_1 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_1.setObjectName(u"text_delay_ch_1")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_1.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_1.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_1.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_1.setSizePolicy(sizePolicy1)
         self.text_delay_ch_1.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_1.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_1.setMaxLength(5)
@@ -290,8 +346,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_2 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_2.setObjectName(u"slider_delay_ch_2")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_2.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_2.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_2.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_2.setSizePolicy(sizePolicy)
         self.slider_delay_ch_2.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_2.setMaximum(62)
         self.slider_delay_ch_2.setSingleStep(2)
@@ -307,8 +363,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_2 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_2.setObjectName(u"text_delay_ch_2")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_2.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_2.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_2.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_2.setSizePolicy(sizePolicy1)
         self.text_delay_ch_2.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_2.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_2.setMaxLength(5)
@@ -343,8 +399,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_3 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_3.setObjectName(u"slider_delay_ch_3")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_3.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_3.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_3.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_3.setSizePolicy(sizePolicy)
         self.slider_delay_ch_3.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_3.setMaximum(62)
         self.slider_delay_ch_3.setSingleStep(2)
@@ -360,8 +416,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_3 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_3.setObjectName(u"text_delay_ch_3")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_3.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_3.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_3.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_3.setSizePolicy(sizePolicy1)
         self.text_delay_ch_3.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_3.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_3.setMaxLength(5)
@@ -396,8 +452,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_4 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_4.setObjectName(u"slider_delay_ch_4")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_4.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_4.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_4.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_4.setSizePolicy(sizePolicy)
         self.slider_delay_ch_4.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_4.setMaximum(62)
         self.slider_delay_ch_4.setSingleStep(2)
@@ -413,8 +469,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_4 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_4.setObjectName(u"text_delay_ch_4")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_4.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_4.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_4.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_4.setSizePolicy(sizePolicy1)
         self.text_delay_ch_4.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_4.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_4.setMaxLength(5)
@@ -449,8 +505,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_5 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_5.setObjectName(u"slider_delay_ch_5")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_5.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_5.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_5.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_5.setSizePolicy(sizePolicy)
         self.slider_delay_ch_5.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_5.setMaximum(62)
         self.slider_delay_ch_5.setSingleStep(2)
@@ -466,8 +522,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_5 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_5.setObjectName(u"text_delay_ch_5")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_5.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_5.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_5.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_5.setSizePolicy(sizePolicy1)
         self.text_delay_ch_5.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_5.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_5.setMaxLength(5)
@@ -502,8 +558,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_6 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_6.setObjectName(u"slider_delay_ch_6")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_6.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_6.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_6.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_6.setSizePolicy(sizePolicy)
         self.slider_delay_ch_6.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_6.setMaximum(62)
         self.slider_delay_ch_6.setSingleStep(2)
@@ -519,8 +575,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_6 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_6.setObjectName(u"text_delay_ch_6")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_6.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_6.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_6.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_6.setSizePolicy(sizePolicy1)
         self.text_delay_ch_6.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_6.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_6.setMaxLength(5)
@@ -555,8 +611,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_7 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_7.setObjectName(u"slider_delay_ch_7")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_7.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_7.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_7.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_7.setSizePolicy(sizePolicy)
         self.slider_delay_ch_7.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_7.setMaximum(62)
         self.slider_delay_ch_7.setSingleStep(2)
@@ -572,8 +628,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_7 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_7.setObjectName(u"text_delay_ch_7")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_7.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_7.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_7.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_7.setSizePolicy(sizePolicy1)
         self.text_delay_ch_7.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_7.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_7.setMaxLength(5)
@@ -608,8 +664,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_8 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_8.setObjectName(u"slider_delay_ch_8")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_8.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_8.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_8.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_8.setSizePolicy(sizePolicy)
         self.slider_delay_ch_8.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_8.setMaximum(62)
         self.slider_delay_ch_8.setSingleStep(2)
@@ -625,8 +681,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_8 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_8.setObjectName(u"text_delay_ch_8")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_8.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_8.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_8.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_8.setSizePolicy(sizePolicy1)
         self.text_delay_ch_8.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_8.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_8.setMaxLength(5)
@@ -661,8 +717,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_9 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_9.setObjectName(u"slider_delay_ch_9")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_9.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_9.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_9.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_9.setSizePolicy(sizePolicy)
         self.slider_delay_ch_9.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_9.setMaximum(62)
         self.slider_delay_ch_9.setSingleStep(2)
@@ -678,8 +734,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_9 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_9.setObjectName(u"text_delay_ch_9")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_9.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_9.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_9.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_9.setSizePolicy(sizePolicy1)
         self.text_delay_ch_9.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_9.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_9.setMaxLength(5)
@@ -714,8 +770,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_10 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_10.setObjectName(u"slider_delay_ch_10")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_10.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_10.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_10.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_10.setSizePolicy(sizePolicy)
         self.slider_delay_ch_10.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_10.setMaximum(62)
         self.slider_delay_ch_10.setSingleStep(2)
@@ -731,8 +787,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_10 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_10.setObjectName(u"text_delay_ch_10")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_10.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_10.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_10.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_10.setSizePolicy(sizePolicy1)
         self.text_delay_ch_10.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_10.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_10.setMaxLength(5)
@@ -767,8 +823,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_11 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_11.setObjectName(u"slider_delay_ch_11")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_11.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_11.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_11.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_11.setSizePolicy(sizePolicy)
         self.slider_delay_ch_11.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_11.setMaximum(62)
         self.slider_delay_ch_11.setSingleStep(2)
@@ -784,8 +840,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_11 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_11.setObjectName(u"text_delay_ch_11")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_11.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_11.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_11.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_11.setSizePolicy(sizePolicy1)
         self.text_delay_ch_11.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_11.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_11.setMaxLength(5)
@@ -820,8 +876,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_12 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_12.setObjectName(u"slider_delay_ch_12")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_12.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_12.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_12.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_12.setSizePolicy(sizePolicy)
         self.slider_delay_ch_12.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_12.setMaximum(62)
         self.slider_delay_ch_12.setSingleStep(2)
@@ -837,8 +893,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_12 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_12.setObjectName(u"text_delay_ch_12")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_12.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_12.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_12.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_12.setSizePolicy(sizePolicy1)
         self.text_delay_ch_12.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_12.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_12.setMaxLength(5)
@@ -873,8 +929,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_13 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_13.setObjectName(u"slider_delay_ch_13")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_13.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_13.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_13.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_13.setSizePolicy(sizePolicy)
         self.slider_delay_ch_13.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_13.setMaximum(62)
         self.slider_delay_ch_13.setSingleStep(2)
@@ -890,8 +946,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_13 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_13.setObjectName(u"text_delay_ch_13")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_13.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_13.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_13.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_13.setSizePolicy(sizePolicy1)
         self.text_delay_ch_13.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_13.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_13.setMaxLength(5)
@@ -926,8 +982,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_14 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_14.setObjectName(u"slider_delay_ch_14")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_14.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_14.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_14.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_14.setSizePolicy(sizePolicy)
         self.slider_delay_ch_14.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_14.setMaximum(62)
         self.slider_delay_ch_14.setSingleStep(2)
@@ -943,8 +999,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_14 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_14.setObjectName(u"text_delay_ch_14")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_14.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_14.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_14.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_14.setSizePolicy(sizePolicy1)
         self.text_delay_ch_14.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_14.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_14.setMaxLength(5)
@@ -979,8 +1035,8 @@ class Ui_Widget_Chipboard(object):
 
         self.slider_delay_ch_15 = QSlider(self.groupBox_delays)
         self.slider_delay_ch_15.setObjectName(u"slider_delay_ch_15")
-        sizePolicy1.setHeightForWidth(self.slider_delay_ch_15.sizePolicy().hasHeightForWidth())
-        self.slider_delay_ch_15.setSizePolicy(sizePolicy1)
+        sizePolicy.setHeightForWidth(self.slider_delay_ch_15.sizePolicy().hasHeightForWidth())
+        self.slider_delay_ch_15.setSizePolicy(sizePolicy)
         self.slider_delay_ch_15.setMinimumSize(QSize(250, 0))
         self.slider_delay_ch_15.setMaximum(62)
         self.slider_delay_ch_15.setSingleStep(2)
@@ -996,8 +1052,8 @@ class Ui_Widget_Chipboard(object):
 
         self.text_delay_ch_15 = QLineEdit(self.groupBox_delays)
         self.text_delay_ch_15.setObjectName(u"text_delay_ch_15")
-        sizePolicy2.setHeightForWidth(self.text_delay_ch_15.sizePolicy().hasHeightForWidth())
-        self.text_delay_ch_15.setSizePolicy(sizePolicy2)
+        sizePolicy1.setHeightForWidth(self.text_delay_ch_15.sizePolicy().hasHeightForWidth())
+        self.text_delay_ch_15.setSizePolicy(sizePolicy1)
         self.text_delay_ch_15.setMinimumSize(QSize(21, 21))
         self.text_delay_ch_15.setMaximumSize(QSize(40, 16777215))
         self.text_delay_ch_15.setMaxLength(5)
@@ -1049,10 +1105,18 @@ class Ui_Widget_Chipboard(object):
         self.verticalLayout_3.addLayout(self.horizontalLayout)
 
 
-        self.gridLayout.addWidget(self.groupBox_delays, 0, 0, 1, 4)
+        self.gridLayout.addWidget(self.groupBox_delays, 0, 0, 4, 4)
 
-        self.horizontalSlider_multiplicity_offset_dac = QSlider(Widget_Chipboard)
+        self.groupBox_3 = QGroupBox(Widget_Chipboard)
+        self.groupBox_3.setObjectName(u"groupBox_3")
+        self.label_psd_auto_veto_dac_2 = QLabel(self.groupBox_3)
+        self.label_psd_auto_veto_dac_2.setObjectName(u"label_psd_auto_veto_dac_2")
+        self.label_psd_auto_veto_dac_2.setGeometry(QRect(10, 40, 108, 24))
+        self.label_psd_auto_veto_dac_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.horizontalSlider_multiplicity_offset_dac = QSlider(self.groupBox_3)
         self.horizontalSlider_multiplicity_offset_dac.setObjectName(u"horizontalSlider_multiplicity_offset_dac")
+        self.horizontalSlider_multiplicity_offset_dac.setEnabled(False)
+        self.horizontalSlider_multiplicity_offset_dac.setGeometry(QRect(10, 70, 121, 27))
         self.horizontalSlider_multiplicity_offset_dac.setMaximum(1023)
         self.horizontalSlider_multiplicity_offset_dac.setSingleStep(10)
         self.horizontalSlider_multiplicity_offset_dac.setPageStep(128)
@@ -1060,31 +1124,24 @@ class Ui_Widget_Chipboard(object):
         self.horizontalSlider_multiplicity_offset_dac.setInvertedControls(False)
         self.horizontalSlider_multiplicity_offset_dac.setTickPosition(QSlider.TickPosition.TicksBelow)
         self.horizontalSlider_multiplicity_offset_dac.setTickInterval(128)
+        self.text_multiplicity_offset_dac = QLineEdit(self.groupBox_3)
+        self.text_multiplicity_offset_dac.setObjectName(u"text_multiplicity_offset_dac")
+        self.text_multiplicity_offset_dac.setEnabled(False)
+        self.text_multiplicity_offset_dac.setGeometry(QRect(140, 70, 50, 21))
+        sizePolicy2 = QSizePolicy(QSizePolicy.Policy.MinimumExpanding, QSizePolicy.Policy.Fixed)
+        sizePolicy2.setHorizontalStretch(0)
+        sizePolicy2.setVerticalStretch(0)
+        sizePolicy2.setHeightForWidth(self.text_multiplicity_offset_dac.sizePolicy().hasHeightForWidth())
+        self.text_multiplicity_offset_dac.setSizePolicy(sizePolicy2)
+        self.text_multiplicity_offset_dac.setMinimumSize(QSize(21, 0))
+        self.text_multiplicity_offset_dac.setMaximumSize(QSize(50, 16777215))
+        self.text_multiplicity_offset_dac.setBaseSize(QSize(30, 0))
+        self.text_multiplicity_offset_dac.setMaxLength(6)
+        self.text_multiplicity_offset_dac.setCursorPosition(6)
+        self.text_multiplicity_offset_dac.setAlignment(Qt.AlignmentFlag.AlignCenter)
+        self.text_multiplicity_offset_dac.setClearButtonEnabled(False)
 
-        self.gridLayout.addWidget(self.horizontalSlider_multiplicity_offset_dac, 1, 2, 1, 1)
-
-        self.horizontalLayout_2 = QHBoxLayout()
-        self.horizontalLayout_2.setObjectName(u"horizontalLayout_2")
-        self.label_post_acq = QLabel(Widget_Chipboard)
-        self.label_post_acq.setObjectName(u"label_post_acq")
-
-        self.horizontalLayout_2.addWidget(self.label_post_acq)
-
-        self.lineEdit_post_ack = QLineEdit(Widget_Chipboard)
-        self.lineEdit_post_ack.setObjectName(u"lineEdit_post_ack")
-        font1 = QFont()
-        font1.setPointSize(13)
-        self.lineEdit_post_ack.setFont(font1)
-
-        self.horizontalLayout_2.addWidget(self.lineEdit_post_ack)
-
-        self.pushButton_post_acq = QPushButton(Widget_Chipboard)
-        self.pushButton_post_acq.setObjectName(u"pushButton_post_acq")
-
-        self.horizontalLayout_2.addWidget(self.pushButton_post_acq)
-
-
-        self.gridLayout.addLayout(self.horizontalLayout_2, 3, 1, 1, 3)
+        self.gridLayout.addWidget(self.groupBox_3, 1, 4, 2, 1)
 
 
         self.retranslateUi(Widget_Chipboard)
@@ -1098,20 +1155,43 @@ class Ui_Widget_Chipboard(object):
 
     def retranslateUi(self, Widget_Chipboard):
         Widget_Chipboard.setWindowTitle(QCoreApplication.translate("Widget_Chipboard", u"Form", None))
-        self.label.setText(QCoreApplication.translate("Widget_Chipboard", u"Acquisition Mode", None))
-        self.pushButton.setText(QCoreApplication.translate("Widget_Chipboard", u"Configure Chipboard Settings", None))
+        self.groupBox_2.setTitle(QCoreApplication.translate("Widget_Chipboard", u"Data Collection", None))
+        self.label.setText(QCoreApplication.translate("Widget_Chipboard", u"Acquisition Mode:", None))
+        self.label_8.setText(QCoreApplication.translate("Widget_Chipboard", u"Status: ", None))
+        self.comboBox_chipboard_mode.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"Disabled", None))
+        self.comboBox_chipboard_mode.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"Enabled", None))
+
+        self.pushButton_open_adc_plots.setText(QCoreApplication.translate("Widget_Chipboard", u"Open ADC Plots", None))
+#if QT_CONFIG(tooltip)
+        self.label_post_acq.setToolTip(QCoreApplication.translate("Widget_Chipboard", u"<html><head/><body><p>This lets the user execute a data processing script after the data acquisition thread finishes acquisition. A new process will be executed of the program at the path specifed here. </p><p><span style=\" font-weight:700;\">$LAST_ACQ</span> can be used to pass the timestamped name of the last data acquisition. </p><p><br/></p></body></html>", None))
+#endif // QT_CONFIG(tooltip)
+        self.label_post_acq.setText(QCoreApplication.translate("Widget_Chipboard", u"Post Acquisition Script:", None))
+        self.lineEdit_post_ack.setPlaceholderText(QCoreApplication.translate("Widget_Chipboard", u"/path/to/script $LAST_ACQ", None))
+        self.pushButton_post_acq.setText(QCoreApplication.translate("Widget_Chipboard", u"...", None))
+        self.label_event_counter.setText("")
+        self.label_acq_status_led.setText("")
         self.groupBox.setTitle(QCoreApplication.translate("Widget_Chipboard", u"Multiplexers", None))
+        self.label_4.setText(QCoreApplication.translate("Widget_Chipboard", u"INTX Output", None))
+        self.label_take_event_mux.setText(QCoreApplication.translate("Widget_Chipboard", u"Take Event Signal", None))
+        self.comboBox_timestamp_clock_input.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"Internal", None))
+        self.comboBox_timestamp_clock_input.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"External", None))
+
+        self.label_2.setText(QCoreApplication.translate("Widget_Chipboard", u"Timestamp Clock", None))
+        self.comboBox_pre_amp_mux.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"Disabled", None))
+
         self.label_3.setText(QCoreApplication.translate("Widget_Chipboard", u"OR Output", None))
+        self.label_6.setText(QCoreApplication.translate("Widget_Chipboard", u"Pre Amp MUX Output", None))
 #if QT_CONFIG(tooltip)
         self.label_5.setToolTip(QCoreApplication.translate("Widget_Chipboard", u"This is the CFD pulse generated by the PSD chips it is routed to backplane connector. ", None))
 #endif // QT_CONFIG(tooltip)
         self.label_5.setText(QCoreApplication.translate("Widget_Chipboard", u"CFD OUT", None))
-        self.label_4.setText(QCoreApplication.translate("Widget_Chipboard", u"INTX Output", None))
-        self.label_6.setText(QCoreApplication.translate("Widget_Chipboard", u"Pre Amp MUX Output", None))
-        self.comboBox_pre_amp_mux.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"Disabled", None))
-
         self.comboBox_intx_mux.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"PSD 0", None))
         self.comboBox_intx_mux.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"PSD 1", None))
+
+        self.comboBox_take_event_input.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"External", None))
+        self.comboBox_take_event_input.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"Internal: 500 ns", None))
+        self.comboBox_take_event_input.setItemText(2, QCoreApplication.translate("Widget_Chipboard", u"Internal: 1 us", None))
+        self.comboBox_take_event_input.setItemText(3, QCoreApplication.translate("Widget_Chipboard", u"Internal: 2 us", None))
 
         self.comboBox_or_mux.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"PSD 0", None))
         self.comboBox_or_mux.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"PSD 1", None))
@@ -1120,15 +1200,6 @@ class Ui_Widget_Chipboard(object):
 
         self.comboBox_psd_cfd_mux.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"PSD 0", None))
         self.comboBox_psd_cfd_mux.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"PSD 1", None))
-
-#if QT_CONFIG(tooltip)
-        self.label_psd_auto_veto_dac_2.setToolTip(QCoreApplication.translate("Widget_Chipboard", u"<html><head/><body><p><span style=\" font-weight:700;\">Auto Veto Time: </span></p><p><br/></p><p>Configures the time at which the ASIC auto resets if the <span style=\" font-weight:700;\">Veto Reset(Take Event)</span> signal is not asserted.  </p><p>Inversely related to DAC voltage, not linear; Higher Voltage -&gt; Quicker reset.  </p></body></html>", None))
-#endif // QT_CONFIG(tooltip)
-        self.label_psd_auto_veto_dac_2.setText(QCoreApplication.translate("Widget_Chipboard", u"Multiplicity Offset", None))
-        self.text_multiplicity_offset_dac.setInputMask(QCoreApplication.translate("Widget_Chipboard", u"0.00 V", None))
-        self.text_multiplicity_offset_dac.setText(QCoreApplication.translate("Widget_Chipboard", u"0.0 V", None))
-        self.comboBox_chipboard_mode.setItemText(0, QCoreApplication.translate("Widget_Chipboard", u"Disabled", None))
-        self.comboBox_chipboard_mode.setItemText(1, QCoreApplication.translate("Widget_Chipboard", u"Enabled", None))
 
         self.groupBox_delays.setTitle(QCoreApplication.translate("Widget_Chipboard", u"Delays", None))
         self.label_15.setText(QCoreApplication.translate("Widget_Chipboard", u"Channel", None))
@@ -1184,14 +1255,15 @@ class Ui_Widget_Chipboard(object):
         self.qb_delay_configure.setText(QCoreApplication.translate("Widget_Chipboard", u"Configure Delays", None))
         self.qb_delay_reset.setText(QCoreApplication.translate("Widget_Chipboard", u"Reset Delays", None))
         self.qrb_control_all.setText(QCoreApplication.translate("Widget_Chipboard", u"Control All Delays", None))
+        self.groupBox_3.setTitle(QCoreApplication.translate("Widget_Chipboard", u"Misc Options", None))
 #if QT_CONFIG(tooltip)
-        self.horizontalSlider_multiplicity_offset_dac.setToolTip(QCoreApplication.translate("Widget_Chipboard", u"Voltage Slider for PSD Delay DAC A", None))
+        self.label_psd_auto_veto_dac_2.setToolTip("")
 #endif // QT_CONFIG(tooltip)
+        self.label_psd_auto_veto_dac_2.setText(QCoreApplication.translate("Widget_Chipboard", u"Multiplicity Offset", None))
 #if QT_CONFIG(tooltip)
-        self.label_post_acq.setToolTip(QCoreApplication.translate("Widget_Chipboard", u"<html><head/><body><p>This lets the user execute a data processing script after the data acquisition thread finishes acquisition. A new process will be executed of the program at the path specifed here. </p><p><span style=\" font-weight:700;\">$LAST_ACQ</span> can be used to pass the timestamped name of the last data acquisition. </p><p><br/></p></body></html>", None))
+        self.horizontalSlider_multiplicity_offset_dac.setToolTip(QCoreApplication.translate("Widget_Chipboard", u"<html><head/><body><p>Voltage Slider for Multiplicity Offset</p><p><br/></p></body></html>", None))
 #endif // QT_CONFIG(tooltip)
-        self.label_post_acq.setText(QCoreApplication.translate("Widget_Chipboard", u"Post Acquisition Script:", None))
-        self.lineEdit_post_ack.setPlaceholderText(QCoreApplication.translate("Widget_Chipboard", u"/path/to/script $LAST_ACQ", None))
-        self.pushButton_post_acq.setText(QCoreApplication.translate("Widget_Chipboard", u"Browse", None))
+        self.text_multiplicity_offset_dac.setInputMask(QCoreApplication.translate("Widget_Chipboard", u"0.00 V", None))
+        self.text_multiplicity_offset_dac.setText(QCoreApplication.translate("Widget_Chipboard", u"0.0 V", None))
     # retranslateUi
 

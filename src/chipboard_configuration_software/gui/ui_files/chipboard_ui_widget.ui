@@ -6,38 +6,187 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>862</width>
-    <height>727</height>
+    <width>953</width>
+    <height>622</height>
    </rect>
   </property>
   <property name="windowTitle">
    <string>Form</string>
   </property>
   <layout class="QGridLayout" name="gridLayout">
-   <item row="2" column="1">
-    <widget class="QLabel" name="label">
-     <property name="text">
-      <string>Acquisition Mode</string>
+   <item row="3" column="4">
+    <widget class="QGroupBox" name="groupBox_2">
+     <property name="title">
+      <string>Data Collection</string>
      </property>
+     <layout class="QGridLayout" name="gridLayout_3">
+      <item row="1" column="0">
+       <widget class="QLabel" name="label">
+        <property name="text">
+         <string>Acquisition Mode:</string>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="3">
+       <widget class="QLabel" name="label_8">
+        <property name="text">
+         <string>Status: </string>
+        </property>
+        <property name="alignment">
+         <set>Qt::AlignmentFlag::AlignRight|Qt::AlignmentFlag::AlignTrailing|Qt::AlignmentFlag::AlignVCenter</set>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="1">
+       <widget class="QComboBox" name="comboBox_chipboard_mode">
+        <item>
+         <property name="text">
+          <string>Disabled</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Enabled</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="2" column="0">
+       <widget class="QPushButton" name="pushButton_open_adc_plots">
+        <property name="text">
+         <string>Open ADC Plots</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0" colspan="4">
+       <layout class="QHBoxLayout" name="horizontalLayout_2">
+        <item>
+         <widget class="QLabel" name="label_post_acq">
+          <property name="toolTip">
+           <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This lets the user execute a data processing script after the data acquisition thread finishes acquisition. A new process will be executed of the program at the path specifed here. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;$LAST_ACQ&lt;/span&gt; can be used to pass the timestamped name of the last data acquisition. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+          </property>
+          <property name="text">
+           <string>Post Acquisition Script:</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QLineEdit" name="lineEdit_post_ack">
+          <property name="font">
+           <font>
+            <pointsize>13</pointsize>
+           </font>
+          </property>
+          <property name="placeholderText">
+           <string>/path/to/script $LAST_ACQ</string>
+          </property>
+         </widget>
+        </item>
+        <item>
+         <widget class="QToolButton" name="pushButton_post_acq">
+          <property name="text">
+           <string>...</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
+      </item>
+      <item row="2" column="3">
+       <widget class="QLabel" name="label_event_counter">
+        <property name="minimumSize">
+         <size>
+          <width>100</width>
+          <height>0</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+       </widget>
+      </item>
+      <item row="1" column="4">
+       <widget class="QLabel" name="label_acq_status_led">
+        <property name="maximumSize">
+         <size>
+          <width>20</width>
+          <height>20</height>
+         </size>
+        </property>
+        <property name="text">
+         <string/>
+        </property>
+        <property name="pixmap">
+         <pixmap resource="resources.qrc">:/icons/blue-led-on.png</pixmap>
+        </property>
+        <property name="scaledContents">
+         <bool>true</bool>
+        </property>
+       </widget>
+      </item>
+     </layout>
     </widget>
    </item>
-   <item row="4" column="1" colspan="2">
-    <widget class="QPushButton" name="pushButton">
-     <property name="text">
-      <string>Configure Chipboard Settings</string>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="0" rowspan="4">
+   <item row="0" column="4">
     <widget class="QGroupBox" name="groupBox">
      <property name="title">
       <string>Multiplexers</string>
      </property>
      <layout class="QGridLayout" name="gridLayout_2">
+      <item row="2" column="0">
+       <widget class="QLabel" name="label_4">
+        <property name="text">
+         <string>INTX Output</string>
+        </property>
+       </widget>
+      </item>
+      <item row="5" column="0">
+       <widget class="QLabel" name="label_take_event_mux">
+        <property name="text">
+         <string>Take Event Signal</string>
+        </property>
+       </widget>
+      </item>
+      <item row="6" column="3">
+       <widget class="QComboBox" name="comboBox_timestamp_clock_input">
+        <item>
+         <property name="text">
+          <string>Internal</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>External</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="6" column="0">
+       <widget class="QLabel" name="label_2">
+        <property name="text">
+         <string>Timestamp Clock</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="3">
+       <widget class="QComboBox" name="comboBox_pre_amp_mux">
+        <item>
+         <property name="text">
+          <string>Disabled</string>
+         </property>
+        </item>
+       </widget>
+      </item>
       <item row="1" column="0">
        <widget class="QLabel" name="label_3">
         <property name="text">
          <string>OR Output</string>
+        </property>
+       </widget>
+      </item>
+      <item row="4" column="0">
+       <widget class="QLabel" name="label_6">
+        <property name="text">
+         <string>Pre Amp MUX Output</string>
         </property>
        </widget>
       </item>
@@ -51,29 +200,6 @@
         </property>
        </widget>
       </item>
-      <item row="2" column="0">
-       <widget class="QLabel" name="label_4">
-        <property name="text">
-         <string>INTX Output</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="0">
-       <widget class="QLabel" name="label_6">
-        <property name="text">
-         <string>Pre Amp MUX Output</string>
-        </property>
-       </widget>
-      </item>
-      <item row="4" column="3">
-       <widget class="QComboBox" name="comboBox_pre_amp_mux">
-        <item>
-         <property name="text">
-          <string>Disabled</string>
-         </property>
-        </item>
-       </widget>
-      </item>
       <item row="2" column="3">
        <widget class="QComboBox" name="comboBox_intx_mux">
         <item>
@@ -84,6 +210,30 @@
         <item>
          <property name="text">
           <string>PSD 1</string>
+         </property>
+        </item>
+       </widget>
+      </item>
+      <item row="5" column="3">
+       <widget class="QComboBox" name="comboBox_take_event_input">
+        <item>
+         <property name="text">
+          <string>External</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Internal: 500 ns</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Internal: 1 us</string>
+         </property>
+        </item>
+        <item>
+         <property name="text">
+          <string>Internal: 2 us</string>
          </property>
         </item>
        </widget>
@@ -129,80 +279,7 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="1">
-    <widget class="QLabel" name="label_psd_auto_veto_dac_2">
-     <property name="toolTip">
-      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;Auto Veto Time: &lt;/span&gt;&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;p&gt;Configures the time at which the ASIC auto resets if the &lt;span style=&quot; font-weight:700;&quot;&gt;Veto Reset(Take Event)&lt;/span&gt; signal is not asserted.  &lt;/p&gt;&lt;p&gt;Inversely related to DAC voltage, not linear; Higher Voltage -&amp;gt; Quicker reset.  &lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-     </property>
-     <property name="text">
-      <string>Multiplicity Offset</string>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-    </widget>
-   </item>
-   <item row="1" column="3">
-    <widget class="QLineEdit" name="text_multiplicity_offset_dac">
-     <property name="sizePolicy">
-      <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
-       <horstretch>0</horstretch>
-       <verstretch>0</verstretch>
-      </sizepolicy>
-     </property>
-     <property name="minimumSize">
-      <size>
-       <width>21</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="maximumSize">
-      <size>
-       <width>50</width>
-       <height>16777215</height>
-      </size>
-     </property>
-     <property name="baseSize">
-      <size>
-       <width>30</width>
-       <height>0</height>
-      </size>
-     </property>
-     <property name="inputMask">
-      <string>0.00 V</string>
-     </property>
-     <property name="text">
-      <string>0.0 V</string>
-     </property>
-     <property name="maxLength">
-      <number>6</number>
-     </property>
-     <property name="cursorPosition">
-      <number>6</number>
-     </property>
-     <property name="alignment">
-      <set>Qt::AlignmentFlag::AlignCenter</set>
-     </property>
-     <property name="clearButtonEnabled">
-      <bool>false</bool>
-     </property>
-    </widget>
-   </item>
-   <item row="2" column="2">
-    <widget class="QComboBox" name="comboBox_chipboard_mode">
-     <item>
-      <property name="text">
-       <string>Disabled</string>
-      </property>
-     </item>
-     <item>
-      <property name="text">
-       <string>Enabled</string>
-      </property>
-     </item>
-    </widget>
-   </item>
-   <item row="0" column="0" colspan="4">
+   <item row="0" column="0" rowspan="4" colspan="4">
     <widget class="QGroupBox" name="groupBox_delays">
      <property name="minimumSize">
       <size>
@@ -2495,69 +2572,128 @@
      </layout>
     </widget>
    </item>
-   <item row="1" column="2">
-    <widget class="QSlider" name="horizontalSlider_multiplicity_offset_dac">
-     <property name="toolTip">
-      <string>Voltage Slider for PSD Delay DAC A</string>
+   <item row="1" column="4" rowspan="2">
+    <widget class="QGroupBox" name="groupBox_3">
+     <property name="title">
+      <string>Misc Options</string>
      </property>
-     <property name="maximum">
-      <number>1023</number>
-     </property>
-     <property name="singleStep">
-      <number>10</number>
-     </property>
-     <property name="pageStep">
-      <number>128</number>
-     </property>
-     <property name="orientation">
-      <enum>Qt::Orientation::Horizontal</enum>
-     </property>
-     <property name="invertedControls">
-      <bool>false</bool>
-     </property>
-     <property name="tickPosition">
-      <enum>QSlider::TickPosition::TicksBelow</enum>
-     </property>
-     <property name="tickInterval">
-      <number>128</number>
-     </property>
+     <widget class="QLabel" name="label_psd_auto_veto_dac_2">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>108</width>
+        <height>24</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string/>
+      </property>
+      <property name="text">
+       <string>Multiplicity Offset</string>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+     </widget>
+     <widget class="QSlider" name="horizontalSlider_multiplicity_offset_dac">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>70</y>
+        <width>121</width>
+        <height>27</height>
+       </rect>
+      </property>
+      <property name="toolTip">
+       <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;Voltage Slider for Multiplicity Offset&lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+      </property>
+      <property name="maximum">
+       <number>1023</number>
+      </property>
+      <property name="singleStep">
+       <number>10</number>
+      </property>
+      <property name="pageStep">
+       <number>128</number>
+      </property>
+      <property name="orientation">
+       <enum>Qt::Orientation::Horizontal</enum>
+      </property>
+      <property name="invertedControls">
+       <bool>false</bool>
+      </property>
+      <property name="tickPosition">
+       <enum>QSlider::TickPosition::TicksBelow</enum>
+      </property>
+      <property name="tickInterval">
+       <number>128</number>
+      </property>
+     </widget>
+     <widget class="QLineEdit" name="text_multiplicity_offset_dac">
+      <property name="enabled">
+       <bool>false</bool>
+      </property>
+      <property name="geometry">
+       <rect>
+        <x>140</x>
+        <y>70</y>
+        <width>50</width>
+        <height>21</height>
+       </rect>
+      </property>
+      <property name="sizePolicy">
+       <sizepolicy hsizetype="MinimumExpanding" vsizetype="Fixed">
+        <horstretch>0</horstretch>
+        <verstretch>0</verstretch>
+       </sizepolicy>
+      </property>
+      <property name="minimumSize">
+       <size>
+        <width>21</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="maximumSize">
+       <size>
+        <width>50</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="baseSize">
+       <size>
+        <width>30</width>
+        <height>0</height>
+       </size>
+      </property>
+      <property name="inputMask">
+       <string>0.00 V</string>
+      </property>
+      <property name="text">
+       <string>0.0 V</string>
+      </property>
+      <property name="maxLength">
+       <number>6</number>
+      </property>
+      <property name="cursorPosition">
+       <number>6</number>
+      </property>
+      <property name="alignment">
+       <set>Qt::AlignmentFlag::AlignCenter</set>
+      </property>
+      <property name="clearButtonEnabled">
+       <bool>false</bool>
+      </property>
+     </widget>
     </widget>
-   </item>
-   <item row="3" column="1" colspan="3">
-    <layout class="QHBoxLayout" name="horizontalLayout_2">
-     <item>
-      <widget class="QLabel" name="label_post_acq">
-       <property name="toolTip">
-        <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p&gt;This lets the user execute a data processing script after the data acquisition thread finishes acquisition. A new process will be executed of the program at the path specifed here. &lt;/p&gt;&lt;p&gt;&lt;span style=&quot; font-weight:700;&quot;&gt;$LAST_ACQ&lt;/span&gt; can be used to pass the timestamped name of the last data acquisition. &lt;/p&gt;&lt;p&gt;&lt;br/&gt;&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
-       </property>
-       <property name="text">
-        <string>Post Acquisition Script:</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QLineEdit" name="lineEdit_post_ack">
-       <property name="font">
-        <font>
-         <pointsize>13</pointsize>
-        </font>
-       </property>
-       <property name="placeholderText">
-        <string>/path/to/script $LAST_ACQ</string>
-       </property>
-      </widget>
-     </item>
-     <item>
-      <widget class="QPushButton" name="pushButton_post_acq">
-       <property name="text">
-        <string>Browse</string>
-       </property>
-      </widget>
-     </item>
-    </layout>
    </item>
   </layout>
  </widget>
- <resources/>
+ <resources>
+  <include location="resources.qrc"/>
+ </resources>
  <connections/>
 </ui>

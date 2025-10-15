@@ -8,9 +8,10 @@ from functools import partial
 import shlex
 from typing import get_args, cast, List
 
-from PySide6.QtCore import Slot, Qt, QObject, Signal
-from PySide6.QtGui import QIntValidator
+from PySide6.QtCore import Slot, Qt, QObject, Signal, QTimer
+from PySide6.QtGui import QIntValidator, QPixmap
 from PySide6.QtWidgets import QCheckBox, QComboBox, QSlider, QLineEdit, QWidget, QFileDialog
+from serial import PortNotOpenError
 
 from chipboard_configuration_software.command_generator.commands.configuration_types.chipboard_config_types import \
     ChipboardConfigurationDict, DelayConfigurationDict
@@ -28,6 +29,11 @@ from chipboard_configuration_software.uart_link.middleware import UartMiddleware
 
 logger = logging.getLogger(__name__)
 
+ICON_GREEN_LED = ":/icons/green-led-on.png"
+ICON_GREEN_LED_DIM = ":/icons/green-led-on-dim.png"
+ICON_BLUE_LED = ":/icons/blue-led-on.png"
+ICON_RED_LED = ":/icons/red-led-on.png"
+
 
 class ChipboardController(QWidget):
     status_message = Signal(str)
@@ -35,6 +41,7 @@ class ChipboardController(QWidget):
     def __init__(self, parent_ui, ui: Ui_Widget_Chipboard, config_handler: ConfigurationManager,
                  uart_link: UartMiddleware):
         super().__init__()
+        self._led_current_state = ICON_BLUE_LED
         self.parent_ui = parent_ui
         self.ui = ui
         self.chipboard_config: ChipboardConfigurationDict = config_handler.current_chipboard_config
@@ -58,9 +65,23 @@ class ChipboardController(QWidget):
             2: "cfd",
         }
 
+        self.take_event_mux_cmd_index_map = {
+            0: "external",
+            1: "500 ns",
+            2: "1 us",
+            3: "2 us",
+        }
+
+        self.timestamp_mux_cmd_index_map = {
+            1: "external",
+            0: "internal"
+        }
+
         self._connect_delay_signals()
         self._connect_mux_signals()
         self._connect_misc_signals()
+
+        self.status_timer = None
 
         self.update_ui()
         logger.info("Chipboard Settings GUI signals connected!")
@@ -97,6 +118,30 @@ class ChipboardController(QWidget):
         self.ui.qb_delay_reset.pressed.connect(self._on_reset_delays_clicked)
         self.ui.qb_delay_configure.pressed.connect(self._on_delay_configure_clicked)
         self.ui.qrb_control_all.toggled.connect(self._on_delay_all_changed)
+
+    def start_status_timer(self, refresh_time_ms=500):
+        self.status_timer = QTimer()
+        self.status_timer.timeout.connect(self._update_status_led)
+        self._led_current_state = ICON_BLUE_LED
+        self.status_timer.start(refresh_time_ms)
+
+    def stop_status_timer(self):
+        self.status_timer.stop()
+        self.status_timer = None
+        self.ui.label_acq_status_led.setPixmap(QPixmap(ICON_BLUE_LED))
+        self._led_current_state = ICON_BLUE_LED
+
+    def _update_status_led(self):
+        self._led_current_state = self._status_led_green_toggle(self._led_current_state)
+
+    def _status_led_green_toggle(self, current_state: str):
+
+        if current_state == ICON_GREEN_LED:
+            self.ui.label_acq_status_led.setPixmap(QPixmap(ICON_GREEN_LED_DIM))
+            return ICON_GREEN_LED_DIM
+        else:
+            self.ui.label_acq_status_led.setPixmap(QPixmap(ICON_GREEN_LED))
+            return ICON_GREEN_LED
 
     @Slot()
     def _on_delay_configure_clicked(self):
@@ -162,6 +207,8 @@ class ChipboardController(QWidget):
         self.ui.comboBox_or_mux.currentIndexChanged.connect(self._on_or_mux_changed)
         self.ui.comboBox_intx_mux.currentIndexChanged.connect(self._on_intx_mux_changed)
         self.ui.comboBox_psd_cfd_mux.currentIndexChanged.connect(self._on_psd_cfd_mux_changed)
+        self.ui.comboBox_take_event_input.currentIndexChanged.connect(self._on_take_event_mux_changed)
+        self.ui.comboBox_timestamp_clock_input.currentIndexChanged.connect(self._on_timestamp_mux_changed)
 
     @Slot(str)
     def _on_pre_amp_mux_changed(self, value):
@@ -175,6 +222,18 @@ class ChipboardController(QWidget):
         """Slot for or mux """
         logger.debug(f"or mux changed with value {value}, cmd {self.mux_cmd_index_map[value]}")
         self.chipboard_config["mux"]["or_output"] = self.mux_cmd_index_map[value]
+
+    @Slot(int)
+    def _on_take_event_mux_changed(self, value):
+        """Slot for or mux """
+        logger.debug(f"take mux changed with value {value}, cmd {self.take_event_mux_cmd_index_map[value]}")
+        self.chipboard_config["mux"]["take_event_input"] = self.take_event_mux_cmd_index_map[value]
+
+    @Slot(int)
+    def _on_timestamp_mux_changed(self, value):
+        """Slot for or mux """
+        logger.debug(f"take mux changed with value {value}, cmd {self.timestamp_mux_cmd_index_map[value]}")
+        self.chipboard_config["mux"]["timestamp_input"] = self.timestamp_mux_cmd_index_map[value]
 
     @Slot(int)
     def _on_intx_mux_changed(self, value):
@@ -219,6 +278,7 @@ class ChipboardController(QWidget):
 
         self.ui.comboBox_chipboard_mode.currentTextChanged.connect(self._on_chipboard_mode_changed)
         self.ui.pushButton_post_acq.pressed.connect(self._on_script_browse_clicked)
+        self.ui.pushButton_open_adc_plots.pressed.connect(self.parent_ui.show_adc_plot_window)
         pass
 
     @Slot(str)
@@ -240,7 +300,9 @@ class ChipboardController(QWidget):
             self.parent_ui.configuration_thread.finished.connect(self._start_data_acquisition)
 
             # Start config thread
+
             self.parent_ui.configuration_thread.start()
+            self.start_status_timer(refresh_time_ms=500)
 
         else:
             self.parent_ui.daq_stop.set()
@@ -251,9 +313,10 @@ class ChipboardController(QWidget):
                 config_handler=self.config_handler,
                 uart_link=self.uart_link
             )
+
             self.parent_ui.configuration_thread.finished.connect(self._post_acquisition_handler)
             self.parent_ui.configuration_thread.start()
-
+            self.stop_status_timer()
 
     @Slot()
     def _start_data_acquisition(self):
@@ -265,7 +328,8 @@ class ChipboardController(QWidget):
             os.mkdir(output_dir)
 
         self.last_binary_file_path = f"{output_dir}/output_events_{time_stamp}.bin"
-        self.config_handler.save_current_configuration(configuration_file_path=f'{output_dir}/configuration_{time_stamp}.json')
+        self.config_handler.save_current_configuration(
+            configuration_file_path=f'{output_dir}/configuration_{time_stamp}.json')
         self.parent_ui.daq_stop = threading.Event()
         self.parent_ui.daq_thread = DataAcquisitionThread(
             serial_link=self.uart_link,
@@ -347,3 +411,9 @@ class ChipboardController(QWidget):
         except Exception as e:
             logger.exception(f"Failed to launch post-acquisition program: {e}")
             self.status_message.emit("❌ Error launching post-acquisition script! See log for details.")
+
+    def status_led_red(self):
+
+        self.status_timer.stop()
+        self.ui.label_acq_status_led.setPixmap(QPixmap(ICON_RED_LED))
+        self._led_current_state = ICON_RED_LED

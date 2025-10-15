@@ -80,7 +80,7 @@
    <item row="1" column="0" colspan="3">
     <layout class="QVBoxLayout" name="verticalLayout_3">
      <item>
-      <widget class="GraphicsLayoutWidget" name="adc_plot_layout_widget" native="true">
+      <widget class="DockArea" name="adc_plot_layout_widget" native="true">
        <property name="sizePolicy">
         <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
          <horstretch>0</horstretch>
@@ -102,9 +102,9 @@
  </widget>
  <customwidgets>
   <customwidget>
-   <class>GraphicsLayoutWidget</class>
+   <class>DockArea</class>
    <extends>QWidget</extends>
-   <header>pyqtgraph</header>
+   <header>pyqtgraph.dockarea</header>
    <container>1</container>
   </customwidget>
  </customwidgets>

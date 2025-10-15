@@ -156,19 +156,8 @@ class CfdController(QWidget):
         self.cfd_config["common_settings"]["nowlin_delay"] = delay
 
     def _update_lockout_dac_comboBox(self, mode: LockoutMode = "short"):
-        lock_out_dac_map = {"short": ["110 ns",
-                                      '220 ns',
-                                      "330 ns", '440 ns', '550 ns', '660 ns', '770 ns', '880 ns', '990 ns', '1.1 us',
-                                      '1.2 us', '1.3 us', '1.4 us', '1.5 us', '1.6 us', '1.8 us', '1.9 us', '2.0 us',
-                                      '2.1 us', '2.2 us', '2.3 us', '2.4 us', '2.5 us', '2.6 us', '2.8 us', '2.9 us',
-                                      '3.0 us', '3.1 us', '3.2 us', '3.3 us', '3.4 us'],
-                            "long": ["535 ns",
-                                     '1.1 us',
-                                     '1.6 us',
-                                     '2.1 us', '2.7 us', '3.2 us', '3.7 us', '4.3 us', '4.8 us', '5.3 us', '5.9 us',
-                                     '6.4 us', '7.0 us', '7.5 us', '8.0 us', '8.6 us', '9.1 us', '9.6 us', '10.2 us',
-                                     '10.7 us', '11.2 us', '11.8 us', '12.3 us', '12.8 us', '13.4 us', '13.9 us',
-                                     '14.4 us', '15.0 us', '15.5 us', '16.1 us', '16.6 us'],
+        lock_out_dac_map = {"short": ['3.4 us', '1.7 us', '1.1 us', '855 ns', '684 ns', '570 ns', '489 ns', '428 ns', '380 ns', '342 ns', '311 ns', '285 ns', '263 ns', '244 ns', '228 ns', '214 ns', '201 ns', '190 ns', '180 ns', '171 ns', '163 ns', '156 ns', '149 ns', '143 ns', '137 ns', '132 ns', '127 ns', '122 ns', '118 ns', '114 ns', '110 ns'],
+                            "long": ['16.6 us', '8.3 us', '5.5 us', '4.2 us', '3.3 us', '2.8 us', '2.4 us', '2.1 us', '1.8 us', '1.7 us', '1.5 us', '1.4 us', '1.3 us', '1.2 us', '1.1 us', '1.0 us', '979 ns', '925 ns', '876 ns', '832 ns', '793 ns', '757 ns', '724 ns', '694 ns', '666 ns', '640 ns', '616 ns', '594 ns', '574 ns', '555 ns', '537 ns'],
                             "disabled": []
                             }
 
@@ -332,7 +321,11 @@ class CfdController(QWidget):
     def _on_leading_edge_dac_slider_changed(self, value):
         """Slot for leading edge dac slider """
         logger.debug(f"leading edge dac slider clicked with value {value}")
-        self.leading_edge_dac_text[int(self.current_leading_edge_dac_slider_channel)].setText(str(value))
+
+        current_channel = self.current_leading_edge_dac_slider_channel
+        self.leading_edge_dac_text[int(current_channel)].setText(str(value))
+
+        self.cfd_config["individual_channel_settings"][current_channel]["leading_edge_DAC_value"] = value
 
     @Slot(str)
     def _on_leading_edge_dac_edited(self, channel, value):

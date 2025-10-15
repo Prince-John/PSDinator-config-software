@@ -125,7 +125,9 @@ def generate_default_configuration() -> dict:
                                    mux={"preamp_output": "disabled",
                                         "or_output": "cfd",
                                         "intx_output": "psd_0",
-                                        "psd_cfd_output": "psd_0"}
+                                        "psd_cfd_output": "psd_0",
+                                        "take_event_input": "external",
+                                        "timestamp_input": "internal"}
                                    )
 
                       }
@@ -225,7 +227,9 @@ class ConfigurationManager:
             "mux.preamp_output",
             "mux.or_output",
             "mux.intx_output",
-            "mux.psd_cfd_output"
+            "mux.psd_cfd_output",
+            "mux.take_event_input"
+            "mux.timestamp_input"
 
         }
         if os.path.isfile(auto_save_file_path):
