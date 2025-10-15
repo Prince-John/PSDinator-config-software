@@ -19,7 +19,7 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QGridLayout, QHBoxLayout
     QLabel, QPushButton, QSizePolicy, QVBoxLayout,
     QWidget)
 
-from pyqtgraph import GraphicsLayoutWidget
+from pyqtgraph.dockarea import DockArea
 
 class Ui_adc_plots(object):
     def setupUi(self, adc_plots):
@@ -76,7 +76,7 @@ class Ui_adc_plots(object):
 
         self.verticalLayout_3 = QVBoxLayout()
         self.verticalLayout_3.setObjectName(u"verticalLayout_3")
-        self.adc_plot_layout_widget = GraphicsLayoutWidget(adc_plots)
+        self.adc_plot_layout_widget = DockArea(adc_plots)
         self.adc_plot_layout_widget.setObjectName(u"adc_plot_layout_widget")
         sizePolicy = QSizePolicy(QSizePolicy.Policy.Expanding, QSizePolicy.Policy.Expanding)
         sizePolicy.setHorizontalStretch(0)

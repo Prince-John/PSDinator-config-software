@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="icons">
+    <file alias="green-led-on.png">icons/green-led-on.png</file>
+    <file alias="blue-led-on.png">icons/blue-led-on.png</file>
+    <file alias="green-led-on-dim.png">icons/green-led-on-dim.png</file>
+    <file alias="red-led-on.png">icons/led-red-on.png</file>
+  </qresource>
+</RCC>

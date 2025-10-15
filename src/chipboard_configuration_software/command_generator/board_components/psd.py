@@ -337,9 +337,11 @@ This implies that both edges of the CFD pulse must possess very
 low jitter. Integrator delays are still relative to the rising edge of the
 CFD pulse, just as in PSD3.'
 
+0-250ns
+
     :return:  1 bit vtc range bitstring. The return is of type int, only 1 LSB is valid.
     """
-    vtc_range_map = {"250 ns": 1, "2 us": 0}
+    vtc_range_map = {"250 ns": 0, "2 us": 1}
 
     if vtc_range not in vtc_range_map:
         raise ValueError("not a valid vtc range")

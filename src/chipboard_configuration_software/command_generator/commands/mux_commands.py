@@ -25,7 +25,7 @@ def generate_preamp_mux_subcommands(mux_config):
     try:
         mux_word = mux.generate_mux_word(int(mux_config["preamp_output"]), True)
     except ValueError as e:
-        #print(f"Could not parse channel, pre amp mux disabled. ")
+        # print(f"Could not parse channel, pre amp mux disabled. ")
         mux_word = mux.generate_mux_word(0, False)
 
     mux_command_string = f'{mux_command_prefix}{preamp_mux_prefix}{mux_word:02X}\0'
@@ -78,6 +78,34 @@ def generate_psd_cfd_mux_subcommands(mux_config):
     return mux_command_string
 
 
+def generate_take_event_mux_subcommands(mux_config):
+    prefix = "TEV:"
+    take_event_mux_map = {"external": 0,
+                          "500 ns": 1,
+                          "1 us": 2,
+                          "2 us": 3}
+    mux_command_string = ""
+
+    if mux_config["take_event_input"] in take_event_mux_map:
+        mux_word = take_event_mux_map[mux_config["take_event_input"]]
+        mux_command_string = f'{mux_command_prefix}{prefix}{mux_word:02X}\0'
+
+    return mux_command_string
+
+
+def generate_timestamp_mux_subcommands(mux_config):
+    prefix = "TSP:"
+    take_event_mux_map = {"internal": 1,
+                          "external": 0}
+    mux_command_string = ""
+
+    if mux_config["timestamp_input"] in take_event_mux_map:
+        mux_word = take_event_mux_map[mux_config["timestamp_input"]]
+        mux_command_string = f'{mux_command_prefix}{prefix}{mux_word:02X}\0'
+
+    return mux_command_string
+
+
 def generate_mux_commands(mux_config: MuxConfigurationDict) -> List[str]:
     mux_commands = []
 
@@ -96,5 +124,11 @@ def generate_mux_commands(mux_config: MuxConfigurationDict) -> List[str]:
 
             case "psd_cfd_output":
                 mux_commands.append(generate_psd_cfd_mux_subcommands(mux_config))
+
+            case "take_event_input":
+                mux_commands.append(generate_take_event_mux_subcommands(mux_config))
+
+            case "timestamp_input":
+                mux_commands.append(generate_timestamp_mux_subcommands(mux_config))
 
     return mux_commands

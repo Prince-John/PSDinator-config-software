@@ -6,6 +6,8 @@ __pycache__
 poetry.lock
 dist/
 
+docs/
+
 gui.log
 autosave_config.json
 /configuration_*.json

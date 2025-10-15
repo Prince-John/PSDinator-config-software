@@ -20,6 +20,12 @@ from chipboard_configuration_software.gui.background_threads.decoded_pipe_reader
 from chipboard_configuration_software.gui.configuration_helper import ConfigurationManager
 from chipboard_configuration_software.gui.ui_files.adc_plot_ui_widget import Ui_adc_plots
 
+import pyqtgraph as pg
+from pyqtgraph.console import ConsoleWidget
+from pyqtgraph.dockarea.Dock import Dock
+from pyqtgraph.dockarea.DockArea import DockArea
+from pyqtgraph.Qt import QtWidgets
+
 logger = logging.getLogger(__name__)
 
 ch: QColor
@@ -56,72 +62,63 @@ class ADCPlotsController(QWidget):
         self._setup_fifo_and_thread()
         self._setup_plot_area()
         self._connect_signals()
+        self.hist_timer = QTimer(self)
+        self.start_histogram_timer()
 
         logger.info("ADC Plots GUI initialized and ready.")
 
     def _setup_fifo_and_thread(self):
         create_fifo("/tmp/daq_pipe")
         max_counts = int(self.ui.comboBox_event_count.currentText())
-        self.decoded_reader_thread = DecodePipeReaderThread("/tmp/daq_pipe", max_points=max_counts)
+        self.decoded_reader_thread = DecodePipeReaderThread("/tmp/daq_pipe", max_points=1000)
         self.decoded_reader_thread.start()
 
-    def _get_or_create_bar(self, adc_type: str, ch: int) -> pg.BarGraphItem:
-        if ch in self.bar_items[adc_type]:
-            return self.bar_items[adc_type][ch]
-
-        color = CHANNEL_COLORS[ch]
-        bar = pg.BarGraphItem(x=[], height=[], width=1, brush=color)
-        self.bar_items[adc_type][ch] = bar
-        self.plots[adc_type].addItem(bar)
-        self.legends[adc_type].addItem(bar, f"CH {ch}")
-        return bar
-
     def _setup_plot_area(self):
-        layout_widget: pg.GraphicsLayoutWidget = self.ui.adc_plot_layout_widget
+        area: pg.dockarea.DockArea = self.ui.adc_plot_layout_widget
 
-        font = QFont()
-        font.setPointSize(14)
+        dock_A = Dock("Subchannel A", size=(500, 400))
+        dock_B = Dock("Subchannel B", size=(500, 400))
+        dock_C = Dock("Subchannel C", size=(500, 400))
+        dock_T = Dock("TVC ", size=(500, 500))
+
+        docks = [dock_A, dock_B, dock_C, dock_T]
+
+        area.addDock(dock_A, 'top')
+        area.addDock(dock_B, 'bottom', dock_A)
+        area.addDock(dock_C, 'bottom', dock_B)
+        area.addDock(dock_T, 'bottom', dock_C)
 
         self.plots = {}
-        self.bar_items = {'a': {}, 'b': {}, 'c': {}, 't': {}}  # per-channel bar graphs
-        self.text_items = {}
+        self.curves = {"A": {}, "B": {}, "C": {}, "T": {}}
         self.legends = {}
 
-        for row, adc_type in enumerate(("a", "b", "c", "t")):
-            plot = layout_widget.addPlot(row=row, col=0)
-            plot.setTitle(f"ADC {adc_type.upper()}")
+        labels = ["A", "B", "C", "T"]
+
+        for dock, label in zip(docks, labels):
+            plot = pg.PlotWidget()
+            plot.setTitle(f"ADC {label}")
             plot.setLabel("left", "Count")
             plot.setLabel("bottom", "ADC Value")
-            plot.setXRange(-32768, 32767)
             plot.enableAutoRange("y", True)
+            plot.enableAutoRange("x", True)
             plot.setDownsampling(mode='peak')
             plot.setMouseEnabled(x=True, y=False)
-
-            # Create persistent text label (for peak/FWHM stats)
-            text_item = TextItem("", anchor=(0, 1), color='w')
-            text_item.setFont(font)
-            plot.addItem(text_item)
-
-            # Setup legend per ADC type
             legend = pg.LegendItem((80, 60), offset=(60, 20))
             legend.setParentItem(plot.graphicsItem())
-
-            # Save references
-            self.plots[adc_type] = plot
-            self.text_items[adc_type] = text_item
-            self.legends[adc_type] = legend
+            dock.addWidget(plot)
+            self.plots[label] = plot
+            self.legends[label] = legend
 
     def _connect_signals(self):
 
         for i in range(16):
             self.ui.comboBox_channel_selection.addItem(f"{i}")
 
-        options = np.logspace(2, 5, num=10, base=10)
+        options = [2 ** i for i in range(8, 16)]
 
         for i in options:
             self.ui.comboBox_event_count.addItem(f"{int(i)}")
 
-        self.decoded_reader_thread.histogram_ready.connect(self._on_histogram_ready)
         self.ui.button_clear_all.clicked.connect(self._on_clear_plots_clicked)
         self.ui.comboBox_event_count.currentTextChanged.connect(self._on_max_counts_changed)
         self.ui.comboBox_channel_selection.currentTextChanged.connect(self._on_channel_selection_changed)
@@ -130,6 +127,10 @@ class ADCPlotsController(QWidget):
         if config is None:
             config = self.chipboard_config
         pass
+
+    def start_histogram_timer(self, refresh_time_ms=150):
+        self.hist_timer.timeout.connect(self._update_histograms_from_buffer)
+        self.hist_timer.start(refresh_time_ms)
 
     def closeEvent(self, event):
         if self.decoded_reader_thread.isRunning():
@@ -140,35 +141,43 @@ class ADCPlotsController(QWidget):
             pass
         event.accept()
 
-    @Slot(int, str, np.ndarray, np.ndarray, float, float)
-    def _on_histogram_ready(self, channel, adc_type, bins, counts, peak, fwhm):
-        plot = self.plots[adc_type]
+    def update_histograms(self, updates):
+        """
+        updates: dict[int, dict[str, (counts, bin_edges)]]
+            Output from ChannelBuffers.get_hit_histograms()
+            Example:
+            {
+              0: {"A": (counts, bin_edges), "B": (...), ...},
+              3: {"A": (counts, bin_edges), ...}
+            }
+        """
+        for ch, adc_dict in updates.items():
+            for adc_label, (counts, bin_edges) in adc_dict.items():
+                # Compute step histogram points
+                x = bin_edges
+                y = counts
 
-        # Compute histogram centers
-        x = (bins[:-1] + bins[1:]) / 2
-        width = bins[1] - bins[0]
+                if ch not in self.curves[adc_label]:
+                    # Assign a distinct color per channel
+                    color = pg.intColor(ch, hues=16, values=1, maxValue=255, alpha=200)
+                    curve = pg.PlotCurveItem(x, y,
+                                             stepMode=True,
+                                             fillLevel=0,
+                                             brush=color,
+                                             pen=color,
+                                             )
+                    self.plots[adc_label].addItem(curve)
+                    self.curves[adc_label][ch] = curve
+                    self.legends[adc_label].addItem(curve, f'Ch: {ch}')
+                else:
+                    curve = self.curves[adc_label][ch]
+                    curve.setData(x, y, stepMode=True)
 
-        if self.selected_channel is None:
-            # All channels mode: plot this channel as an overlay
-            bar = self._get_or_create_bar(adc_type, channel)#TODO - make this return all 3 bar items in a channel
-            bar.setOpts(x=x, height=counts, width=width)
-        elif self.selected_channel == channel:
-            # Single-channel mode
-            # Clear other channels’ bars for this adc_type
-            for ch, bar in self.bar_items[adc_type].items():
-                bar.setOpts(x=[], height=[], width=1)
-
-            bar = self._get_or_create_bar(adc_type, channel)
-            bar.setOpts(x=x, height=counts, width=width)
-
-            label = self.text_items[adc_type]
-
-            label.setText(f"FWHM: {fwhm:.0f} codes \n ~ {fwhm*11:.1f} ps  \nPeak: {peak:.0f}")
-            label.setPos(peak + 2*fwhm, max(counts) * 0.50)
-
-        self.ui.label_status_adc.setText(
-            f"CH {channel} : ADC {adc_type.upper()} ({'All' if self.selected_channel is None else f'CH {self.selected_channel}'})")
-
+    def _update_histograms_from_buffer(self, lifetime_hits=False):
+        updates = self.decoded_reader_thread.np_buffers.get_hit_histograms(only_hits=True, lifetime_hits=lifetime_hits)
+        if updates:
+            self.update_histograms(updates)
+            self.decoded_reader_thread.np_buffers.reset_hits()
 
     @Slot()
     def _on_clear_plots_clicked(self):
@@ -177,13 +186,8 @@ class ADCPlotsController(QWidget):
         self.clear_plots()
 
     def clear_plots(self):
-        self.histogram_data = defaultdict(lambda: {'a': [], 'b': [], 'c': [], 't': []})
-        self.decoded_reader_thread.clear_histogram_data()
-        for adc_type in ('a', 'b', 'c', 't'):
-            for bar in self.bar_items[adc_type].values():
-                bar.setOpts(x=[], height=[], width=1)
-            self.text_items[adc_type].setText("")
-
+        self.decoded_reader_thread.np_buffers.clear_histograms()
+        self._update_histograms_from_buffer(lifetime_hits=True)
         self.ui.label_status_adc.setText("Plots cleared.")
 
     @Slot(str)
@@ -194,7 +198,7 @@ class ADCPlotsController(QWidget):
         self.decoded_reader_thread.set_histogram_counts(counts)
         self.clear_plots()
         self.ui.label_status_adc.setText(f"Histogram counts set to {counts}")
-    
+
     @Slot(str)
     def _on_channel_selection_changed(self, value):
         """Slot for channel selection """

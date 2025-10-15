@@ -23,6 +23,7 @@ from .ui_files.psd_ui_widget import Ui_Widget_Psd
 from .ui_files.cfd_ui_widget import Ui_Widget_Cfd
 from .ui_files.chipboard_ui_widget import Ui_Widget_Chipboard
 
+
 from .psd_ui_controller import PsdController
 from .cfd_ui_controller import CfdController
 from .chipboard_ui_controller import ChipboardController
@@ -185,12 +186,8 @@ class MainWindow(QtWidgets.QMainWindow, Ui_MainWindow):
         adc_ui = Ui_adc_plots()
         self.adc_plot_window = ADCPlotsController(self, adc_ui, self.config_handler)
 
-        # Set up the UI (important if you're not using `setupUi` inside controller)
-        #adc_ui.setupUi(self.adc_plot_window)
-
-        # Make it behave like a top-level window
         self.adc_plot_window.setWindowTitle("ADC Plot Viewer")
-        self.adc_plot_window.resize(800, 600)  # Optional: set initial size
+        #self.adc_plot_window.resize(800, 600)
         self.adc_plot_window.show()
 
     def get_chipboard_self_id(self):
