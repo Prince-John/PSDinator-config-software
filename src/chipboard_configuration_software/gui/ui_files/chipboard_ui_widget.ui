@@ -2598,7 +2598,7 @@
      </widget>
      <widget class="QSlider" name="horizontalSlider_multiplicity_offset_dac">
       <property name="enabled">
-       <bool>false</bool>
+       <bool>true</bool>
       </property>
       <property name="geometry">
        <rect>
