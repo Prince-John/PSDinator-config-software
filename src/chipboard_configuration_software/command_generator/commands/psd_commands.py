@@ -106,6 +106,10 @@ def generate_octal_dac_psd_subcommands(psd_octal_dac_config: OctalDacSettingsDic
                 auto_veto_reset = dac.generate_dac_word(2, float(psd_octal_dac_config["auto_veto_time"]))
                 dac_subcommands.append(f'{octal_dac_prefix}{auto_veto_reset:04X}\0')
 
+            case "multiplicity_offset":
+                multiplicity_offset = dac.generate_dac_word(1, float(psd_octal_dac_config["multiplicity_offset"]))
+                dac_subcommands.append(f'{octal_dac_prefix}{multiplicity_offset:04X}\0')
+
     return dac_subcommands
 
 
