@@ -279,7 +279,27 @@ class ChipboardController(QWidget):
         self.ui.comboBox_chipboard_mode.currentTextChanged.connect(self._on_chipboard_mode_changed)
         self.ui.pushButton_post_acq.pressed.connect(self._on_script_browse_clicked)
         self.ui.pushButton_open_adc_plots.pressed.connect(self.parent_ui.show_adc_plot_window)
-        pass
+        self.ui.horizontalSlider_multiplicity_offset_dac.valueChanged.connect(self._on_multiplicity_slider_changed)
+
+    @Slot(int)
+    def _on_multiplicity_slider_changed(self, value):
+        """Slot for multiplicity slider """
+        logger.debug(f"multiplicity slider changed with value {value}")
+        # self.ui.text_multiplicity_offset_dac.setText(str(value))
+        voltage = self._on_octal_dac_slider_valueChanged("text_multiplicity_offset_dac", value)
+        self.chipboard_config["psd"]["octal_dac_settings"]["multiplicity_offset"] = voltage
+
+    @Slot(int)
+    def _on_octal_dac_slider_valueChanged(self, text_object_name: str, value: int) -> str:
+        logger.debug(f"{text_object_name} Slider Value Changed to {value}")
+        line = getattr(self.ui, text_object_name)
+
+        voltage = (value / 1023) * 5.0
+
+        line.setText(f"{voltage:0.2f} V")
+        logger.debug(f"{text_object_name} text auto set to {voltage:0.2f} V")
+
+        return f"{voltage:0.2f}"
 
     @Slot(str)
     def _on_chipboard_mode_changed(self, mode):
