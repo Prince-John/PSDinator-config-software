@@ -20,7 +20,6 @@ from PySide6.QtWidgets import (QApplication, QComboBox, QFrame, QGridLayout,
     QLineEdit, QPushButton, QRadioButton, QSizePolicy,
     QSlider, QSpacerItem, QToolButton, QVBoxLayout,
     QWidget)
-
 from . import resources_rc
 
 class Ui_Widget_Chipboard(object):
@@ -1115,7 +1114,7 @@ class Ui_Widget_Chipboard(object):
         self.label_psd_auto_veto_dac_2.setAlignment(Qt.AlignmentFlag.AlignCenter)
         self.horizontalSlider_multiplicity_offset_dac = QSlider(self.groupBox_3)
         self.horizontalSlider_multiplicity_offset_dac.setObjectName(u"horizontalSlider_multiplicity_offset_dac")
-        self.horizontalSlider_multiplicity_offset_dac.setEnabled(False)
+        self.horizontalSlider_multiplicity_offset_dac.setEnabled(True)
         self.horizontalSlider_multiplicity_offset_dac.setGeometry(QRect(10, 70, 121, 27))
         self.horizontalSlider_multiplicity_offset_dac.setMaximum(1023)
         self.horizontalSlider_multiplicity_offset_dac.setSingleStep(10)

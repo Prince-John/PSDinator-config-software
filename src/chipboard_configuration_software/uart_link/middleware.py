@@ -3,7 +3,7 @@ import time
 
 import serial
 from serial.tools.list_ports import comports
-
+from threading import Lock
 from chipboard_configuration_software.uart_link.utils import print_with_bars
 
 # from utils import print_with_bars
@@ -33,6 +33,8 @@ class UartMiddleware:
         self.usb_location = None
         self.serial_handler = serial.Serial(baudrate=baudrate)
         self.available_ports = comports()
+        self.chipboard_mode = None
+        self.serial_port_lock = Lock()
 
     def get_available_devices(self, print_output: bool = True) -> list:
         """
@@ -60,6 +62,7 @@ class UartMiddleware:
             self.serial_handler.open()
             status = f"Connected to {device} at {self.serial_handler.baudrate} baud!"
             print(status)
+            self.chipboard_mode = "connected"
             return status
         else:
             raise IOError("Device is not available")
@@ -72,7 +75,9 @@ class UartMiddleware:
         self.serial_handler.write(byte_array)
         try:
             self.wait_ack()
+            self.chipboard_mode = "config"
         except (TimeoutError, CommandRejectedError) as e:
+
             raise ConnectionRefusedError(e)
 
     def wait_ack(self, timeout=0.5):
@@ -101,8 +106,8 @@ class UartMiddleware:
         buff = [ETX, NUL]
         byte_array = bytearray(buff)
         self.serial_handler.write(byte_array)
-
         self.wait_ack()
+        self.chipboard_mode = "connected"
 
     def send_CMD(self, message, command_string, dry_run=False):
         print("")
@@ -134,6 +139,46 @@ class UartMiddleware:
             if self.serial_handler.in_waiting:
                 return self.serial_handler.read(bytes_expected)
 
+    def read_until(self, expected: bytes = b"\x00", size: int | None = None) -> bytes:
+        """
+        Read from the UART until the 'expected' terminator sequence is found
+        (inclusive) or the underlying serial timeout is hit or 'size' bytes
+        have been read.
+        It relies on self.serial_handler.timeout for its timeout behavior.
+
+        :param expected: Terminator sequence, e.g., b"\\x00" for COBS packets.
+        :param size: Optional maximum number of bytes to read.
+        :return: Bytes read, possibly empty on timeout.
+        """
+
+        if not isinstance(expected, (bytes, bytearray)):
+            expected = bytes(expected)
+
+        terminator = expected
+        term_len = len(terminator)
+
+        buf = bytearray()
+
+        with self.serial_port_lock:
+            while True:
+                # If a max size is given and we hit it, stop
+                if size is not None and len(buf) >= size:
+                    break
+
+                chunk = self.serial_handler.read(1)
+
+                # Underlying serial timeout: pyserial returns b"" when its timeout hits
+                if not chunk:
+                    break
+
+                buf += chunk
+
+                # Stop once we see the terminator at the end
+                if term_len > 0 and buf.endswith(terminator):
+                    break
+
+        return bytes(buf)
+
     def cleanup(self) -> None:
         """
         Closes up any open device connections + #TODO other closeout housekeeping
@@ -141,3 +186,4 @@ class UartMiddleware:
         :return: None
         """
         self.serial_handler.close()
+        self.chipboard_mode = None

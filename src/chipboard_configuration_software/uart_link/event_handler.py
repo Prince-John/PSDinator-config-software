@@ -1,3 +1,4 @@
+import errno
 import os
 import threading
 from time import sleep
@@ -47,6 +48,10 @@ class DataAcquisitionThread(threading.Thread):
                 except FileNotFoundError:
                     print("Warning: No Named pipe found. Skipping pipe output.", flush=True)
                     self._acquire_loop(fid_bin, None)
+                except OSError as e:
+                    if e.errno == errno.ENXIO:
+                        print("OSError: Device not configured or no such device/address.")
+                    self._acquire_loop(fid_bin, None)
         finally:
             print(f"{self.event_count} packets received and written to disk.", flush=True)
             print("Data acquisition thread exiting; file closed.")
@@ -70,7 +75,7 @@ class DataAcquisitionThread(threading.Thread):
         :raises: serial.SerialTimeoutException
         """
 
-        cobs_packet = self.serial_link.serial_handler.read_until(expected=b'\x00')
+        cobs_packet = self.serial_link.read_until(expected=b'\x00')
 
         if not cobs_packet:
             raise serial.SerialTimeoutException
